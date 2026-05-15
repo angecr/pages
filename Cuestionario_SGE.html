@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen Autoevaluable SGE - ILERNA</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f4f9; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .question { font-weight: bold; font-size: 1.1em; margin-bottom: 15px; }
+        .option { display: block; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; transition: 0.3s; }
+        .option:hover { background-color: #eef2ff; }
+        .correct { background-color: #dcfce7 !important; border-color: #22c55e !important; }
+        .incorrect { background-color: #fee2e2 !important; border-color: #ef4444 !important; }
+        .justification { margin-top: 10px; padding: 10px; border-left: 4px solid #3b82f6; background: #f0f7ff; display: none; font-size: 0.9em; }
+        #score { font-size: 1.5em; text-align: center; margin: 20px 0; font-weight: bold; color: #1e40af; }
+        button { display: block; width: 100%; padding: 15px; background: #2563eb; color: white; border: none; border-radius: 6px; font-size: 1em; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h1>Cuestionario Integral SGE</h1>
+    <p>Basado en fuentes oficiales de ILERNA (Libro y Exámenes 2021-2025).</p>
+    <div id="quiz-container"></div>
+    <div id="score"></div>
+    <button onclick="window.location.reload()">Reiniciar Test (Nuevas posiciones)</button>
+
+    <script>
+        const questions = [
+            { q: "¿Qué es el diccionario o tablas hash en Python?", a: "Un conjunto de estructuras que almacenan información mediante clave en lugar de por posición.", j: "Permite búsquedas eficientes mediante claves únicas vinculadas a valores. [cite: 19]", options: ["Un conjunto de estructuras que almacenan información por posición.", "Una representación de cadenas con comillas simples obligatorias.", "Estructuras que no permiten duplicar valores."] },
+            { q: "¿Cuál es la mínima unidad de estructura de una base de datos?", a: "Dato", j: "El dato es la unidad mínima indivisible de información almacenada. [cite: 42]", options: ["Tabla", "Registro", "Fila"] },
+            { q: "¿Cuál es el conjunto de registros relacionados almacenados bajo un mismo nombre?", a: "Tabla", j: "Las tablas son la estructura base que agrupa la información relacional. [cite: 13]", options: ["Columna", "Fila", "Campo"] },
+            { q: "En Python, las variables:", a: "No necesitan ser definidas (declaradas) para su utilización.", j: "Python es de tipado dinámico; la variable se crea al asignarle un valor. [cite: 9]", options: ["Necesitan ser declaradas obligatoriamente.", "Deben indicar su tipo antes de recibir un valor.", "Solo pueden ser globales."] },
+            { q: "Identifica los tipos de software según el coste económico:", a: "Freeware, Payware y Shareware.", j: "Clasificación estándar basada en el modelo de pago del software. [cite: 21]", options: ["Moneyware, Shareware y Rumboware.", "Freeware, OpenSource y Payware.", "Shareware, Demo y Full."] },
+            { q: "¿Qué tipo de lenguaje es Python?", a: "Lenguaje interpretado y multiplataforma.", j: "Se ejecuta línea a línea y funciona en Windows, Linux y macOS. [cite: 189]", options: ["Lenguaje compilado y monoparadigma.", "Lenguaje de bajo nivel para hardware.", "Lenguaje exclusivo para desarrollo web."] },
+            { q: "¿Qué carácter se utiliza para iniciar un comentario en una línea en Python?", a: "#", j: "La almohadilla indica al intérprete que ignore el resto de la línea. [cite: 7]", options: ["//", "/*", "!"] },
+            { q: "En el plan de formación de gestión de compra-venta, el orden lógico es:", a: "Categoría de productos > Crear productos > Crear stock inicial.", j: "Primero se define la jerarquía, luego el objeto y finalmente sus existencias. [cite: 321]", options: ["Crear stock > Crear productos.", "Orden de compra > Categoría de productos.", "Crear productos > Crear stock > Crear categoría."] },
+            { q: "¿Qué módulo permite crear una orden de compra directa?", a: "Compras", j: "Gestiona directamente el aprovisionamiento de bienes y servicios. [cite: 326]", options: ["Ventas", "Marketing", "Punto de Venta"] },
+            { q: "Mediante la modularidad y la integridad se logra la:", a: "Adaptabilidad", j: "Permite que el sistema crezca y se ajuste a las necesidades cambiantes de la empresa. [cite: 39]", options: ["Supervisión", "Gestión", "Planificación"] },
+            { q: "¿Qué características tiene un ERP?", a: "Integración, modularidad, adaptabilidad.", j: "Son los tres pilares fundamentales que definen el sistema. [cite: 332]", options: ["Rigidez, simplicidad e integridad.", "Velocidad, coste bajo y escalabilidad.", "Seguridad, control y borrado."] },
+            { q: "Ventaja del ERP:", a: "Permite la actualización de datos en tiempo real.", j: "La base de datos única asegura coherencia inmediata en todos los departamentos. [cite: 333]", options: ["No requiere formación.", "Es económico de implantar.", "Garantiza ausencia total de errores."] },
+            { q: "¿Qué palabras definen la lógica operacional de los CRM?", a: "Organizar, Automatizar y Gestionar.", j: "La lógica operacional se enfoca en optimizar el contacto diario con el cliente. [cite: 469]", options: ["Analizar y Proyectar.", "Vender y Cobrar.", "Codificar y Depurar."] },
+            { q: "Mejor tipo de base de datos para un ERP:", a: "Relacional", j: "Facilita la vinculación entre tablas y la integridad de los datos. [cite: 338]", options: ["Multidimensional", "Jerárquica", "No Relacional"] },
+            { q: "Sistema de instalación con servidor central y aplicaciones cliente remotas:", a: "Cliente-servidor", j: "Arquitectura donde los datos están centralizados y el acceso es distribuido. [cite: 40]", options: ["Monopuesto", "SaaS", "Online"] },
+            { q: "¿Qué es un ERP?", a: "Es un sistema de planificación de recursos empresariales.", j: "Software integral para gestionar todos los procesos de una compañía. [cite: 36]", options: ["Lo opuesto a un CRM.", "Un sistema de correo interno.", "Una base de datos sin lógica."] },
+            { q: "Instalación recomendada para desarrollo o aprendizaje:", a: "Monopuesto", j: "Permite el control total del entorno sin dependencias de red. [cite: 98]", options: ["SaaS", "Cliente-servidor Web", "Cloud"] },
+            { q: "Define Shareware:", a: "Uso gratuito temporal y luego requiere pago al autor.", j: "Modalidad de evaluación para incentivar la compra posterior. [cite: 64]", options: ["Software siempre gratuito.", "Software de código abierto permisivo.", "Software sin propietario."] },
+            { q: "¿Qué productos contabilizan en el stock?", a: "Almacenable", j: "Los productos almacenables requieren control físico de existencias. [cite: 29]", options: ["Servicio", "Consumible", "Digital"] },
+            { q: "La vista gráfica permite crear:", a: "Un gráfico de barras o circular.", j: "Representación visual de datos agrupados para informes. [cite: 69]", options: ["Vistas de tipo árbol.", "Formularios de entrada.", "Listas de usuarios."] },
+            { q: "¿Qué modalidad de albaranes existen?", a: "De entrada, de salida y externos.", j: "Cubren todos los movimientos de mercancía posibles. [cite: 136]", options: ["Solo nacionales e internacionales.", "Pendientes y cobrados.", "Solo de entrada."] },
+            { q: "Niveles de diseño de bases de datos relacionales:", a: "Físico, Lógico o Conceptual y Externo.", j: "Arquitectura estándar de tres niveles de abstracción. [cite: 141]", options: ["Físico y Lógico solamente.", "Único y Múltiple.", "Base y Vista."] },
+            { q: "ERP de origen español con gran implantación:", a: "OpenBravo", j: "Es el ERP nacido en España citado en el temario. [cite: 62]", options: ["SAP", "Odoo", "Oracle"] },
+            { q: "Función incorrecta de herramientas de Data Warehouse:", a: "Control en el tiempo de respuesta.", j: "Es una métrica de rendimiento, no una función de gestión ETL propiamente dicha. [cite: 54]", options: ["Control de acceso.", "Manejo de excepciones.", "Extracción y carga."] },
+            { q: "¿Con qué archivos podemos cargar/exportar datos en ERP-CRM?", a: "Archivos xml y csv.", j: "Son los formatos de intercambio de datos más extendidos. [cite: 24]", options: ["Archivos flag y tiff.", "Archivos exe y bat.", "Archivos mp3 y wav."] },
+            { q: "En la metodología de implantación, la fase de desarrollo define:", a: "Análisis detallado y diseño del sistema.", j: "Etapa donde se define la estructura técnica del proyecto. [cite: 73]", options: ["Instalación física.", "Estudio de viabilidad inicial.", "Mantenimiento."] },
+            { q: "La fase 2 de Desarrollo NO incluye:", a: "Revisión de visiones.", j: "La revisión de visiones pertenece a la etapa de estrategia/iniciación. [cite: 195]", options: ["Análisis detallado.", "Diseño físico.", "Diseño lógico."] },
+            { q: "Fase de implantación que crea el sistema 'sobre papel' analizando especificaciones:", a: "Fase de desarrollo", j: "Se traduce la necesidad del negocio a un diseño técnico funcional. [cite: 93]", options: ["Fase de iniciación.", "Fase de soporte.", "Fase de explotación."] },
+            { q: "¿Qué paradigma utiliza OpenERP para separar datos de representación?", a: "Modelo Vista Controlador (MVC)", j: "Asegura la independencia entre la lógica y la interfaz. [cite: 177]", options: ["Modelo Vista Clasificador.", "Modelo Jerárquico.", "Programación Lineal."] },
+            { q: "¿Para qué sirve la vista de búsqueda?", a: "Complementa a la vista árbol con un panel de filtrado.", j: "Permite realizar búsquedas complejas sobre listados. [cite: 44]", options: ["Crea gráficos circulares.", "Sustituye al formulario.", "Solo sirve para borrar registros."] },
+            { q: "En Python, palabra clave para crear una función:", a: "def", j: "Sentencia reservada para definir funciones. [cite: 168]", options: ["fun", "function", "init"] },
+            { q: "Función de cadena que devuelve la longitud en Python:", a: "len(cadena)", j: "Función integrada para contar elementos de un objeto. [cite: 123]", options: ["longitud(cadena)", "count(cadena)", "size()"] },
+            { q: "¿Qué motor de base de datos usa Odoo por recomendación?", a: "PostgreSQL", j: "Es el SGBD relacional estándar sobre el que corre Odoo. [cite: 489]", options: ["MySQL", "SQL Server", "Oracle"] },
+            { q: "Las excepciones en Python se gestionan con:", a: "try, except, else, finally", j: "Bloques para captura y tratamiento de errores en tiempo de ejecución. [cite: 828]", options: ["if, else", "catch, throw", "error, solve"] },
+            { q: "¿Qué es una excepción?", a: "Objeto que tiene información de un error producido en la ejecución.", j: "Contiene el tipo de fallo y la causa que lo generó. [cite: 830]", options: ["Una variable sin valor.", "Una función mal escrita.", "Un archivo borrado."] },
+            { q: "En una devolución, ¿cuándo hay que hacer factura rectificativa obligatoriamente?", a: "Cuando la factura ya ha sido abonada (pagada).", j: "Legalmente no se puede borrar una factura cobrada, debe rectificarse. [cite: 166]", options: ["Cuando es borrador.", "Siempre en cualquier caso.", "Nunca."] },
+            { q: "En Python, los espacios en blanco y tabulaciones:", a: "Son muy importantes para la interpretación (identación).", j: "Definen los bloques de código en lugar de usar llaves {}. [cite: 703]", options: ["No importan nada.", "Solo sirven para leer mejor.", "Se ignoran por el intérprete."] },
+            { q: "Módulos mínimos instalados en OpenERP:", a: "base, base_setup, web_livechat.", j: "Núcleo esencial para que el sistema sea funcional. [cite: 341]", options: ["sales, purchase.", "hr, accounting.", "marketing, stock."] },
+            { q: "Operandos del tipo booleano en Python:", a: "and, or, not.", j: "Operadores lógicos para evaluar condiciones. [cite: 155]", options: ["sum, res.", "if, else.", "get, set."] }
+        ];
+
+        // Función para barajar (Shuffle)
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        const container = document.getElementById('quiz-container');
+        let currentScore = 0;
+
+        // Mezclar preguntas antes de renderizar
+        shuffle(questions);
+
+        questions.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            let opts = [q.a, ...q.options];
+            shuffle(opts); // Mezclar opciones de respuesta
+
+            let optionsHtml = opts.map(opt => 
+                `<div class="option" onclick="checkAnswer(this, '${opt === q.a}', '${index}')">${opt}</div>`
+            ).join('');
+
+            card.innerHTML = `
+                <div class="question">${index + 1}. ${q.q}</div>
+                ${optionsHtml}
+                <div id="just-${index}" class="justification">
+                    <strong>Justificación:</strong> ${q.j}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        function checkAnswer(el, isCorrect, idx) {
+            const parent = el.parentElement;
+            const options = parent.querySelectorAll('.option');
+            const just = document.getElementById(`just-${idx}`);
+
+            // Deshabilitar clics en esta pregunta
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+
+            if (isCorrect === 'true') {
+                el.classList.add('correct');
+                currentScore++;
+            } else {
+                el.classList.add('incorrect');
+                // Marcar la correcta para que el alumno aprenda
+                options.forEach(opt => {
+                    if (opt.innerText === questions[idx].a) opt.classList.add('correct');
+                });
+            }
+
+            just.style.display = 'block';
+            updateScore();
+        }
+
+        function updateScore() {
+            document.getElementById('score').innerText = `Puntuación actual: ${currentScore} / ${questions.length}`;
+        }
+    </script>
+</body>
+</html>
