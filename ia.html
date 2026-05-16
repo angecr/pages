@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Interactivo: Inteligencia Artificial</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #8e44ad; /* Azul violáceo tecnológico */
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --background-color: #f0f3f6;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        #quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            max-width: 850px;
+            width: 100%;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e1e8ed;
+        }
+
+        .progress {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: var(--secondary-color);
+            background: #f4ebfa;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .score {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: var(--success-color);
+        }
+
+        h2 {
+            font-size: 1.35em;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            line-height: 1.5;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: #ffffff;
+            border: 2px solid #dcdde1;
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-size: 1.05em;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--secondary-color);
+            background-color: #faf5fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .option-btn.correct {
+            background-color: #eafaf1;
+            border-color: var(--success-color);
+            color: #1e8449;
+            font-weight: 700;
+        }
+
+        .option-btn.incorrect {
+            background-color: #fceae9;
+            border-color: var(--accent-color);
+            color: #c0392b;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .justification-box {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f6f0fb;
+            border-left: 5px solid var(--secondary-color);
+            border-radius: 6px;
+            font-size: 1.05em;
+            line-height: 1.6;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .justification-box h4 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1em;
+        }
+
+        .next-btn-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .next-btn, .restart-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.1s;
+            display: none;
+            box-shadow: 0 4px 6px rgba(142, 68, 173, 0.2);
+        }
+
+        .next-btn:hover, .restart-btn:hover {
+            background-color: #732d91;
+            transform: translateY(-2px);
+        }
+
+        .restart-btn {
+            display: inline-block;
+            margin-top: 25px;
+            font-size: 1.2em;
+        }
+
+        .results-screen {
+            text-align: center;
+            display: none;
+        }
+
+        .results-screen h1 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+
+        .results-screen p {
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        .final-score {
+            font-size: 4em;
+            font-weight: 800;
+            color: var(--secondary-color);
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            #quiz-container { padding: 25px 20px; }
+            h2 { font-size: 1.2em; }
+            .option-btn { font-size: 1em; padding: 14px 15px; }
+            .final-score { font-size: 3em; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="quiz-container">
+        <!-- Pantalla de la Pregunta -->
+        <div id="question-screen">
+            <div class="header">
+                <div class="progress" id="progress">Pregunta 1 de X</div>
+                <div class="score" id="score">Puntuación: 0</div>
+            </div>
+            
+            <h2 id="question-text">¿Pregunta?</h2>
+            
+            <div class="options-container" id="options">
+                <!-- Los botones se insertan por JS -->
+            </div>
+
+            <div class="justification-box" id="justification">
+                <h4>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg> 
+                    Explicación
+                </h4>
+                <p id="justification-text"></p>
+            </div>
+
+            <div class="next-btn-container">
+                <button class="next-btn" id="next-btn" onclick="handleNext()">Siguiente Pregunta</button>
+            </div>
+        </div>
+
+        <!-- Pantalla de Resultados -->
+        <div class="results-screen" id="results-screen">
+            <h1>¡Test Completado!</h1>
+            <p>Has finalizado el repaso de Inteligencia Artificial.</p>
+            <div class="final-score" id="final-score">0 / X</div>
+            <button class="restart-btn" onclick="startQuiz()">Reintentar Cuestionario Aleatorio</button>
+        </div>
+    </div>
+
+    <script>
+        const rawQuestions = [
+            {
+                q: "¿Qué evento histórico es considerado el nacimiento oficial de la inteligencia artificial como disciplina científica en 1956?",
+                options: ["La conferencia de Dartmouth.", "El lanzamiento de la primera computadora de IBM.", "El simposio de cibernética del MIT.", "La creación del test de Turing."],
+                correct: "La conferencia de Dartmouth.",
+                justification: "Fue en este simposio de verano organizado en el Dartmouth College donde pioneros de la informática acuñaron y utilizaron por primera vez el término 'Inteligencia artificial'."
+            },
+            {
+                q: "¿Cuál de los siguientes no fue uno de los nombres que recibió el campo de las 'máquinas pensantes' durante la 'Era del optimismo' en los años 50-60?",
+                options: ["Teoría del caos.", "Cibernética.", "Teoría de los autómatas.", "Procesamiento complejo de la información."],
+                correct: "Teoría del caos.",
+                justification: "Durante esos años, la investigación se apoyaba en conceptos como la Cibernética, la Teoría de los autómatas o el Procesamiento complejo de la información, pero no en la teoría del caos."
+            },
+            {
+                q: "¿Cuál fue la causa principal del período conocido como 'El Invierno de la IA' durante los años 70 y 80?",
+                options: ["Una drástica reducción en la financiación debido a expectativas no cumplidas.", "El auge de la robótica que desplazó a la IA del interés académico.", "La invención del microchip que hizo innecesario investigar algoritmos.", "El miedo a que las máquinas superaran a los humanos de inmediato."],
+                correct: "Una drástica reducción en la financiación debido a expectativas no cumplidas.",
+                justification: "Al no poder materializarse las ambiciosas promesas de crear máquinas con raciocinio a corto plazo (por limitaciones de hardware y datos), los gobiernos e inversores retiraron sus fondos."
+            },
+            {
+                q: "¿Qué factor fue clave para el resurgimiento de la IA en los años 90?",
+                options: ["El aumento de la potencia computacional y los avances en algoritmos.", "La invención de los primeros teléfonos móviles.", "El descubrimiento de la Inteligencia Artificial General (AGI).", "Una ley internacional que obligaba a usar ordenadores cuánticos."],
+                correct: "El aumento de la potencia computacional y los avances en algoritmos.",
+                justification: "Ordenadores más potentes y baratos permitieron procesar algoritmos más complejos, lo que sacó a la disciplina de su 'invierno'."
+            },
+            {
+                q: "¿Qué concepto clave se emplea para describir la capacidad de la IA de 'aprender, adaptarse y mejorar'?",
+                options: ["Machine learning.", "Deepfake.", "Blockchain.", "Hardcoding."],
+                correct: "Machine learning.",
+                justification: "El aprendizaje automático (machine learning) es el subcampo de la IA que permite que un sistema identifique patrones en los datos para mejorar por sí solo sin ser programado explícitamente para esa mejora."
+            },
+            {
+                q: "¿Cuál de las siguientes afirmaciones describe mejor la “Narrow AI” o IA débil, que predomina en la actualidad?",
+                options: ["Está especializada en tareas específicas y es muy eficiente en su dominio, pero no tiene conciencia ni comprensión general.", "Tiene una comprensión igual o superior a la del ser humano en todos los ámbitos cognitivos.", "Es una IA que únicamente es capaz de procesar imágenes y vídeos, no texto.", "Solo se utiliza para resolver problemas estadísticos sin aprendizaje automático."],
+                correct: "Está especializada en tareas específicas y es muy eficiente en su dominio, pero no tiene conciencia ni comprensión general.",
+                justification: "Herramientas como ChatGPT, el filtro de spam o los recomendadores de Netflix son 'Narrow AI': dominan su tarea pero carecen del razonamiento global que posee un humano."
+            },
+            {
+                q: "El concepto de AGI (IA General) se diferencia de la Narrow AI en que la AGI:",
+                options: ["Sería capaz de aprender cualquier tarea intelectual, como un humano.", "Únicamente funcionaría en computación cuántica.", "Estaría limitada solo al reconocimiento facial.", "Es la que usamos a diario en nuestros asistentes de voz (Siri, Alexa)."],
+                correct: "Sería capaz de aprender cualquier tarea intelectual, como un humano.",
+                justification: "La Inteligencia Artificial General es aún teórica, pero su objetivo es igualar o superar la versatilidad de la mente humana en cualquier dominio cognitivo."
+            },
+            {
+                q: "¿Qué característica define a la Generative AI (IA Generativa)?",
+                options: ["La creación de contenido nuevo a partir de datos existentes.", "La clasificación de correos como spam o legítimos.", "El simple cálculo de probabilidades y estadísticas.", "El reconocimiento de huellas dactilares y biometría."],
+                correct: "La creación de contenido nuevo a partir de datos existentes.",
+                justification: "A diferencia de otras IA que solo predicen o clasifican, esta IA crea audios, textos o imágenes originales basándose en los patrones que ha aprendido."
+            },
+            {
+                q: "¿Cuál de los siguientes sistemas representa mejor la IA discriminativa?",
+                options: ["Un modelo que clasifica correos electrónicos como spam o no spam.", "Un generador de código de programación automático.", "Una IA que compone canciones originales en un estilo específico.", "Un modelo que genera retratos fotorrealistas desde descripciones."],
+                correct: "Un modelo que clasifica correos electrónicos como spam o no spam.",
+                justification: "La IA discriminativa se encarga de separar, categorizar y clasificar la información en grupos específicos."
+            },
+            {
+                q: "Un sistema de reconocimiento facial que debe decidir si una cara en una foto pertenece a una persona autorizada (sí/no) es un caso de uso de:",
+                options: ["IA Discriminativa.", "IA Generativa.", "Machine Reasoning.", "AGI (Inteligencia Artificial General)."],
+                correct: "IA Discriminativa.",
+                justification: "Al igual que el filtro de spam, el sistema clasifica (discrimina) el rostro de entrada entre la opción 'autorizado' o 'no autorizado'."
+            },
+            {
+                q: "Un sistema que analiza las ventas de los últimos cinco años para estimar la demanda de un producto en el próximo trimestre es un ejemplo de:",
+                options: ["IA Predictiva.", "IA Generativa Visual.", "Procesamiento de Lenguaje Natural.", "IA Discriminativa en Redes Sociales."],
+                correct: "IA Predictiva.",
+                justification: "Usa datos históricos y tendencias para calcular la probabilidad de eventos futuros."
+            },
+            {
+                q: "El objetivo principal de la Analytical AI es:",
+                options: ["Procesar grandes volúmenes de datos para identificar patrones y tomar decisiones.", "Redactar correos electrónicos automáticos imitando la voz de un humano.", "Clasificar imágenes médicas de tumores con un sí/no simple.", "Inventar escenarios de videojuegos desde cero."],
+                correct: "Procesar grandes volúmenes de datos para identificar patrones y tomar decisiones.",
+                justification: "La IA Analítica está diseñada para escudriñar bases de datos masivas buscando relaciones ocultas (como en la detección de fraudes bancarios)."
+            },
+            {
+                q: "Un sistema de IA que calcula la prima de un seguro basándose en modelos matemáticos para cuantificar la incertidumbre y el riesgo, es un ejemplo de:",
+                options: ["IA Estadística.", "Robótica Autónoma.", "IA Generativa en Finanzas.", "Computación Cuántica Aplicada."],
+                correct: "IA Estadística.",
+                justification: "Es un subtipo de IA que utiliza cálculos de probabilidad pura para validar hipótesis y modelos financieros."
+            },
+            {
+                q: "¿Qué tipo de IA utiliza modelos probabilísticos y técnicas como la regresión?",
+                options: ["Statistical AI (IA Estadística).", "Generative AI.", "AGI Teórica.", "Robotic Process Automation (RPA)."],
+                correct: "Statistical AI (IA Estadística).",
+                justification: "La regresión es una técnica probabilística para estimar las relaciones entre variables, propia de los enfoques estadísticos de IA."
+            },
+            {
+                q: "La 'consistencia' de la IA se refiere a que…",
+                options: ["Los resultados pueden variar incluso con entradas similares debido a su naturaleza probabilística, lo que plantea retos en aplicaciones que requieren fiabilidad.", "La máquina devuelve siempre el mismo resultado matemático sin excepción.", "El sistema jamás cometerá errores lógicos o de razonamiento si se le entrena con suficientes datos.", "La IA mantendrá un mismo tono moral en todas las respuestas independientemente del prompt."],
+                correct: "Los resultados pueden variar incluso con entradas similares debido a su naturaleza probabilística, lo que plantea retos en aplicaciones que requieren fiabilidad.",
+                justification: "A diferencia de una calculadora, la IA estima probabilidades. Por tanto, puede darnos resultados distintos a una misma pregunta, un problema conocido como 'inconsistencia'."
+            },
+            {
+                q: "¿Cuál es uno de los principales desafíos ecológicos y económicos de los modelos de IA avanzados?",
+                options: ["El alto consumo de energía y la necesidad de hardware avanzado.", "La dificultad para encontrar lenguajes de programación adecuados.", "El coste de licencias del sistema operativo.", "La escasez de modelos de código abierto."],
+                correct: "El alto consumo de energía y la necesidad de hardware avanzado.",
+                justification: "Entrenar y hacer funcionar grandes modelos requiere tarjetas gráficas de altísima potencia y enormes centros de datos, lo que plantea serios retos de sostenibilidad."
+            },
+            {
+                q: "La principal ventaja de los datos estructurados es que:",
+                options: ["Permiten un análisis rápido y preciso de grandes volúmenes.", "Ocupan más espacio pero aseguran ser indescifrables por humanos.", "Están en formato libre (texto, audio), lo que facilita su recolección de internet.", "No necesitan un preprocesamiento ni limpieza para ser entendidos por modelos estadísticos básicos."],
+                correct: "Permiten un análisis rápido y preciso de grandes volúmenes.",
+                justification: "Al venir ordenados de forma estandarizada (como en una tabla de Excel con filas y columnas), la máquina los digiere de manera inmediata."
+            },
+            {
+                q: "En un sistema de gestión de almacén basado en IA, ¿qué tipo de datos serían más útiles para predecir la demanda de productos?",
+                options: ["Historial de ventas y datos estacionales.", "Grabaciones en vídeo de seguridad del almacén.", "Opiniones escritas en blogs sobre la competencia.", "Audio de las asambleas de accionistas."],
+                correct: "Historial de ventas y datos estacionales.",
+                justification: "Estos son ejemplos claros de datos estructurados numéricos, que son perfectos para hacer predicciones de stock mediante IA predictiva o estadística."
+            },
+            {
+                q: "¿Cuál de las siguientes situaciones representa mejor el concepto de machine learning en la vida cotidiana?",
+                options: ["Un navegador GPS que actualiza la ruta al detectar tráfico en tiempo real.", "Un microondas programado para calentar durante exactamente 60 segundos.", "Un programa de contabilidad que suma los ingresos y los gastos con precisión absoluta.", "Un disco duro que comprime archivos grandes para ahorrar espacio."],
+                correct: "Un navegador GPS que actualiza la ruta al detectar tráfico en tiempo real.",
+                justification: "El sistema asimila nueva información (el tráfico actual) y 'aprende' en el momento para recalcular y mejorar su resultado (la ruta más rápida)."
+            },
+            {
+                q: "Los modelos de refuerzo aprenden mediante:",
+                options: ["Prueba/error y recompensa.", "Instrucciones de código duro (hardcoding).", "Solo a través de datos tabulares pre-etiquetados.", "Extracción de información por web scraping de sitios enciclopédicos."],
+                correct: "Prueba/error y recompensa.",
+                justification: "En el aprendizaje por refuerzo, la IA interactúa con un entorno sin datos etiquetados; gana 'puntos' cuando acierta y es penalizada cuando falla, como si fuera un videojuego."
+            },
+            {
+                q: "¿Qué chatbot combina búsqueda web y conversación mostrando explícitamente las fuentes?",
+                options: ["Perplexity AI.", "Midjourney.", "Adobe Firefly.", "ChatGPT-3 offline."],
+                correct: "Perplexity AI.",
+                justification: "Perplexity está específicamente diseñado para buscar información en internet en tiempo real y citar con enlaces el origen exacto de los datos mostrados."
+            },
+            {
+                q: "Un usuario quiere una respuesta de IA que además le muestre las fuentes web de donde extrajo la información. ¿Qué herramienta sería la más adecuada según el texto?",
+                options: ["Perplexity.", "ChatGPT sin conexión web.", "DALL-E 3.", "Un modelo puro generativo de imágenes."],
+                correct: "Perplexity.",
+                justification: "Perplexity cita explícitamente mediante números entre corchetes y referencias clicables de dónde saca cada afirmación, mitigando las alucinaciones de modelos puramente generativos."
+            },
+            {
+                q: "¿Qué modelo de IA generativa de Adobe crea imágenes, efectos y variaciones gráficas a partir de prompts y además está pensado para integrarse en Photoshop o Illustrator?",
+                options: ["Firefly.", "Stable Diffusion.", "Midjourney.", "DALL-E 2."],
+                correct: "Firefly.",
+                justification: "Adobe Firefly es la solución corporativa de Adobe, enfocada al diseño profesional con integración directa en su suite creativa."
+            },
+            {
+                q: "¿Qué tipo de modelo permite generar imágenes desde texto?",
+                options: ["Generativo.", "Discriminativo.", "Predictivo.", "Estadístico puro."],
+                correct: "Generativo.",
+                justification: "La rama 'generativa' es la encargada de transformar una instrucción textual (prompt) en archivos visuales originales."
+            },
+            {
+                q: "Al usar una IA para generar imágenes como DALL-E, la calidad del resultado depende fundamentalmente de:",
+                options: ["La precisión y el detalle del prompt (la instrucción).", "La velocidad de conexión a internet del usuario.", "El sistema operativo del ordenador cliente.", "La cantidad de RAM local en la computadora del diseñador."],
+                correct: "La precisión y el detalle del prompt (la instrucción).",
+                justification: "Un modelo no adivina intenciones; cuanto más contexto, estilo y detalle le aportemos en nuestro prompt, de mejor calidad será el resultado o output."
+            },
+            {
+                q: "Si le pides a una IA que resuelva un problema matemático complejo y le indicas 'razona paso a paso', estás utilizando la técnica de prompting llamada:",
+                options: ["Chain-of-thought (Cadena de pensamiento).", "Few-shot prompting.", "Zero-shot prompting.", "Ingeniería inversa de prompts."],
+                correct: "Chain-of-thought (Cadena de pensamiento).",
+                justification: "Esta técnica fuerza a la IA a desglosar su razonamiento lógicamente antes de dar la respuesta final, evitando fallos garrafales en problemas multietapa."
+            },
+            {
+                q: "En los modelos de inteligencia artificial generativa, las llamadas 'alucinaciones' hacen referencia a que el modelo:",
+                options: ["Genera resultados completamente inventados, sin relación con la realidad.", "Empieza a responder en idiomas extraños que no comprende.", "Consume tanta RAM que hace 'caer' los servidores.", "Rechaza responder aduciendo problemas éticos exagerados."],
+                correct: "Genera resultados completamente inventados, sin relación con la realidad.",
+                justification: "Como la IA calcula qué palabra es más probable que vaya después de otra (en lugar de consultar una base de datos de hechos verídicos), cuando desconoce algo, frecuentemente lo 'inventa' de manera muy convincente."
+            },
+            {
+                q: "¿Qué habilidad transversal es clave para usar la IA de manera efectiva, según el texto?",
+                options: ["Pensamiento Crítico para verificar la información generada.", "Saber programar en lenguajes como C++ o Java.", "Tener un nivel nativo de inglés técnico.", "Habilidad para diseñar hardware informático."],
+                correct: "Pensamiento Crítico para verificar la información generada.",
+                justification: "Debido a que la IA sufre alucinaciones e inconsistencias, el ser humano debe contrastar y validar rigurosamente toda la información antes de utilizarla en su trabajo."
+            },
+            {
+                q: "En la sinergia Humano-IA, ¿cuál es una de las aportaciones clave del humano?",
+                options: ["Criterio, ética y empatía.", "Procesamiento y análisis masivo de tablas en microsegundos.", "Escritura de código binario sin errores de compilación.", "Predicción estadística perfecta de tendencias económicas a 10 años."],
+                correct: "Criterio, ética y empatía.",
+                justification: "La inteligencia artificial aporta el procesamiento de datos brutos a velocidad récord, mientras que el humano se encarga de la interpretación emocional, moral y el contexto social."
+            },
+            {
+                q: "¿Qué tipo de tareas son ideales para la automatización con IA, según el texto?",
+                options: ["Tareas con pasos claros, repetibles y basadas en datos.", "Negociaciones que requieren alta empatía e inteligencia emocional humana.", "Dirección estratégica de los objetivos a largo plazo de una corporación.", "La decisión final en casos éticos médicos."],
+                correct: "Tareas con pasos claros, repetibles y basadas en datos.",
+                justification: "Toda tarea que sea altamente rutinaria y estructurada es la candidata ideal para que un algoritmo la ejecute, liberando tiempo valioso al empleado."
+            },
+            {
+                q: "¿Cuál de los siguientes no es un aspecto que solo el intelecto humano puede aportar?",
+                options: ["Análisis de grandes cantidades de datos.", "Empatía.", "Ética y moralidad.", "Creatividad emocional compleja."],
+                correct: "Análisis de grandes cantidades de datos.",
+                justification: "Analizar millones de datos estructurados es exactamente el mayor fuerte computacional de la máquina; los otros aspectos (empatía, ética) son de momento exclusivos humanos."
+            },
+            {
+                q: "¿Cuál es la relación más adecuada entre la inteligencia artificial y los profesionales humanos según el enfoque actual de la tecnología?",
+                options: ["La IA funciona como un complemento que amplifica las capacidades humanas, creando una sinergia donde cada uno aporta sus fortalezas únicas.", "La IA reemplazará a todos los profesionales intelectuales en los próximos 2 años, haciendo obsoleto al ser humano.", "La IA es una simple moda pasajera que no afectará a los métodos tradicionales de trabajo de cuello blanco.", "Los humanos solo servirán para hacer mantenimiento de servidores mientras la IA toma las decisiones ejecutivas."],
+                correct: "La IA funciona como un complemento que amplifica las capacidades humanas, creando una sinergia donde cada uno aporta sus fortalezas únicas.",
+                justification: "Las fuentes recalcan que la IA no elimina el valor humano, sino que funciona como una 'herramienta potenciadora' o copiloto en tareas complejas."
+            },
+            {
+                q: "En el contexto legal, un abogado utilizaría la IA principalmente para:",
+                options: ["Procesar y resumir grandes volúmenes de documentos legales.", "Emitir sentencias éticas en los juicios reemplazando al juez.", "Mentir convincentemente con 'alucinaciones' para ganar el caso.", "Sustituir las entrevistas personales con clientes sensibles (ej. familia o derecho penal)."],
+                correct: "Procesar y resumir grandes volúmenes de documentos legales.",
+                justification: "Esto automatiza el arduo trabajo de buscar precedentes, dejando al abogado la tarea puramente humana de decidir la estrategia jurídica."
+            },
+            {
+                q: "Tu equipo quiere usar una IA para traducir material educativo a varios idiomas. ¿Cuál sería la mejor forma de aplicarlo?",
+                options: ["Revisar las traducciones para detectar errores culturales o de contexto.", "Aceptar la traducción tal cual sale del modelo, asumiendo que es perfecta.", "Evitar usar IA por completo ya que las traducciones humanas siempre son más rápidas.", "Confiar en la IA generativa para que ella misma se autoevalúe éticamente sobre el texto final."],
+                correct: "Revisar las traducciones para detectar errores culturales o de contexto.",
+                justification: "Puesto que las IA automáticas carecen de comprensión real del mundo, a menudo pierden expresiones idiomáticas y matices sociales locales, haciendo ineludible la supervisión final de un traductor humano."
+            },
+            {
+                q: "¿Por qué es tan importante la supervisión humana de los resultados de la IA?",
+                options: ["Porque la IA puede equivocarse, reproducir sesgos o perder matices.", "Porque la legislación prohíbe el uso de cualquier herramienta informática sin la firma de un supervisor.", "Porque la IA intencionadamente engaña al usuario humano si no se le vigila.", "Porque sin supervisión, la máquina apagará sus propios servidores."],
+                correct: "Porque la IA puede equivocarse, reproducir sesgos o perder matices.",
+                justification: "La máquina aprende de datos imperfectos, asume patrones discriminatorios y adivina estadísticamente. Si el humano no valida, se asume un grave riesgo ético o empresarial."
+            },
+            {
+                q: "Uno de los requisitos del nuevo rol profesional de 'Prompt Designer' es:",
+                options: ["Conocimiento de técnicas como el Few-shot prompting y cadena de pensamiento.", "Un doctorado en matemáticas puras y física cuántica.", "Experiencia excluyente ensamblando tarjetas gráficas (GPUs).", "Habilidad para programar sistemas operativos desde cero."],
+                correct: "Conocimiento de técnicas como el Few-shot prompting y cadena de pensamiento.",
+                justification: "Un diseñador de instrucciones necesita dominar frameworks y estructuras avanzadas para exprimir al máximo el comportamiento del motor de IA sin tocar código fuente duro."
+            },
+            {
+                q: "¿Cuál es el objetivo principal del rol de Prompt Designer?",
+                options: ["Crear instrucciones precisas para sistemas de IA que generen los resultados deseados.", "Revisar la ética final del documento o la imagen ya creada.", "Vender licencias de software de Inteligencia artificial a corporaciones.", "Instalar y mantener los cables y servidores donde corre el modelo."],
+                correct: "Crear instrucciones precisas para sistemas de IA que generen los resultados deseados.",
+                justification: "Su labor se centra exclusivamente en estructurar el 'input' perfecto para guiar al modelo a dar un output útil."
+            },
+            {
+                q: "¿Qué requisito es esencial para un Prompt Designer, además de la comprensión profunda de modelos de IA?",
+                options: ["Habilidades de comunicación excepcionales.", "Dominio de lenguajes de programación de bajo nivel como ensamblador.", "Una carrera en ciberseguridad.", "Un alto grado de fuerza física y habilidad manual."],
+                correct: "Habilidades de comunicación excepcionales.",
+                justification: "Dado que interactúa con IA basada en Procesamiento de Lenguaje Natural (PLN), debe saber redactar, estructurar párrafos y expresarse de forma inequívoca."
+            },
+            {
+                q: "Si un sistema de IA comienza a generar consistentemente resultados que muestran sesgos de género o raza, ¿qué rol tiene la responsabilidad primordial de intervenir y aplicar salvaguardas éticas?",
+                options: ["Supervisor de IA.", "Prompt Designer.", "Especialista en Marketing.", "Administrador de Redes."],
+                correct: "Supervisor de IA.",
+                justification: "Es el perfil dedicado a monitorizar las salidas y auditorías de la máquina, implementando los filtros (guardrails) necesarios para alinearla con políticas de la empresa y la ley."
+            },
+            {
+                q: "¿Qué principio ético exige divulgar de manera clara cómo funciona una IA y que el usuario sepa que interactúa con ella?",
+                options: ["Transparencia.", "Velocidad de Respuesta.", "Eficiencia Energética.", "Automatización Ciega."],
+                correct: "Transparencia.",
+                justification: "El Reglamento de IA europeo impone la transparencia obligatoria para sistemas que interactúen con humanos o generen contenido (ej: etiquetar un deepfake o indicar que hablas con un bot)."
+            },
+            {
+                q: "¿Qué es la anonimización de datos?",
+                options: ["Eliminar o alterar datos personales para que no identifiquen a individuos.", "Borrar completamente las bases de datos de la empresa.", "Hacer que la IA no revele sus fuentes de información de internet.", "Ocultar la identidad del desarrollador o la empresa matriz del software."],
+                correct: "Eliminar o alterar datos personales para que no identifiquen a individuos.",
+                justification: "Es un requisito técnico del RGPD para poder usar información (nombres, DNI, historiales médicos) en el entrenamiento de IA sin comprometer la privacidad real de las personas."
+            },
+            {
+                q: "¿Qué ocurre si una obra de arte, un texto o una canción es generada SOLO por IA sin intervención humana significativa?",
+                options: ["No puede registrarse con derechos de autor.", "Pasa automáticamente a pertenecer a los creadores de la IA (OpenAI, Anthropic, etc.).", "Se registra a nombre de la persona que introdujo el prompt de 3 palabras.", "Queda permanentemente bloqueada de su distribución pública en internet."],
+                correct: "No puede registrarse con derechos de autor.",
+                justification: "La jurisprudencia y la ley actual establecen que únicamente las creaciones con una aportación o modificación creativa netamente humana son susceptibles de ser protegidas por Copyright."
+            },
+            {
+                q: "¿Qué ejemplo corresponde a un 'deepfake' malicioso?",
+                options: ["Un vídeo manipulado en el que un político dice algo que nunca dijo.", "Un texto resumido automáticamente por IA de un artículo largo de 20 páginas.", "Una canción que copia ligeramente la melodía de los años 80.", "Una fotografía pasada por un filtro de brillo automático de Instagram."],
+                correct: "Un vídeo manipulado en el que un político dice algo que nunca dijo.",
+                justification: "Los deepfakes manipulan de forma altamente realista rostros y voces con IA para crear contenido falso o fraudulento, representando un grave problema social y político."
+            },
+            {
+                q: "Si una pulsera de salud mide mal el pulso en pieles oscuras porque fue diseñada y probada en el laboratorio SOLO con usuarios de piel clara, ¿qué tipo de sesgo se ha producido?",
+                options: ["Sesgo en Datos de Entrenamiento.", "Sesgo de Confirmación por parte del analista.", "Sesgo de Prompts introducido por el comprador final.", "Sesgo Cultural (incomprensión de idiomas locales)."],
+                correct: "Sesgo en Datos de Entrenamiento.",
+                justification: "El problema viene 'de fábrica', porque la muestra original de datos empleada para entrenar el modelo de la pulsera carecía de diversidad y no representaba a un sector de la población."
+            },
+            {
+                q: "Un sistema de IA para RRHH descarta sistemáticamente a candidatas mujeres para puestos técnicos porque ha sido entrenado con currículums de los últimos 20 años donde la mayoría de esos puestos eran ocupados por hombres. Esto es un ejemplo de:",
+                options: ["Sesgo en Datos de Entrenamiento.", "Sesgo de Selección (descarte intencionado de mujeres en la muestra actual).", "Alucinación masiva.", "Sesgo de Confirmación algorítmico."],
+                correct: "Sesgo en Datos de Entrenamiento.",
+                justification: "La máquina no odia a las mujeres, simplemente ha asimilado ciegamente patrones estadísticos discriminatorios arraigados históricamente en los datos reales del pasado de la empresa."
+            },
+            {
+                q: "Cuando un sistema de reconocimiento de voz entrenado únicamente con voces de adultos no funciona bien con las voces de los niños, ¿qué tipo de sesgo está ocurriendo?",
+                options: ["Sesgo de Selección.", "Sesgo en Prompts.", "Alucinación sonora.", "Sesgo de Confirmación de audio."],
+                correct: "Sesgo de Selección.",
+                justification: "Ocurre en la recolección de los datos, cuando se excluyen sistemáticamente ciertos demográficos (como niños o personas con acentos marcados) de la muestra y el conjunto de datos deja de ser representativo de la población global."
+            },
+            {
+                q: "Formularle a la IA una pregunta como 'Explica detalladamente por qué el producto A es definitivamente superior al producto B', induce a un:",
+                options: ["Sesgo en Prompts.", "Sesgo de Selección.", "Sesgo en Datos de Entrenamiento.", "Ataque cibernético tipo Jailbreak."],
+                correct: "Sesgo en Prompts.",
+                justification: "El usuario dirige y fuerza al sistema a darle una respuesta polarizada, introduciendo un punto de vista y un pre-juicio directamente en su propia instrucción."
+            },
+            {
+                q: "¿Qué tipo de sesgo ocurre al buscar información buscando reforzar nuestras creencias o hipótesis previas en lugar de cuestionarlas de manera objetiva?",
+                options: ["Sesgo de confirmación.", "Sesgo en Datos de Entrenamiento.", "Sesgo de Selección representacional.", "Deepfake intencionado."],
+                correct: "Sesgo de confirmación.",
+                justification: "Es un fallo cognitivo humano aplicado a nuestro uso de la IA; hacemos que la máquina valide lo que nosotros ya damos por hecho como una verdad inamovible."
+            },
+            {
+                q: "Una de las estrategias de mitigación de sesgos algorítmicos mencionadas en el texto es:",
+                options: ["Realizar auditorías humanas constantes y diversificar las fuentes de los datos.", "Evitar utilizar cualquier herramienta informática a toda costa.", "Dar todo el poder al algoritmo y esperar que se corrija solo con el tiempo.", "Aceptar que los sesgos son inevitables y no es necesario aplicar correcciones éticas."],
+                correct: "Realizar auditorías humanas constantes y diversificar las fuentes de los datos.",
+                justification: "Los sesgos se combaten asegurándose de que la materia prima inicial provenga de fuentes equitativas (diversificación) y evaluando activamente las salidas (human-in-the-loop)."
+            }
+        ];
+
+        let quizData = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        // Función para mezclar elementos del array aleatoriamente (Algoritmo de Fisher-Yates)
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Iniciar Quiz
+        function startQuiz() {
+            document.getElementById('results-screen').style.display = 'none';
+            document.getElementById('question-screen').style.display = 'block';
+            
+            // Hacemos una copia profunda del array original de preguntas
+            quizData = JSON.parse(JSON.stringify(rawQuestions));
+            
+            // 1. Barajar el orden de aparición de las preguntas
+            quizData = shuffleArray(quizData);
+            
+            // 2. Barajar el orden de los botones de opciones por cada pregunta
+            quizData.forEach(q => {
+                q.options = shuffleArray(q.options);
+            });
+
+            currentQuestionIndex = 0;
+            score = 0;
+            updateUI();
+            renderQuestion();
+        }
+
+        function updateUI() {
+            document.getElementById('progress').innerText = `Pregunta ${currentQuestionIndex + 1} de ${quizData.length}`;
+            document.getElementById('score').innerText = `Aciertos: ${score}`;
+        }
+
+        function renderQuestion() {
+            const currentQ = quizData[currentQuestionIndex];
+            document.getElementById('question-text').innerText = currentQ.q;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = ''; 
+
+            document.getElementById('justification').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
+
+            currentQ.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = option;
+                btn.onclick = () => selectOption(option, currentQ.correct, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selected, correct, btnElement) {
+            const currentQ = quizData[currentQuestionIndex];
+            const allBtns = document.querySelectorAll('.option-btn');
+            
+            // Bloquear los botones para evitar dobles clics y resaltar la opción correcta siempre
+            allBtns.forEach(btn => {
+                btn.disabled = true;
+                if (btn.innerText === correct) {
+                    btn.classList.add('correct');
+                }
+            });
+
+            // Verificar si el usuario ha acertado
+            if (selected === correct) {
+                score++;
+                updateUI();
+            } else {
+                btnElement.classList.add('incorrect');
+            }
+
+            // Mostrar el recuadro con la explicación
+            document.getElementById('justification-text').innerText = currentQ.justification;
+            document.getElementById('justification').style.display = 'block';
+
+            // Mostrar botón para avanzar a la siguiente pantalla (o ver resultados si es la última)
+            document.getElementById('next-btn').style.display = 'inline-block';
+            
+            if (currentQuestionIndex === quizData.length - 1) {
+                document.getElementById('next-btn').innerText = 'Ver Calificación Final';
+            } else {
+                document.getElementById('next-btn').innerText = 'Siguiente Pregunta';
+            }
+        }
+
+        function handleNext() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                updateUI();
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('question-screen').style.display = 'none';
+            document.getElementById('results-screen').style.display = 'block';
+            document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
+        }
+
+        // Iniciar automáticamente al cargar la página en el navegador
+        window.onload = startQuiz;
+
+    </script>
+</body>
+</html>
