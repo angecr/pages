@@ -831,7 +831,157 @@
                 options: ["Verdadero.", "Falso."],
                 correct: "Falso.",
                 justification: "Se pueden (y deben) hacer utilizando interfaces gestoras como PgAdmin III en PostgreSQL para resguardar la información."
-            }
+            }, 
+            {
+                q: "¿Qué módulos forman parte del SAP ERP, según el libro?",
+                options: ["Distribución y ventas (SD), Contabilidad financiera (FI), Recursos humanos (HR).", "CRM, SRM y SCM exclusivamente.", "Solo módulos de contabilidad y nóminas.", "Únicamente el módulo de fabricación industrial."],
+                correct: "Distribución y ventas (SD), Contabilidad financiera (FI), Recursos humanos (HR).",
+                justification: "El libro destaca, entre los módulos de SAP ERP: Distribución y ventas (SD), Contabilidad de activos (AA), Gestión de materiales (MM), Planificación de producción (PP), Gestión de almacenes (WM), Gestión de calidad (QM), Contabilidad financiera (FI) y Recursos humanos (HR)."
+            },
+            {
+                q: "¿Qué tipo de Sistema Gestor de Bases de Datos utiliza SAP S/4 HANA?",
+                options: ["Un SGBD de tipo relacional clásico en disco.", "Un SGBD de tipo 'en memoria' (SAP HANA).", "Un SGBD jerárquico tradicional.", "Un SGBD multidimensional descentralizado."],
+                correct: "Un SGBD de tipo 'en memoria' (SAP HANA).",
+                justification: "SAP S/4 HANA está optimizado para el SGBD SAP HANA, que es un sistema gestor de bases de datos de tipo 'en memoria', y está pensado para grandes empresas y para uso en la nube."
+            },
+            {
+                q: "¿Para qué tamaño de empresa está diseñado SAP Business One?",
+                options: ["Grandes corporaciones multinacionales.", "Empresas exclusivamente del sector público.", "Pequeñas y medianas empresas.", "Únicamente startups tecnológicas."],
+                correct: "Pequeñas y medianas empresas.",
+                justification: "Según el libro, SAP Business One es un ERP diseñado para pequeñas y medianas empresas, con buena integración con productos Microsoft (Office, Excel, Outlook) y soporte para Windows, Mac OS y Linux."
+            },
+            {
+                q: "¿Qué ERP de SAP se basa principalmente en aplicaciones online y es muy intuitivo para pymes?",
+                options: ["SAP Business All-in-One.", "SAP S/4 HANA.", "SAP Business ByDesign.", "SAP NetWeaver."],
+                correct: "SAP Business ByDesign.",
+                justification: "SAP Business ByDesign es el ERP de SAP diseñado para pequeñas y medianas empresas, de coste más asequible, muy intuitivo, y utilizado sobre todo para gestiones empresariales basadas en aplicaciones online."
+            },
+            {
+                q: "¿Bajo qué sistema operativo funciona Microsoft Dynamics?",
+                options: ["Solo bajo Linux.", "Solo bajo macOS.", "Solo bajo Windows.", "Bajo Windows, Linux y macOS indistintamente."],
+                correct: "Solo bajo Windows.",
+                justification: "El libro indica que Microsoft Dynamics es un ERP propietario que, como era de esperar, solo trabaja bajo el sistema operativo Windows."
+            },
+            {
+                q: "Según el libro, ¿cuál NO es una ventaja de los sistemas ERP?",
+                options: ["Se eliminan datos redundantes.", "Es costoso, en tiempo y en dinero.", "La información empresarial se actualiza en tiempo real.", "Existe un control de la actividad empresarial."],
+                correct: "Es costoso, en tiempo y en dinero.",
+                justification: "El coste en tiempo y dinero está listado como una de las principales DESVENTAJAS del ERP, no como ventaja. El resto sí aparecen como ventajas en el manual."
+            },
+            {
+                q: "¿Cuál de las siguientes es una desventaja de un sistema ERP?",
+                options: ["Consistencia de datos a la hora de tomar decisiones.", "Eficiencia empresarial.", "Ante un cambio de metodología, puede aparecer desconfianza entre los empleados.", "Integración de elementos internos y externos."],
+                correct: "Ante un cambio de metodología, puede aparecer desconfianza entre los empleados.",
+                justification: "El libro recoge entre las desventajas: coste, necesidad de nuevos aprendizajes, dificultades de integración, problemas para volver atrás ante fallos y desconfianza entre los empleados ante cambios metodológicos."
+            },
+            {
+                q: "En el tipo de instalación cliente-servidor web, ¿qué característica diferencial tiene respecto al cliente-servidor clásico?",
+                options: ["Usa una interfaz basada en estándares web accesible desde cualquier navegador.", "Solo permite acceso desde una terminal física concreta.", "No requiere base de datos.", "Funciona exclusivamente offline."],
+                correct: "Usa una interfaz basada en estándares web accesible desde cualquier navegador.",
+                justification: "El cliente-servidor web es similar al cliente-servidor clásico, pero utiliza una interfaz basada en estándares web, permitiendo acceso y gestión desde cualquier navegador instalado en la máquina cliente, sin necesidad de aplicación previa."
+            },
+            {
+                q: "¿Qué datos mínimos se han de introducir para crear un nuevo usuario en el ERP de Odoo, según el libro?",
+                options: ["Un nombre y un email.", "Un nombre y una clave.", "Un nombre, apellidos, un teléfono y un email.", "Un nombre, un email y una clave."],
+                correct: "Un nombre y una clave.",
+                justification: "El solucionario oficial del libro (Tema 3.7) indica que los datos mínimos para crear un nuevo usuario en el ERP de Odoo son un nombre y una clave."
+            },
+            {
+                q: "¿Qué construcciones se utilizan en Python para gestionar las excepciones?",
+                options: ["if, else, end, return.", "do, while, until, break.", "try, except, else, finally.", "throw, catch, exit, raise."],
+                correct: "try, except, else, finally.",
+                justification: "El libro indica que las excepciones en Python se gestionan mediante las construcciones try, except, else y finally, equivalentes al try-catch de Java."
+            },
+            {
+                q: "En Python, ¿qué palabra reservada utiliza el usuario para lanzar una excepción manualmente?",
+                options: ["throw.", "raise.", "launch.", "trigger."],
+                correct: "raise.",
+                justification: "Según el libro, en cualquier momento el usuario puede lanzar una excepción utilizando la palabra raise junto con algún objeto que herede de Exception."
+            },
+            {
+                q: "¿Cuál de las siguientes NO es una excepción conocida en Python según el libro?",
+                options: ["IOError.", "KeyError.", "IndexError.", "DivisionError."],
+                correct: "DivisionError.",
+                justification: "El libro lista entre las excepciones conocidas: BaseException, Exception, AritmeticError, EOFError, IOError, ImportError, IndexError y KeyError. Los errores de división se gestionan con ZeroDivisionError, no 'DivisionError'."
+            },
+            {
+                q: "Aparte de la almohadilla (#), ¿qué otra forma permite Python para realizar comentarios, sobre todo en varias líneas?",
+                options: ["Usar las llaves { }.", "Usar las barras inclinadas //.", "Usar triples comillas simples.", "Usar la etiqueta <comment>."],
+                correct: "Usar triples comillas simples.",
+                justification: "El libro indica que en Python se puede comentar con la almohadilla (#) hasta el final de línea o, alternativamente, con triples comillas simples, que permiten comentarios en varias líneas."
+            },
+            {
+                q: "¿Cuál de las siguientes etiquetas javadoc recomienda el libro para documentar código Python?",
+                options: ["@parameter, @result, @creator, @release.", "@param, @return, @author, @version.", "@input, @output, @owner, @date.", "@arg, @ret, @writer, @build."],
+                correct: "@param, @return, @author, @version.",
+                justification: "El libro recomienda usar las etiquetas javadoc estándar: @param (parámetro), @return (valor devuelto), @author (nombre del autor) y @version (versión correspondiente)."
+            },
+            {
+                q: "¿Cuántos tipos de relaciones diferentes se pueden crear entre objetos en Odoo?",
+                options: ["Dos: uno a uno y muchos a muchos.", "Tres: uno a uno, uno a muchos y muchos a muchos.", "Cuatro: uno a uno, uno a muchos, muchos a uno y muchos a muchos.", "Cinco, incluyendo la herencia múltiple."],
+                correct: "Cuatro: uno a uno, uno a muchos, muchos a uno y muchos a muchos.",
+                justification: "El libro indica que en Odoo se pueden diferenciar cuatro tipos de relaciones: uno a uno, uno a muchos, muchos a uno y muchos a muchos."
+            },
+            {
+                q: "¿Qué IDE recomienda el libro para el desarrollo en Python, complementado con un módulo específico?",
+                options: ["Visual Studio con la extensión Pylance.", "Eclipse complementado con PyDev.", "NetBeans con el plugin Anaconda.", "IntelliJ IDEA con PyCharm Bundle."],
+                correct: "Eclipse complementado con PyDev.",
+                justification: "El libro indica que se puede desarrollar bajo Eclipse complementado con PyDev, módulo desarrollado para Aptana que permite programar en Python con sangrado de líneas, resaltado, autorrelleno, etc."
+            },
+            {
+                q: "Según el libro, ¿cuál es la implementación de Python más utilizada por ofrecer más estabilidad y madurez?",
+                options: ["JPython (escrita en Java).", "IronPython (escrita en C#).", "CPython (escrita en C).", "PyPy (escrita en Python)."],
+                correct: "CPython (escrita en C).",
+                justification: "El libro recoge tres implementaciones (CPython en C, JPython en Java e IronPython en C#) y señala que la más utilizada es la de C, ya que es la que ofrece más estabilidad y madurez."
+            },
+            {
+                q: "¿Cuál de los siguientes NO es un tipo de diario contable definido en el libro?",
+                options: ["General.", "Ventas.", "Compras.", "Marketing digital."],
+                correct: "Marketing digital.",
+                justification: "El libro distingue como tipos de diarios: General, Ventas, Compras, En efectivo o de caja, Abono de, y Banco y cheques. 'Marketing digital' no aparece como tipo de diario contable."
+            },
+            {
+                q: "¿Qué es un asiento contable en un ERP?",
+                options: ["Una factura emitida a un cliente.", "Un conjunto de apuntes que permiten representar algún movimiento contable.", "Un albarán de salida del almacén.", "Un informe de productividad mensual."],
+                correct: "Un conjunto de apuntes que permiten representar algún movimiento contable.",
+                justification: "Según el libro, un asiento es un conjunto de apuntes que permiten representar algún movimiento contable. Los ERP permiten crearlos de forma manual o automática (lo más frecuente, al realizar el pago)."
+            },
+            {
+                q: "¿Qué se entiende por 'Plan contable' en el contexto de un ERP?",
+                options: ["El calendario fiscal de la empresa.", "La estructura jerárquica de las distintas cuentas contables.", "Un informe mensual de pérdidas y ganancias.", "Una previsión anual de ingresos."],
+                correct: "La estructura jerárquica de las distintas cuentas contables.",
+                justification: "El libro define el plan contable como la estructura jerárquica de las distintas cuentas contables. Muchos ERP permiten gestionar los planes contables y, una vez elaborado, no se suele modificar."
+            },
+            {
+                q: "¿En qué país surgió SugarCRM y qué tecnología usa según el libro?",
+                options: ["Alemania, programado en Java.", "España, programado en PHP puro.", "Estados Unidos, programado en lenguaje LAMP.", "India, programado en Ruby on Rails."],
+                correct: "Estados Unidos, programado en lenguaje LAMP.",
+                justification: "Según el libro, SugarCRM es un software para gestionar la relación de las empresas con sus clientes, surgido en los Estados Unidos. Funciona a través de la web y está programado en el lenguaje LAMP."
+            },
+            {
+                q: "Entre los Data Warehouse actuales mencionados en el libro, ¿cuál es la alternativa de código abierto?",
+                options: ["Teradata.", "Oracle 12c Database.", "Amazon Web Service.", "Cloudera."],
+                correct: "Cloudera.",
+                justification: "El libro indica que Teradata, Oracle 12c Database y Amazon Web Service son data warehouse de licencia privativa, mientras que Cloudera es una alternativa de código abierto, aunque sin el servicio de mantenimiento de los privativos."
+            },
+            {
+                q: "¿Qué tipo de objeto se utiliza como base para implementar una clase Python que represente un objeto nuevo en Odoo?",
+                options: ["base.model.", "osv.osv.", "odoo.Object.", "openerp.Model."],
+                correct: "osv.osv.",
+                justification: "El libro indica que, cuando se crea un objeto nuevo en Odoo, es conveniente implementar una clase que herede del objeto osv.osv para que se reconozcan los elementos del nuevo objeto."
+            },
+            {
+                q: "En la definición de un objeto Odoo, ¿qué propiedad indica el nombre del objeto y es OBLIGATORIA?",
+                options: ["_table.", "_columns.", "_name.", "_inherit."],
+                correct: "_name.",
+                justification: "El libro especifica que _name indica el nombre del objeto y es un valor obligatorio. Otras propiedades como _columns (diccionario de campos) también son obligatorias pero no indican el nombre del objeto."
+            },
+            {
+                q: "¿Qué dos operadores se distinguen tanto para listas como para diccionarios en Python según el libro?",
+                options: ["Operador de suma (+) y operador de resta (-).", "Operador de concatenación (+) y operador de repetición (*).", "Operador lógico (&&) y operador relacional (==).", "Operador de asignación (=) y operador de comparación (!=)."],
+                correct: "Operador de concatenación (+) y operador de repetición (*).",
+                justification: "El libro indica que para las listas (y de la misma forma que en los diccionarios) se pueden distinguir dos operadores: operador concatenación (+) y operador de repetición (*)."
+            }            
         ];
 
         let quizData = [];
