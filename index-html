@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudio DAM - Cuestionarios</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --text-color: #333;
+            --primary: #2c3e50;
+            --sge-color: #e74c3c;
+            --ia-color: #9b59b6;
+            --multi-color: #2ecc71;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 2.5rem 1rem;
+        }
+
+        header h1 { margin: 0; font-size: 2.5rem; }
+        header p { margin: 0.5rem 0 0 0; opacity: 0.9; }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        .card h2 { margin-top: 0; color: var(--primary); }
+        .card p { color: #666; flex-grow: 1; margin-bottom: 25px; }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover { opacity: 0.9; }
+        
+        /* Colores específicos para cada asignatura */
+        .btn-sge { background-color: var(--sge-color); }
+        .btn-ia { background-color: var(--ia-color); }
+        .btn-multi { background-color: var(--multi-color); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Plataforma de Estudio - DAM</h1>
+        <p>Selecciona una asignatura para comenzar el test</p>
+    </header>
+
+    <main class="container">
+        <div class="card">
+            <h2>Sistemas de Gestión Empresarial</h2>
+            <p>Pon a prueba tus conocimientos sobre ERPs (Odoo, SAP), arquitectura, módulos e instalación de sistemas empresariales.</p>
+            <a href="sge.html" class="btn btn-sge">Iniciar Test SGE</a>
+        </div>
+
+        <div class="card">
+            <h2>Módulo Optativo: IA</h2>
+            <p>Preguntas sobre Machine Learning, Redes Neuronales, Deep Learning, prompts y modelos de lenguaje.</p>
+            <a href="ia.html" class="btn btn-ia">Iniciar Test IA</a>
+        </div>
+
+        <div class="card">
+            <h2>Prog. Multimedia y Dispositivos Móviles</h2>
+            <p>Repasa conceptos de Android Studio, ciclo de vida de una Activity, layouts, Kotlin/Java y motores de videojuegos.</p>
+            <a href="multimedia.html" class="btn btn-multi">Iniciar Test Multimedia</a>
+        </div>
+    </main>
+
+</body>
+</html>
