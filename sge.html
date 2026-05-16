@@ -7,7 +7,7 @@
     <style>
         :root {
             --primary-color: #1a365d;
-            --secondary-color: #d35400; /* Tono naranja oscuro elegante */
+            --secondary-color: #d35400;
             --accent-color: #e74c3c;
             --success-color: #27ae60;
             --background-color: #f8f9fa;
@@ -219,8 +219,7 @@
             
             <h2 id="question-text">¿Pregunta?</h2>
             
-            <div class="options-container" id="options">
-                </div>
+            <div class="options-container" id="options"></div>
 
             <div class="justification-box" id="justification">
                 <h4>
@@ -677,15 +676,15 @@
             },
             {
                 q: "¿Cuál de las siguientes es una forma de trabajar en la nube en función de las opciones que posee el cliente?",
-                options: ["PaaS (Platform as Service).", "SaaS (Software as Service).", "Todas las respuestas son correctas.", "IaaS (Infrastructure as Service)"],
+                options: ["PaaS (Platform as Service).", "SaaS (Software as Service).", "Todas las respuestas son correctas.", "IaaS (Infrastructure as Service)."],
                 correct: "Todas las respuestas son correctas.",
                 justification: "Los tres términos presentados representan los tres modelos fundamentales de servicios en la computación en la nube (Cloud Computing)."
             },
             {
                 q: "¿Cuáles son los dos tipos de licencia robusta que existen?",
-                options: ["Fuertes y débiles.", "Globales y locales.", "Ninguna de las respuestas anteriores", "Comunity y premium."],
+                options: ["Fuertes y débiles.", "Permisivas y restrictivas.", "Abiertas y cerradas.", "Comerciales y gratuitas."],
                 correct: "Fuertes y débiles.",
-                justification: "En el contexto de la gestión de software y los sistemas ERP-CRM, el término "licencia robusta" hace referencia a las licencias de tipo Copyleft (licencias protectoras o recíprocas). Fuerte: Obliga a que cualquier software derivado o que incluya parte de ese código sea obligatoriamente liberado bajo la misma licencia libre. Débil: Permite que el código sea enlazado o integrado con módulos de software privativo/comercial sin obligar a que todo el programa resultante adopte la licencia libre"
+                justification: "En el contexto de la gestión de software y los sistemas ERP-CRM, el término 'licencia robusta' hace referencia a las licencias de tipo Copyleft. Fuerte: obliga a que cualquier software derivado sea liberado bajo la misma licencia. Débil: permite integración con software privativo sin obligar a que todo el programa adopte la licencia libre."
             },
             {
                 q: "No se puede hacer una copia de seguridad de una base de datos.",
@@ -699,7 +698,6 @@
         let currentQuestionIndex = 0;
         let score = 0;
 
-        // Función para barajar elementos de un array
         function shuffleArray(array) {
             let currentIndex = array.length, randomIndex;
             while (currentIndex !== 0) {
@@ -713,17 +711,10 @@
         function startQuiz() {
             document.getElementById('results-screen').style.display = 'none';
             document.getElementById('question-screen').style.display = 'block';
-            
-            // Copia profunda
+
             quizData = JSON.parse(JSON.stringify(rawQuestions));
-            
-            // 1) Barajar preguntas
             quizData = shuffleArray(quizData);
-            
-            // 2) Barajar opciones
-            quizData.forEach(q => {
-                q.options = shuffleArray(q.options);
-            });
+            quizData.forEach(q => { q.options = shuffleArray(q.options); });
 
             currentQuestionIndex = 0;
             score = 0;
@@ -739,9 +730,9 @@
         function renderQuestion() {
             const currentQ = quizData[currentQuestionIndex];
             document.getElementById('question-text').innerText = currentQ.q;
-            
+
             const optionsContainer = document.getElementById('options');
-            optionsContainer.innerHTML = ''; 
+            optionsContainer.innerHTML = '';
 
             document.getElementById('justification').style.display = 'none';
             document.getElementById('next-btn').style.display = 'none';
@@ -756,18 +747,13 @@
         }
 
         function selectOption(selected, correct, btnElement) {
-            const currentQ = quizData[currentQuestionIndex];
             const allBtns = document.querySelectorAll('.option-btn');
-            
-            // Bloqueo de opciones
+
             allBtns.forEach(btn => {
                 btn.disabled = true;
-                if (btn.innerText === correct) {
-                    btn.classList.add('correct');
-                }
+                if (btn.innerText === correct) btn.classList.add('correct');
             });
 
-            // Verificar acierto
             if (selected === correct) {
                 score++;
                 updateUI();
@@ -775,18 +761,11 @@
                 btnElement.classList.add('incorrect');
             }
 
-            // Explicación
-            document.getElementById('justification-text').innerText = currentQ.justification;
+            document.getElementById('justification-text').innerText = quizData[currentQuestionIndex].justification;
             document.getElementById('justification').style.display = 'block';
-
-            // Siguiente
             document.getElementById('next-btn').style.display = 'inline-block';
-            
-            if (currentQuestionIndex === quizData.length - 1) {
-                document.getElementById('next-btn').innerText = 'Ver Calificación Final';
-            } else {
-                document.getElementById('next-btn').innerText = 'Siguiente Pregunta';
-            }
+            document.getElementById('next-btn').innerText =
+                currentQuestionIndex === quizData.length - 1 ? 'Ver Calificación Final' : 'Siguiente Pregunta';
         }
 
         function handleNext() {
@@ -805,9 +784,7 @@
             document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
         }
 
-        // Iniciar
         window.onload = startQuiz;
-
     </script>
 </body>
 </html>
