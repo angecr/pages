@@ -84,13 +84,37 @@
             background-color: #ffffff;
             border: 2px solid #dcdde1;
             border-radius: 8px;
-            padding: 16px 20px;
+            padding: 14px 18px;
             font-size: 1.05em;
             text-align: left;
             cursor: pointer;
             transition: all 0.2s ease;
             color: var(--text-color);
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .option-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+            border-radius: 6px;
+            background-color: #f0f3f7;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 0.95em;
+            border: 1px solid #dcdde1;
+            transition: all 0.2s ease;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .option-text {
+            flex: 1;
         }
 
         .option-btn:hover:not(:disabled) {
@@ -100,11 +124,30 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
+        .option-btn.pre-selected {
+            border-color: var(--primary-color);
+            background-color: #eef2f8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(26, 54, 93, 0.18);
+        }
+
+        .option-btn.pre-selected .option-number {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
         .option-btn.correct {
             background-color: #eafaf1;
             border-color: var(--success-color);
             color: #1e8449;
             font-weight: 700;
+        }
+
+        .option-btn.correct .option-number {
+            background-color: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
         }
 
         .option-btn.incorrect {
@@ -113,9 +156,41 @@
             color: #c0392b;
         }
 
+        .option-btn.incorrect .option-number {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
         .option-btn:disabled {
             cursor: not-allowed;
             opacity: 0.85;
+        }
+
+        .keyboard-hint {
+            margin-top: 18px;
+            padding: 10px 14px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.85em;
+            color: #7f8c8d;
+            text-align: center;
+            border: 1px dashed #dcdde1;
+        }
+
+        .keyboard-hint kbd {
+            display: inline-block;
+            padding: 2px 8px;
+            background: white;
+            border: 1px solid #bdc3c7;
+            border-bottom-width: 2px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            color: var(--primary-color);
+            font-weight: 700;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+            margin: 0 2px;
         }
 
         .justification-box {
@@ -164,6 +239,17 @@
             transform: translateY(-2px);
         }
 
+        .next-btn .kbd-inline {
+            display: inline-block;
+            padding: 1px 7px;
+            background: rgba(255,255,255,0.22);
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85em;
+            margin-left: 8px;
+            font-weight: 700;
+        }
+
         .restart-btn {
             display: inline-block;
             margin-top: 25px;
@@ -203,8 +289,10 @@
         @media (max-width: 600px) {
             #quiz-container { padding: 25px 20px; }
             h2 { font-size: 1.2em; }
-            .option-btn { font-size: 1em; padding: 14px 15px; }
+            .option-btn { font-size: 1em; padding: 12px 14px; }
+            .option-number { width: 26px; height: 26px; min-width: 26px; font-size: 0.85em; }
             .final-score { font-size: 3em; }
+            .keyboard-hint { font-size: 0.78em; }
         }
     </style>
 </head>
@@ -221,6 +309,10 @@
             
             <div class="options-container" id="options"></div>
 
+            <div class="keyboard-hint">
+                Usa <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> (teclado o numpad) para seleccionar · <kbd>Enter</kbd> para confirmar y avanzar
+            </div>
+
             <div class="justification-box" id="justification">
                 <h4>
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -234,7 +326,7 @@
             </div>
 
             <div class="next-btn-container">
-                <button class="next-btn" id="next-btn" onclick="handleNext()">Siguiente Pregunta</button>
+                <button class="next-btn" id="next-btn" onclick="handleNext()">Siguiente Pregunta<span class="kbd-inline">Enter</span></button>
             </div>
         </div>
 
@@ -746,6 +838,11 @@
         let currentQuestionIndex = 0;
         let score = 0;
 
+        // === NUEVO: estado para navegación por teclado ===
+        let preSelectedIndex = -1;   // índice de la opción resaltada (aún sin confirmar)
+        let questionAnswered = false; // true cuando ya se ha confirmado la respuesta
+        // ================================================
+
         function shuffleArray(array) {
             let currentIndex = array.length, randomIndex;
             while (currentIndex !== 0) {
@@ -785,21 +882,52 @@
             document.getElementById('justification').style.display = 'none';
             document.getElementById('next-btn').style.display = 'none';
 
-            currentQ.options.forEach(option => {
+            // Resetear estado de teclado para la nueva pregunta
+            preSelectedIndex = -1;
+            questionAnswered = false;
+
+            currentQ.options.forEach((option, idx) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
-                btn.innerText = option;
-                btn.onclick = () => selectOption(option, currentQ.correct, btn);
+                btn.dataset.index = idx;
+
+                // Número visible que indica qué tecla pulsar
+                const numSpan = document.createElement('span');
+                numSpan.className = 'option-number';
+                numSpan.innerText = idx + 1;
+                btn.appendChild(numSpan);
+
+                const textSpan = document.createElement('span');
+                textSpan.className = 'option-text';
+                textSpan.innerText = option;
+                btn.appendChild(textSpan);
+
+                btn.onclick = () => commitOption(option, currentQ.correct, btn);
                 optionsContainer.appendChild(btn);
             });
         }
 
-        function selectOption(selected, correct, btnElement) {
+        // Resalta visualmente una opción sin confirmarla todavía
+        function preSelectOption(index) {
+            if (questionAnswered) return;
+            const buttons = document.querySelectorAll('.option-btn');
+            if (index < 0 || index >= buttons.length) return;
+
+            buttons.forEach(b => b.classList.remove('pre-selected'));
+            buttons[index].classList.add('pre-selected');
+            preSelectedIndex = index;
+        }
+
+        // Confirma definitivamente la opción seleccionada (equivalente a hacer click)
+        function commitOption(selected, correct, btnElement) {
             const allBtns = document.querySelectorAll('.option-btn');
 
             allBtns.forEach(btn => {
+                btn.classList.remove('pre-selected');
                 btn.disabled = true;
-                if (btn.innerText === correct) btn.classList.add('correct');
+                if (btn.querySelector('.option-text').innerText === correct) {
+                    btn.classList.add('correct');
+                }
             });
 
             if (selected === correct) {
@@ -809,11 +937,19 @@
                 btnElement.classList.add('incorrect');
             }
 
+            questionAnswered = true;
+
             document.getElementById('justification-text').innerText = quizData[currentQuestionIndex].justification;
             document.getElementById('justification').style.display = 'block';
             document.getElementById('next-btn').style.display = 'inline-block';
-            document.getElementById('next-btn').innerText =
-                currentQuestionIndex === quizData.length - 1 ? 'Ver Calificación Final' : 'Siguiente Pregunta';
+            document.getElementById('next-btn').innerHTML =
+                (currentQuestionIndex === quizData.length - 1 ? 'Ver Calificación Final' : 'Siguiente Pregunta')
+                + '<span class="kbd-inline">Enter</span>';
+        }
+
+        // Compatibilidad: mantenemos la firma anterior por si se llama desde otro sitio
+        function selectOption(selected, correct, btnElement) {
+            commitOption(selected, correct, btnElement);
         }
 
         function handleNext() {
@@ -831,6 +967,52 @@
             document.getElementById('results-screen').style.display = 'block';
             document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
         }
+
+        // === MANEJADOR DE TECLADO ===
+        document.addEventListener('keydown', (e) => {
+            // En la pantalla de resultados: Enter reinicia el cuestionario
+            if (document.getElementById('results-screen').style.display === 'block') {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    startQuiz();
+                }
+                return;
+            }
+
+            // Teclas 1-4 (tanto del teclado normal como del numpad con NumLock activo)
+            // e.key devuelve "1","2","3","4" en ambos casos cuando NumLock está activo.
+            if (/^[1-4]$/.test(e.key)) {
+                e.preventDefault();
+                const idx = parseInt(e.key, 10) - 1;
+                preSelectOption(idx);
+                return;
+            }
+
+            // Soporte explícito por code para numpad incluso sin NumLock activo
+            // (e.code: "Numpad1", "Numpad2"...). Si el usuario tiene NumLock apagado
+            // y pulsa Numpad1, e.key llega como "End" pero e.code sigue siendo "Numpad1".
+            if (/^Numpad[1-4]$/.test(e.code)) {
+                e.preventDefault();
+                const idx = parseInt(e.code.replace('Numpad', ''), 10) - 1;
+                preSelectOption(idx);
+                return;
+            }
+
+            // ENTER: confirma la opción pre-seleccionada o avanza si ya está corregida
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (!questionAnswered) {
+                    if (preSelectedIndex >= 0) {
+                        const buttons = document.querySelectorAll('.option-btn');
+                        buttons[preSelectedIndex].click();
+                    }
+                    // Si no hay nada pre-seleccionado, ignoramos el Enter
+                } else {
+                    handleNext();
+                }
+            }
+        });
+        // ============================
 
         window.onload = startQuiz;
     </script>
