@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuestionario Completo: Sistemas de Gestión Empresarial (72 Preguntas)</title>
+    <title>Cuestionario Interactivo: Sistemas de Gestión Empresarial</title>
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #2980b9;
+            --primary-color: #1a365d;
+            --secondary-color: #d35400; /* Tono naranja oscuro elegante */
             --accent-color: #e74c3c;
             --success-color: #27ae60;
-            --background-color: #f5f7fa;
+            --background-color: #f8f9fa;
             --card-bg: #ffffff;
             --text-color: #2c3e50;
         }
@@ -35,7 +35,7 @@
         #quiz-container {
             background-color: var(--card-bg);
             border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
             max-width: 850px;
             width: 100%;
             padding: 40px;
@@ -56,8 +56,8 @@
             font-size: 1.1em;
             font-weight: 700;
             color: var(--secondary-color);
-            background: #eef2f5;
-            padding: 5px 15px;
+            background: #fdf2e9;
+            padding: 6px 16px;
             border-radius: 20px;
         }
 
@@ -95,7 +95,7 @@
 
         .option-btn:hover:not(:disabled) {
             border-color: var(--secondary-color);
-            background-color: #f4f8fb;
+            background-color: #fef9f5;
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
@@ -115,14 +115,14 @@
 
         .option-btn:disabled {
             cursor: not-allowed;
-            opacity: 0.8;
+            opacity: 0.85;
         }
 
         .justification-box {
             display: none;
             margin-top: 25px;
             padding: 20px;
-            background-color: #f0f7fb;
+            background-color: #fcf6f2;
             border-left: 5px solid var(--secondary-color);
             border-radius: 6px;
             font-size: 1.05em;
@@ -156,11 +156,11 @@
             font-weight: 600;
             transition: background-color 0.2s, transform 0.1s;
             display: none;
-            box-shadow: 0 4px 6px rgba(41, 128, 185, 0.2);
+            box-shadow: 0 4px 6px rgba(211, 84, 0, 0.2);
         }
 
         .next-btn:hover, .restart-btn:hover {
-            background-color: #1f6391;
+            background-color: #a04000;
             transform: translateY(-2px);
         }
 
@@ -211,7 +211,6 @@
 <body>
 
     <div id="quiz-container">
-        <!-- Pantalla de la Pregunta -->
         <div id="question-screen">
             <div class="header">
                 <div class="progress" id="progress">Pregunta 1 de X</div>
@@ -221,8 +220,7 @@
             <h2 id="question-text">¿Pregunta?</h2>
             
             <div class="options-container" id="options">
-                <!-- Los botones se insertan por JS -->
-            </div>
+                </div>
 
             <div class="justification-box" id="justification">
                 <h4>
@@ -241,7 +239,6 @@
             </div>
         </div>
 
-        <!-- Pantalla de Resultados -->
         <div class="results-screen" id="results-screen">
             <h1>¡Test Completado!</h1>
             <p>Has finalizado el repaso exhaustivo de Sistemas de Gestión Empresarial.</p>
@@ -251,709 +248,438 @@
     </div>
 
     <script>
-        // Array masivo con las 72 preguntas proporcionadas
         const rawQuestions = [
             {
-                q: "¿Qué es un ERP?",
-                options: [
-                    "Es un sistema de planificación de recursos empresariales.",
-                    "Es un lenguaje de programación para crear módulos comerciales.",
-                    "Es un sistema puramente analítico separado de las transacciones.",
-                    "Es una base de datos relacional para el soporte técnico."
-                ],
-                correct: "Es un sistema de planificación de recursos empresariales.",
-                justification: "Es un software de carácter modular que gestiona toda la información de una empresa, mejorando su rendimiento, operatividad y eficiencia."
-            },
-            {
                 q: "¿Qué características tiene un ERP?",
-                options: [
-                    "Integración, modularidad, adaptabilidad.",
-                    "Seguridad, exclusividad, estanqueidad.",
-                    "Velocidad, monopuesto, analítica.",
-                    "Rigidez, modularidad, relacional."
-                ],
+                options: ["Modularidad, escalabilidad, oportunidad.", "Simplicidad, integración, rigidez.", "Integración, modularidad, adaptabilidad.", "Ninguna respuesta es correcta."],
                 correct: "Integración, modularidad, adaptabilidad.",
-                justification: "Engloba toda la actividad, funciona por módulos independientes y se adapta a los requerimientos de la empresa."
-            },
-            {
-                q: "¿Cuál es la definición de 'Adaptabilidad' en el entorno ERP?",
-                options: [
-                    "Gracias a las características de Modularidad e Integración, un ERP se puede adaptar a las distintas necesidades y requerimientos de una determinada empresa.",
-                    "Permite adaptar el hardware del cliente al software obligatoriamente.",
-                    "Es la capacidad de traducir automáticamente el código fuente a distintos idiomas.",
-                    "Es la adaptación obligatoria de la empresa a las rigideces del software."
-                ],
-                correct: "Gracias a las características de Modularidad e Integración, un ERP se puede adaptar a las distintas necesidades y requerimientos de una determinada empresa.",
-                justification: "El ERP se ajusta al modelo de negocio de la organización y no al revés."
-            },
-            {
-                q: "¿Cuál de las siguientes opciones se puede gestionar dentro de un sistema ERP-CRM?",
-                options: [
-                    "Todas las respuestas son correctas (Recursos humanos, Marketing, Gestión de Almacenes, Gestión de usuarios).",
-                    "Solo Gestión de Almacenes y Facturación.",
-                    "Únicamente el Marketing y las Campañas Publicitarias.",
-                    "Solo los Recursos Humanos y Nóminas."
-                ],
-                correct: "Todas las respuestas son correctas (Recursos humanos, Marketing, Gestión de Almacenes, Gestión de usuarios).",
-                justification: "Su propiedad de 'integración' abarca a todas las áreas operativas de una empresa."
-            },
-            {
-                q: "¿Qué es el SAP Business All-in-One?",
-                options: [
-                    "Software diseñado para medianas y grandes empresas incorporando una serie de productos básicos y específicos de un determinado sector de una empresa.",
-                    "Es un Data Warehouse exclusivo para pequeñas empresas (pymes).",
-                    "Es un módulo de Odoo diseñado específicamente para recursos humanos.",
-                    "Es un sistema operativo de licencia libre y abierta."
-                ],
-                correct: "Software diseñado para medianas y grandes empresas incorporando una serie de productos básicos y específicos de un determinado sector de una empresa.",
-                justification: "Es la solución preconfigurada de SAP para este segmento del mercado."
-            },
-            {
-                q: "¿Cuál es el único ERP que tiene su origen en España y que ha conseguido una gran implantación en todo el mundo?",
-                options: ["OpenBravo.", "SAP.", "Oracle.", "Microsoft Dynamics."],
-                correct: "OpenBravo.",
-                justification: "OpenBravo es la principal alternativa libre frente a SAP o Microsoft, naciendo con raíces españolas y expandiéndose globalmente."
-            },
-            {
-                q: "¿Qué significa CRM?",
-                options: [
-                    "Gestión de las Relaciones con el Cliente.",
-                    "Sistema de Control de Recursos Materiales.",
-                    "Centro de Retención de Marketing.",
-                    "Gestión de Redes Multiplataforma."
-                ],
-                correct: "Gestión de las Relaciones con el Cliente.",
-                justification: "Sus siglas responden a Customer Relationship Management."
+                justification: "Un ERP engloba toda la actividad, funciona por módulos independientes y se adapta a los requerimientos de la empresa."
             },
             {
                 q: "¿Qué palabras se identifican con la lógica operacional de los CRM?",
-                options: [
-                    "Todas las respuestas son correctas (Organizar, Automatizar, Gestionar).",
-                    "Exclusivamente 'Analizar'.",
-                    "Solo 'Vender' y 'Comprar'.",
-                    "Solo 'Extraer', 'Transformar', 'Cargar'."
-                ],
-                correct: "Todas las respuestas son correctas (Organizar, Automatizar, Gestionar).",
-                justification: "La parte operacional del CRM automatiza y gestiona las ventas, el marketing y el soporte técnico."
-            },
-            {
-                q: "Dentro de los CRM, con la lógica analítica es posible:",
-                options: [
-                    "Analizar la información existente para llevar a cabo las diferentes campañas de marketing.",
-                    "Enviar correos electrónicos manuales uno por uno a los clientes.",
-                    "Restringir el acceso a los módulos de contabilidad.",
-                    "Conectar directamente el hardware a la base de datos de producción."
-                ],
-                correct: "Analizar la información existente para llevar a cabo las diferentes campañas de marketing.",
-                justification: "La lógica analítica estudia los datos del cliente para modificar o crear nuevas estrategias comerciales."
-            },
-            {
-                q: "Los CRM actuales pueden dividirse en dos categorías, ¿sabes cuáles son?",
-                options: [
-                    "Integrados en un sistema ERP y exclusivos.",
-                    "Básicos y Avanzados.",
-                    "Analíticos y Relacionales.",
-                    "De código abierto y De dominio público."
-                ],
-                correct: "Integrados en un sistema ERP y exclusivos.",
-                justification: "Pueden venir dentro del propio ERP (como el de SAP u Odoo) o ser desarrollados de forma independiente y autónoma (exclusivos)."
-            },
-            {
-                q: "¿Los CRM que están ________ se refieren a que pertenecen al mismo ERP, por ejemplo: Odoo?",
-                options: ["Integrados.", "Exclusivos.", "Analíticos.", "Distribuidos."],
-                correct: "Integrados.",
-                justification: "Son módulos que los mismos fabricantes del ERP incluyen nativamente en su suite de software."
-            },
-            {
-                q: "Una de las principales funciones de un Data Warehouse es:",
-                options: [
-                    "Integra los datos de las correspondientes bases de datos distribuidas.",
-                    "Eliminar los datos antiguos directamente del ERP diario.",
-                    "Funcionar como interfaz gráfica exclusiva de Odoo.",
-                    "Reemplazar al servidor web."
-                ],
-                correct: "Integra los datos de las correspondientes bases de datos distribuidas.",
-                justification: "Reúne la información transaccional separándola de las operaciones cotidianas para facilitar el análisis a largo plazo."
-            },
-            {
-                q: "Identifica las funciones que deben realizar las herramientas que permiten controlar y automatizar las necesidades de los Data Warehouse:",
-                options: [
-                    "Todas son correctas (Gestión integrada de la extracción, transformación y carga, Manejo de excepciones y archivos logs, Control en el tiempo de respuesta).",
-                    "Solo la extracción de datos.",
-                    "Control de acceso y auditoría de contraseñas.",
-                    "Diseño exclusivo de vistas y formularios HTML."
-                ],
-                correct: "Todas son correctas (Gestión integrada de la extracción, transformación y carga, Manejo de excepciones y archivos logs, Control en el tiempo de respuesta).",
-                justification: "Estas herramientas controlan integralmente el flujo ETL (Extracción, Transformación y Carga) para nutrir de datos al almacén."
-            },
-            {
-                q: "Identifica la función INCORRECTA entre las herramientas de automatización de los Data Warehouse:",
-                options: [
-                    "Control de acceso.",
-                    "Manejo de excepciones y archivos logs.",
-                    "Gestión integrada de la extracción, transformación y carga.",
-                    "Control en el tiempo de respuesta."
-                ],
-                correct: "Control de acceso.",
-                justification: "El control de acceso es propio de la seguridad de la Base de Datos nativa, no de las herramientas de automatización y extracción del Data Warehouse (ETL)."
-            },
-            {
-                q: "A la hora de elegir un ERP, es preciso tener en cuenta una serie de factores. ¿Cuál NO es uno de esos factores?",
-                options: [
-                    "Que sea lento y difícil de uso.",
-                    "Que proporcione informes y análisis.",
-                    "Que implemente seguridad.",
-                    "Que ofrezca soporte a todas las áreas que necesite la empresa."
-                ],
-                correct: "Que sea lento y difícil de uso.",
-                justification: "Se busca exactamente lo contrario: que sea fácil y rápido en su uso, ofrezca seguridad y soporte general a toda la empresa."
-            },
-            {
-                q: "Cuando se trabaja con software, debe existir un contrato entre el creador y el comprador, denominado licencia. ¿Qué es?",
-                options: [
-                    "Es un documento que detalla una serie de obligaciones que debe tener el desarrollador con el usuario en cuestión, y viceversa. Según el tipo, establece posibilidades de utilización, modificación y distribución.",
-                    "Es el archivo ejecutable que permite instalar el ERP en Windows.",
-                    "Es la restricción física (USB) obligatoria que necesita el servidor.",
-                    "Es un archivo de registro (log) que monitoriza los errores del usuario."
-                ],
-                correct: "Es un documento que detalla una serie de obligaciones que debe tener el desarrollador con el usuario en cuestión, y viceversa. Según el tipo, establece posibilidades de utilización, modificación y distribución.",
-                justification: "La licencia regula legalmente el uso del código, determinando los derechos del desarrollador y del cliente final."
-            },
-            {
-                q: "Identifica los tipos de software según su coste:",
-                options: [
-                    "Freeware, Payware y Shareware.",
-                    "Código abierto, Dominio público y Propietario.",
-                    "Windows, Linux y MacOS.",
-                    "Local, Cliente-Servidor y SaaS."
-                ],
-                correct: "Freeware, Payware y Shareware.",
-                justification: "Clasificados puramente por el factor económico: Freeware (gratis), Payware (pago obligatorio) y Shareware (prueba temporal o con limitaciones)."
-            },
-            {
-                q: "Si clasificamos el coste económico... ¿Qué es el Shareware?",
-                options: [
-                    "Durante un periodo de tiempo, el software puede usarse sin coste alguno. Pasado cierto tiempo, para poder continuar usándolo, se debe realizar un pago.",
-                    "Es un software de uso totalmente gratuito de por vida.",
-                    "Exige un pago previo antes de poder ser descargado.",
-                    "Es el software cuyo código puede ser modificado y distribuido sin restricciones."
-                ],
-                correct: "Durante un periodo de tiempo, el software puede usarse sin coste alguno. Pasado cierto tiempo, para poder continuar usándolo, se debe realizar un pago.",
-                justification: "Es un modelo de evaluación o prueba comercial (trial period)."
-            },
-            {
-                q: "Identifica las licencias de código abierto permisivas:",
-                options: [
-                    "Todas son correctas (Apache, BSD, MIT).",
-                    "Únicamente Apache.",
-                    "Únicamente GNU/GPL.",
-                    "Windows Pro y Enterprise."
-                ],
-                correct: "Todas son correctas (Apache, BSD, MIT).",
-                justification: "Son licencias que no tienen casi limitaciones para la utilización, comercialización o modificación del código fuente."
-            },
-            {
-                q: "En el sistema de instalación _______ se instalan todos los datos y la gestión en un ordenador, permitiendo conectarse desde distintos puntos instalando una aplicación (cliente).",
-                options: [
-                    "Cliente-servidor.",
-                    "Monopuesto.",
-                    "SaaS.",
-                    "Peer-to-Peer."
-                ],
-                correct: "Cliente-servidor.",
-                justification: "El servidor centraliza la base de datos y la lógica, mientras que los clientes acceden a ella en red local o externa."
-            },
-            {
-                q: "El sistema de instalación _______ realiza la instalación en un ordenador, de tal forma que solo va a tener acceso al sistema el propietario del ordenador físico.",
-                options: [
-                    "Monopuesto.",
-                    "Cliente-servidor.",
-                    "SaaS.",
-                    "Virtualizado."
-                ],
-                correct: "Monopuesto.",
-                justification: "Base de datos, aplicación y cliente residen en la misma máquina local; nadie externo puede conectarse."
-            },
-            {
-                q: "Para entornos de desarrollo o aprendizaje, ¿qué tipo de instalación es mejor?",
-                options: [
-                    "Monopuesto.",
-                    "Cliente-servidor.",
-                    "SaaS.",
-                    "Cloud Computing."
-                ],
-                correct: "Monopuesto.",
-                justification: "No requiere infraestructura de red ni afecta a la base de datos productiva de otros usuarios; es ideal para hacer pruebas de código locales."
-            },
-            {
-                q: "La gestión de usuarios de un sistema _________ tiene entre las funciones más importantes la creación, mantenimiento y borrado de usuarios:",
-                options: [
-                    "ERP-CRM.",
-                    "Data Warehouse.",
-                    "Base de datos.",
-                    "Sistema Operativo."
-                ],
-                correct: "ERP-CRM.",
-                justification: "El administrador del ERP gestiona los perfiles, altas, bajas y permisos específicos de los empleados y roles de la empresa."
-            },
-            {
-                q: "Módulos mínimos instalados en OpenERP (Odoo):",
-                options: [
-                    "Todas las respuestas son correctas (base, web_livechat, base_setup).",
-                    "Solo 'base'.",
-                    "Ventas, Compras y Contabilidad.",
-                    "Marketing y Recursos Humanos."
-                ],
-                correct: "Todas las respuestas son correctas (base, web_livechat, base_setup).",
-                justification: "Son los componentes del núcleo técnico (core) que el sistema instala obligatoriamente por defecto al crear una base de datos."
+                options: ["Organizar.", "Automatizar.", "Gestionar.", "Todas las respuestas son correctas."],
+                correct: "Todas las respuestas son correctas.",
+                justification: "La parte operacional del CRM automatiza y gestiona las ventas, el marketing, el soporte técnico y organiza el call center."
             },
             {
                 q: "¿Qué tipo de base de datos es la mejor opción para un sistema de gestión de base de datos de un ERP?",
-                options: [
-                    "Multidimensional.",
-                    "Relacional.",
-                    "Plana (.txt).",
-                    "Basada en grafos."
-                ],
+                options: ["Racional.", "Relacional.", "Multirelacional.", "Multidimensional."],
                 correct: "Multidimensional.",
-                justification: "Aunque Odoo opera sobre relacionales (PostgreSQL), la teoría del curso cita a las BD multidimensionales como la 'mejor opción' teórica por su rendimiento analítico superior."
+                justification: "Aunque suelen operar en bases de datos relacionales, las multidimensionales se consideran la 'mejor opción' por su alto rendimiento analítico."
             },
             {
-                q: "¿Con qué Base de datos trabaja nativamente OpenERP (Odoo)?",
-                options: ["PostgreSQL.", "MySQL.", "Oracle.", "SQL Server."],
-                correct: "PostgreSQL.",
-                justification: "Es el motor relacional de código abierto que Odoo utiliza obligatoriamente como soporte para todas sus versiones."
+                q: "Módulos mínimos instalados en OpenERP:",
+                options: ["base.", "web_livechat.", "base_setup.", "Todas las respuestas son correctas."],
+                correct: "Todas las respuestas son correctas.",
+                justification: "Son los componentes del núcleo que el sistema instala obligatoriamente por defecto."
             },
             {
-                q: "¿Qué es PostgreSQL?",
-                options: [
-                    "Es un sistema de código abierto de administración de bases de datos de tipo relacional.",
-                    "Es un módulo de Odoo para diseño de informes.",
-                    "Es un lenguaje de programación orientado a objetos.",
-                    "Es un sistema de bases de datos de tipo NO relacional (NoSQL)."
-                ],
-                correct: "Es un sistema de código abierto de administración de bases de datos de tipo relacional.",
-                justification: "Es un SGBD robusto, fiable y de código abierto utilizado mundialmente como soporte de datos."
+                q: "En el sistema de instalación _________ se instalan todos los datos y la gestión de estos en un ordenador... instalando una aplicación (cliente) con la que es posible conectarse al ordenador que poseen los datos (servidor).",
+                options: ["Cliente-servidor.", "Saas.", "Monopuesto.", "Cliente-servidor Web."],
+                correct: "Cliente-servidor.",
+                justification: "El servidor centraliza la base de datos y los clientes acceden a ella instalando una aplicación de acceso."
             },
             {
-                q: "Los sistemas relacionales deben cumplir una serie de propiedades básicas. Indica cuál es:",
-                options: [
-                    "Debe ser un sistema capaz de eliminar la redundancia entre sus datos para poder asegurar la coherencia entre todos.",
-                    "Debe ser un sistema capaz de crear redundancia intencionada en los datos.",
-                    "Debe permitir registros huérfanos sin claves primarias.",
-                    "Debe asegurar que los datos nunca puedan borrarse."
-                ],
-                correct: "Debe ser un sistema capaz de eliminar la redundancia entre sus datos para poder asegurar la coherencia entre todos.",
-                justification: "Esto se conoce como la propiedad de 'Integridad' o normalización de la base de datos."
+                q: "Para entornos de desarrollo o aprendizaje, ¿qué tipo de instalación es mejor?",
+                options: ["SaaS.", "Cliente-servidor.", "Monopuesto.", "Online."],
+                correct: "Monopuesto.",
+                justification: "No requiere red externa ni afecta a otros usuarios reales, por lo que es ideal para hacer pruebas de desarrollo locales."
             },
             {
-                q: "¿Cuál de las siguientes características NO es una propiedad de un sistema relacional?",
-                options: ["Escalaridad.", "Integridad.", "Compartición.", "Seguridad."],
-                correct: "Escalaridad.",
-                justification: "Las propiedades básicas relacionales son integridad, compartición, seguridad y protección contra fallos. La escalaridad pertenece más a la arquitectura del hardware/software."
+                q: "Dependiendo del coste, podemos diferenciar entre diversos tipos de softwares. Identifica los tipos de software según el coste:",
+                options: ["Moneyware, Shareware y Rumboware.", "Freeware, Payware y Shareware.", "Rumboware, Freeware y Payware.", "Ninguna de las respuestas es correcta."],
+                correct: "Freeware, Payware y Shareware.",
+                justification: "Freeware es gratis, Payware es de pago y Shareware es de prueba temporal."
             },
             {
-                q: "Es posible estructurar el diseño de las bases de datos relacionales en tres niveles diferentes:",
-                options: [
-                    "Físico, Lógico o Conceptual y Externo.",
-                    "Físico, Abstracto y Virtual.",
-                    "Frontend, Backend y BD.",
-                    "Primario, Secundario y Terciario."
-                ],
-                correct: "Físico, Lógico o Conceptual y Externo.",
-                justification: "Según ANSI-SPARC: Físico (almacenamiento en disco), Lógico (esquema de tablas) y Externo (vistas del usuario)."
-            },
-            {
-                q: "¿Qué permite el nivel lógico o conceptual?",
-                options: [
-                    "Permite crear una estructura en los datos mediante tablas y restricciones de integridad y claves primarias.",
-                    "Permite establecer las rutas de guardado en el disco duro.",
-                    "Permite el diseño exclusivo de la interfaz gráfica (colores).",
-                    "Determina los voltajes de lectura/escritura de los datos físicos."
-                ],
-                correct: "Permite crear una estructura en los datos mediante tablas y restricciones de integridad y claves primarias.",
-                justification: "Es el nivel intermedio donde el diseñador define el esquema relacional, los campos y cómo se asocian entre sí."
-            },
-            {
-                q: "Unidad mínima de información que puede almacenar un ordenador y que se corresponde con una información, no con un tamaño:",
-                options: ["Dato.", "Registro.", "Byte.", "Tabla."],
-                correct: "Dato.",
-                justification: "En el contexto de la gestión de información, el 'dato' es la unidad atómica conceptual; un hecho puntual."
-            },
-            {
-                q: "Es la mínima unidad de estructura de una base de datos. Conjunto de registros o filas relacionadas almacenadas bajo un mismo nombre:",
-                options: ["Tabla.", "Columna.", "Fila.", "Dato."],
+                q: "Es la mínima unidad de estructura de una base de datos. Es el conjunto de registros o filas relacionadas que se almacenan en una base de datos bajo un mismo nombre.",
+                options: ["Tabla.", "Fila.", "Columna.", "Ninguna de las respuestas es correcta."],
                 correct: "Tabla.",
-                justification: "La tabla agrupa de forma estructurada a todos los registros que comparten los mismos atributos/columnas."
+                justification: "Las tablas son el elemento fundamental de estructuración en bases de datos relacionales, conteniendo filas y columnas."
             },
             {
-                q: "¿Qué son las consultas?",
-                options: [
-                    "Son un conjunto de filas que pueden tener una o varias tablas solicitadas por el usuario, dependiendo de distintos criterios de selección.",
-                    "Son órdenes para formatear el disco duro.",
-                    "Son los archivos XML de Odoo.",
-                    "Son los pagos periódicos de mantenimiento del servidor."
-                ],
-                correct: "Son un conjunto de filas que pueden tener una o varias tablas solicitadas por el usuario, dependiendo de distintos criterios de selección.",
-                justification: "Las consultas (querys, SELECTs) extraen información útil aplicando filtros (WHERE) a las tablas."
-            },
-            {
-                q: "A la hora de utilizar la herramienta gráfica PgAdmin III, se pueden utilizar diversos procedimientos; ¿sabes cuáles son?",
-                options: [
-                    "Todas son correctas (Informes, Modificar una BD, Crear consultas y vistas, Crear una BD).",
-                    "Solo programar en Python.",
-                    "Solo para compilar módulos Odoo.",
-                    "Crear diseños web en HTML."
-                ],
-                correct: "Todas son correctas (Informes, Modificar una BD, Crear consultas y vistas, Crear una BD).",
-                justification: "PgAdmin es un potente cliente visual e interfaz administrativa para gestionar íntegramente bases de datos PostgreSQL."
-            },
-            {
-                q: "¿Con qué archivos podemos cargar y exportar datos masivamente en un sistema ERP-CRM?",
-                options: [
-                    "Mediante archivos xml y csv.",
-                    "Mediante archivos txt y blob.",
-                    "Mediante archivos exe y dll.",
-                    "Mediante archivos flag y tiff."
-                ],
-                correct: "Mediante archivos xml y csv.",
-                justification: "En sistemas modernos como Odoo, las migraciones o cargas iniciales de registros se operan mediante archivos de marcado (XML) o de valores separados por comas (CSV)."
-            },
-            {
-                q: "En el plan de formación de la gestión de compra-venta, ¿cuál es el orden lógico?",
-                options: [
-                    "Categoría de productos > Crear productos > Crear stock inicial.",
-                    "Crear stock inicial > Crear categoría de productos > Crear orden de compraventa.",
-                    "Crear orden de compraventa > Crear stock inicial > Categorías de productos.",
-                    "Crear productos > Crear stock inicial > Categoría de productos."
-                ],
-                correct: "Categoría de productos > Crear productos > Crear stock inicial.",
-                justification: "El ERP sigue una estructura jerárquica: un producto no puede existir sin su categoría padre, y no se le puede asignar stock sin antes crearlo."
+                q: "¿Qué modalidad de albaranes existen?",
+                options: ["Externos.", "De salida.", "De entrada.", "Todas las respuestas son correctas."],
+                correct: "Todas las respuestas son correctas.",
+                justification: "Los albaranes justifican los movimientos logísticos: de entrada, de salida y externos o internos para moverse entre almacenes o ubicaciones."
             },
             {
                 q: "En la gestión de productos, ¿qué productos SÍ que contabilizan en el stock?",
-                options: ["Almacenable.", "Consumible.", "Servicio.", "Digital."],
+                options: ["Consumible.", "Almacenable.", "Servicio.", "Ninguna de las respuestas es correcta."],
                 correct: "Almacenable.",
-                justification: "Solo los de tipo 'Almacenable' registran entradas y salidas y controlan un conteo exacto. Los consumibles no disparan alertas de stock."
+                justification: "Solo los productos marcados como 'almacenables' llevan un control estricto de inventario en el sistema."
             },
             {
-                q: "En las órdenes de compra, es fundamental que para poder vender, haya ______ de los distintos productos:",
-                options: ["Existencias.", "Déficit.", "Devoluciones.", "Anuncios."],
-                correct: "Existencias.",
-                justification: "El flujo lógico bloquea o advierte la salida/venta de un producto si no cuenta con existencias previas registradas."
+                q: "Es posible estructurar el diseño de las bases de datos relacionales en tres niveles diferentes:",
+                options: ["Físico y lógico.", "Físico, lógico y conceptual.", "Físico, lógico o conceptual y externo.", "Ninguna de las respuestas es correcta."],
+                correct: "Físico, lógico o conceptual y externo.",
+                justification: "Se estructuran en nivel físico (almacenamiento en disco), lógico o conceptual (tablas y restricciones) y externo (vistas del usuario)."
             },
             {
                 q: "La gestión de almacén o stock de productos está basada en dos conceptos fundamentales relacionados entre sí, que son:",
-                options: [
-                    "Ubicación y almacén.",
-                    "Albaranes y clientes.",
-                    "Facturas y recibos.",
-                    "Ventas y compras."
-                ],
+                options: ["Ubicación y almacén.", "Albaranes y ubicaciones.", "Ubicaciones físicas y virtuales.", "Ninguna de las respuestas es correcta."],
                 correct: "Ubicación y almacén.",
-                justification: "El 'almacén' es la sede física (la nave), y la 'ubicación' representa el punto lógico (estantería, cliente, proveedor) donde se halla la mercancía."
+                justification: "El almacén representa el espacio general, mientras que las ubicaciones son los espacios específicos y concretos dentro y fuera de él."
             },
             {
-                q: "Dentro de la gestión de almacén, las __________ se encargan de ajustar los stocks vendidos y los que se compran:",
-                options: [
-                    "Ubicaciones de socios.",
-                    "Ubicaciones físicas.",
-                    "Ubicaciones virtuales internas.",
-                    "Tablas maestras de contabilidad."
-                ],
-                correct: "Ubicaciones de socios.",
-                justification: "Representan el espacio lógico del socio (cliente o proveedor) hacia donde se envía o desde donde llega el producto para cuadrar el asiento de inventario de Odoo."
+                q: "Es bastante común que se produzcan devoluciones en el proceso de compra-venta de productos y servicios. Para realizar este proceso de manera correcta, es conveniente diferenciar entre dos tipos de casos:",
+                options: ["Facturas emitidas y facturas pendientes de emitir.", "Facturas abonadas y facturas no pagadas.", "Facturas emitidas y facturas recibidas.", "Todas las respuestas son correctas."],
+                correct: "Facturas abonadas y facturas no pagadas.",
+                justification: "Es fundamental distinguir si la factura ya ha sido abonada (requiere factura rectificativa) o si no está pagada (permite su cancelación en borrador)."
             },
             {
-                q: "¿Qué modalidad de albaranes existen en un ERP típico?",
-                options: [
-                    "Todas las respuestas son correctas (De entrada, Externos/Internos, De salida).",
-                    "Únicamente albaranes de salida.",
-                    "Únicamente albaranes de entrada.",
-                    "Albaranes fiscales y pre-fiscales."
-                ],
-                correct: "Todas las respuestas son correctas (De entrada, Externos/Internos, De salida).",
-                justification: "Documentan y respaldan todo tipo de traslado: compras (entrada), ventas (salida) o movimientos entre naves (internos)."
+                q: "En la metodología de implantación, la fase de desarrollo define:",
+                options: ["Instalación y configuración.", "Análisis detallado y diseño del sistema.", "Viabilidad del sistema y especificación funcional.", "Operación normal y mantenimiento."],
+                correct: "Análisis detallado y diseño del sistema.",
+                justification: "En esta fase (Fase 2) se analiza al detalle y se realiza el diseño lógico y físico sobre papel antes de instalar nada."
             },
             {
-                q: "Es bastante común que se produzcan devoluciones. ¿En qué caso NO será posible cancelar la factura, sino que será preciso rectificarla?",
-                options: [
-                    "Cuando la factura ya ha sido abonada (pagada).",
-                    "Cuando la factura aún es un borrador.",
-                    "Cuando el producto todavía no ha sido enviado.",
-                    "Cuando el cliente sea extranjero."
-                ],
-                correct: "Cuando la factura ya ha sido abonada (pagada).",
-                justification: "Por la legalidad fiscal y contable, una factura ya emitida y pagada no puede borrarse; requiere un abono ('factura rectificativa') para anular el movimiento."
-            },
-            {
-                q: "¿De cuántas fases consta la metodología tradicional de implantación de un sistema ERP-CRM?",
-                options: [
-                    "Consta de 5 fases.",
-                    "Consta de 3 fases.",
-                    "Consta de 4 fases.",
-                    "Consta de 6 fases."
-                ],
-                correct: "Consta de 5 fases.",
-                justification: "Las 5 fases son: Iniciación, Desarrollo, Implementación, Puesta en marcha/Implantación y Producción/Soporte."
-            },
-            {
-                q: "¿En qué fase se realiza un análisis detallado sobre la implantación del ERP y el diseño del sistema en papel?",
-                options: [
-                    "Fase 2. Desarrollo.",
-                    "Fase 1. Iniciación.",
-                    "Fase 3. Implementación.",
-                    "Fase 5. Producción."
-                ],
-                correct: "Fase 2. Desarrollo.",
-                justification: "Aquí se plasman los requisitos funcionales a nivel de documentación técnica y lógica antes de empezar a programar o tocar software."
-            },
-            {
-                q: "En la fase 3 de implementación debe estar completamente definido el sistema. Esta fase se divide en:",
-                options: [
-                    "Todas son correctas (Adquisición del hardware, Desarrollo de software, Plan de pruebas, Documentación).",
-                    "Solo la compra de ordenadores.",
-                    "Solo la programación de módulos.",
-                    "Únicamente en probar la red."
-                ],
-                correct: "Todas son correctas (Adquisición del hardware, Desarrollo de software, Plan de pruebas, Documentación).",
-                justification: "Es la fase ejecutiva donde se construye técnicamente y se realizan las pruebas de laboratorio previo al lanzamiento."
-            },
-            {
-                q: "¿Cómo se llama el proceso en el que se definen detalladamente las necesidades de los colectivos afectados y las acciones para enseñar a usar el programa?",
-                options: [
-                    "Plan de formación.",
-                    "Plan de proyecto.",
-                    "Plan de acción.",
-                    "Plan de información."
-                ],
-                correct: "Plan de formación.",
-                justification: "La capacitación a los empleados es el 'Plan de formación', un subproceso vital para evitar el rechazo de la nueva herramienta ERP."
-            },
-            {
-                q: "En relación a la Fase 5 (producción y soporte), identifica la respuesta INCORRECTA:",
-                options: [
-                    "Las funciones que se llevan a cabo en esta fase NO dependerán del tipo de contrato.",
-                    "Comienza un largo proceso de operación, mantenimiento y soporte.",
-                    "Se procede a entregar todo el material disponible al cliente.",
-                    "Representa el ciclo de vida habitual post-lanzamiento."
-                ],
-                correct: "Las funciones que se llevan a cabo en esta fase NO dependerán del tipo de contrato.",
-                justification: "Es una afirmación falsa. Los servicios que presta la consultora informática (tiempo de respuesta, horas de mantenimiento) dependen al 100% del SLA y el contrato firmado."
-            },
-            {
-                q: "La mayoría de implantaciones de ERP que no llegan a buen fin son casi siempre por una mala _________.",
-                options: ["Organización.", "Ejecución.", "Mantenimiento.", "Red eléctrica."],
-                correct: "Organización.",
-                justification: "El caos en la toma de requisitos, la falta de metodología y una mala 'organización' directiva son las principales causas del fracaso en la implantación."
-            },
-            {
-                q: "¿Qué modelo o paradigma utiliza el ERP de Odoo para la gestión de datos?",
-                options: [
-                    "Modelo – Vista – Controlador (MVC).",
-                    "Modelo – Vista – Clasificador.",
-                    "Modelo – Interfaz – Ficheros.",
-                    "Modelo – Web – Servidor."
-                ],
-                correct: "Modelo – Vista – Controlador (MVC).",
-                justification: "Este paradigma arquitectónico aísla los datos en la BBDD (Modelo), el código o reglas de negocio (Controlador) y las pantallas o interfaces de usuario (Vista)."
-            },
-            {
-                q: "Selecciona la opción correcta respecto a la arquitectura de objetos del servidor en OpenERP:",
-                options: [
-                    "OpenERP utiliza una estructura plana, permitiendo crear un objeto en cada nivel.",
-                    "OpenERP utiliza una jerarquía profunda sin conexión a SQL.",
-                    "OpenERP aloja cada tabla en un servidor distinto.",
-                    "OpenERP no utiliza objetos, solo scripts secuenciales."
-                ],
-                correct: "OpenERP utiliza una estructura plana, permitiendo crear un objeto en cada nivel.",
-                justification: "En Odoo, el ORM aplana la estructura de clases de Python para volcarlas como entidades relacionadas a nivel de la base de datos PostgreSQL."
-            },
-            {
-                q: "¿Qué es una vista? Componente que sirve para...",
-                options: [
-                    "Componente que sirve para mostrar un conjunto de información perteneciente a diferentes tablas.",
-                    "Componente físico de la pantalla de usuario.",
-                    "Documento PDF exportable.",
-                    "Procedimiento almacenado en el núcleo de Linux."
-                ],
-                correct: "Componente que sirve para mostrar un conjunto de información perteneciente a diferentes tablas.",
-                justification: "Actúa como una entidad lógica que unifica visualmente registros esparcidos por la base de datos para facilitar su consumo al usuario."
-            },
-            {
-                q: "Hacen referencia a las distintas pantallas creadas para manejar los diferentes datos, simplificando la gestión de la información (normalmente basadas en vistas):",
-                options: ["Formularios.", "Procedimientos almacenados.", "Informes.", "Logs."],
-                correct: "Formularios.",
-                justification: "Los Form Views son las interfaces gráficas con campos y botones en los que el empleado edita e introduce datos."
-            },
-            {
-                q: "¿Para qué sirve la vista de búsqueda (Search View) en OpenERP?",
-                options: [
-                    "Sirve para complementar a la vista en árbol ya que permite añadir un panel de búsqueda y filtrado en su parte superior.",
-                    "Sirve exclusivamente para listar usuarios administradores.",
-                    "Sirve para generar informes PDF directamente.",
-                    "No existe esa vista en el sistema."
-                ],
-                correct: "Sirve para complementar a la vista en árbol ya que permite añadir un panel de búsqueda y filtrado en su parte superior.",
-                justification: "Habilita la barra de filtros avanzados (agrupaciones, condicionales) encima de los listados tipo Tree (Lista)."
-            },
-            {
-                q: "Permite crear un gráfico de barras o circular partiendo de los campos que se determinen:",
-                options: ["Vista gráfica.", "Vista de búsqueda.", "Vista formulario.", "Vista árbol."],
-                correct: "Vista gráfica.",
-                justification: "Las Graph Views interpretan visualmente los datos estadísticos, sumas y recuentos de la base de datos."
-            },
-            {
-                q: "En la creación de un módulo en un sistema ERP, ¿qué contiene el archivo de inicialización principal (__init__.py / init_xml)?",
-                options: [
-                    "Lista de ficheros XML que se van a utilizar cuando se lance el servidor.",
-                    "La base de datos completa empaquetada.",
-                    "Exclusivamente las imágenes y logos del módulo.",
-                    "Las licencias de usuario final."
-                ],
-                correct: "Lista de ficheros XML que se van a utilizar cuando se lance el servidor.",
-                justification: "Es el archivo de configuración (manifest) que le indica al motor qué archivos de vistas o datos iniciales debe inyectar al instalarse."
-            },
-            {
-                q: "En relación a la creación de informes personalizados (Reports), selecciona la respuesta correcta:",
-                options: [
-                    "Estos informes NO incorporan estructuras novedosas, solo utilizan las existentes, aumentando de esta forma su eficiencia.",
-                    "Cargan módulos completamente nuevos programados en C++.",
-                    "No pueden exportarse ni imprimirse.",
-                    "Sobrescriben el núcleo base del sistema cada vez que se ejecutan."
-                ],
-                correct: "Estos informes NO incorporan estructuras novedosas, solo utilizan las existentes, aumentando de esta forma su eficiencia.",
-                justification: "Los informes y reportes PDF reutilizan los modelos de la base de datos (SELECT) y las plantillas ya existentes (vistas QWeb), optimizando los recursos del sistema."
+                q: "En el plan de formación de la gestión de compra-venta, ¿Cuál es el orden lógico?",
+                options: ["Crear orden de compraventa, Crear stock inicial, Crear Categorías de productos.", "Crear Categorías de productos, Crear orden de compraventa, Crear stock inicial.", "Crear Categorías de productos, Crear productos, Crear stock inicial.", "Crear stock inicial, Crear categorías de productos, Crear orden de compraventa."],
+                correct: "Crear Categorías de productos, Crear productos, Crear stock inicial.",
+                justification: "Primero se define la categoría, luego el producto en sí mismo, y finalmente se le asigna un stock para poder operar con él."
             },
             {
                 q: "¿Qué tipo de lenguaje es Python?",
-                options: [
-                    "Lenguaje interpretado y multiplataforma.",
-                    "Lenguaje compilado y multiplataforma.",
-                    "Lenguaje estricto de máquina.",
-                    "Lenguaje exclusivo para Odoo."
-                ],
+                options: ["Lenguaje compilado y multiplataforma.", "Lenguaje interpretado y multiplataforma.", "Lenguaje compilado.", "Lenguaje interpretado."],
                 correct: "Lenguaje interpretado y multiplataforma.",
-                justification: "Es un lenguaje de alto nivel, ejecutado línea a línea por un intérprete, y funcional en Windows, Linux y Mac."
+                justification: "Python no compila un ejecutable binario directamente; es un lenguaje interpretado que funciona en múltiples sistemas operativos."
             },
             {
-                q: "¿Cuál NO es una característica de Python?",
-                options: [
-                    "Es monoparadigma.",
-                    "Es multiplataforma.",
-                    "Es de software libre.",
-                    "Es interpretado."
-                ],
-                correct: "Es monoparadigma.",
-                justification: "Es FALSO que sea monoparadigma. Python es MULTIPARADIGMA: soporta programación orientada a objetos, imperativa y funcional."
+                q: "En el lenguaje Python:",
+                options: ["Las variables locales tienen un determinado valor a lo largo de todo el programa.", "Las variables no necesitan ser definidas (declaradas) para su utilización.", "Las variables necesitan ser definidas (declaradas) para su utilización.", "Las variables globales solo tienen sentido dentro del bloque en el que se inicialicen."],
+                correct: "Las variables no necesitan ser definidas (declaradas) para su utilización.",
+                justification: "Python usa tipado dinámico, por lo que las variables se inicializan dándoles un valor directamente, sin necesidad de declarar su tipo previamente."
             },
             {
-                q: "En el lenguaje Python, sobre las variables:",
-                options: [
-                    "Las variables no necesitan ser definidas (declaradas en tipo) para su utilización.",
-                    "Requieren ser inicializadas con su tipo estricto como en Java.",
-                    "Una variable local sirve para todo el código universal.",
-                    "No existen las variables globales."
-                ],
-                correct: "Las variables no necesitan ser definidas (declaradas en tipo) para su utilización.",
-                justification: "Por su tipado dinámico, en Python escribimos `x = 5`, y el sistema deduce que es un entero sin tener que declarar explícitamente el tipo de dato."
+                q: "Dentro del lenguaje Python, ¿qué es el diccionario o tablas hash?",
+                options: ["Un conjunto de estructuras que almacenan información mediante clave en lugar de por posición.", "Un conjunto de estructuras que NO almacenan información mediante clave en lugar de por posición.", "Una representación mediante comillas simples o comillas dobles, pero nunca combinando las dos a la vez.", "Ninguna de las respuestas es correcta."],
+                correct: "Un conjunto de estructuras que almacenan información mediante clave en lugar de por posición.",
+                justification: "Los diccionarios en Python usan pares de clave-valor asociativos, en lugar de utilizar un índice posicional como las listas numéricas."
             },
             {
-                q: "En Python las variables han de declararse siempre con un tipo y tener un valor asignado antes del bucle:",
-                options: ["Falso.", "Verdadero."],
+                q: "¿Cuál de estos usaremos para hacer comentarios en Python?",
+                options: ["<>", "//", "!", "#"],
+                correct: "#",
+                justification: "El símbolo de la almohadilla (#) se utiliza para invalidar y comentar una línea de código desde ese símbolo hasta el final."
+            },
+            {
+                q: "Señala los tipos de herencia que podemos encontrar en el lenguaje de programación Python (en Odoo).",
+                options: ["Herencia por extensión.", "Herencia por prototipo.", "Herencia por delegación.", "Todas son correctas."],
+                correct: "Todas son correctas.",
+                justification: "El ORM de Odoo admite los tres tipos de herencia para extender, copiar o delegar campos a nuevos objetos."
+            },
+            {
+                q: "¿Qué es PostgreSQL?",
+                options: ["Es un tipo de base de datos.", "Es un sistema de código abierto de administración de bases de datos de tipo relacional.", "Es un sistema de código abierto de administración de bases de datos de tipo NO relacional.", "Ninguna respuesta es correcta."],
+                correct: "Es un sistema de código abierto de administración de bases de datos de tipo relacional.",
+                justification: "Es un sistema gestor de bases de datos relacionales (SGBD) libre y maduro, siendo el soportado por defecto por Odoo."
+            },
+            {
+                q: "Permite crear un gráfico de barras o circular partiendo de los campos que se determinen. En este tipo de vista, se pueden realizar agrupaciones sobre los campos...",
+                options: ["Vista gráfica.", "Vista de búsqueda.", "Vista formulario.", "Vista en árbol."],
+                correct: "Vista gráfica.",
+                justification: "La vista gráfica posibilita la creación de cuadros analíticos dinámicos como barras y circulares para hacer sumas o cálculos simples sobre grupos."
+            },
+            {
+                q: "¿Para qué sirven los Sistemas de Gestión de Base de Datos (SGBD)?",
+                options: ["Para extraer y manipular datos.", "Para almacenar datos.", "Para darle mayor utilidad a la información que se obtiene de las bases de datos.", "Todas las respuestas son correctas."],
+                correct: "Todas las respuestas son correctas.",
+                justification: "Un SGBD es el núcleo que maneja las tablas, facilitando la extracción, almacenamiento y utilidad analítica de los registros."
+            },
+            {
+                q: "¿Qué es un ERP?",
+                options: ["Lo opuesto a un CRM.", "Es un sistema de planificación de recursos empresariales.", "La incorporación de un determinado sistema informático en los procesos que no están relacionados con la empresa.", "Ninguna de las respuestas es correcta."],
+                correct: "Es un sistema de planificación de recursos empresariales.",
+                justification: "Enterprise Resource Planning. Es un software de carácter modular que gestiona toda la información empresarial centralizada."
+            },
+            {
+                q: "¿Cuál es la definición de 'Adaptabilidad'?",
+                options: ["Gracias a las características de Modularidad e Integración, un ERP se puede adaptar a las distintas necesidades y requerimientos de una determinada empresa.", "Los sistemas ERP abarcan la mayoría de las áreas de una empresa.", "Cada módulo permite gestionar un departamento, y se pueden quitar o poner.", "Ninguna de las respuestas es correcta."],
+                correct: "Gracias a las características de Modularidad e Integración, un ERP se puede adaptar a las distintas necesidades y requerimientos de una determinada empresa.",
+                justification: "La adaptabilidad es la propiedad que permite que el software se ajuste a las reglas de negocio de la empresa al poseer módulos integrables."
+            },
+            {
+                q: "¿Qué es el SAP Business All-in-One?",
+                options: ["Software diseñado para medianas y grandes empresas incorporando una serie de productos básicos y específicos de un determinado sector de una empresa.", "Software que se utiliza para gestiones empresariales que estén basadas en aplicaciones online.", "Todas las respuestas son incorrectas.", "Software que se presenta como una solución muy completa..."],
+                correct: "Software diseñado para medianas y grandes empresas incorporando una serie de productos básicos y específicos de un determinado sector de una empresa.",
+                justification: "Es una solución específica y preconfigurada de SAP orientada a ese segmento concreto del mercado empresarial."
+            },
+            {
+                q: "¿Cuál es el único ERP que tiene su origen en España y que ha conseguido una gran implantación en todo el mundo?",
+                options: ["OpenERP.", "OpenBravo.", "SAP.", "ODOO."],
+                correct: "OpenBravo.",
+                justification: "OpenBravo nació en el seno de la Universidad de Navarra en España (a pesar de la errata puntual del manual que lo mezcla con Odoo, la respuesta correcta en examen es OpenBravo)."
+            },
+            {
+                q: "¿Qué significa CRM?",
+                options: ["Gestión de las Relaciones con el Cliente.", "Significa lo opuesto al concepto de ERP.", "Gestión de las Redes del Cliente.", "Ninguna de las respuestas es correcta."],
+                correct: "Gestión de las Relaciones con el Cliente.",
+                justification: "Son las siglas en inglés para Customer Relationship Management."
+            },
+            {
+                q: "Dentro de los CRM, con la lógica analítica es posible:",
+                options: ["Automatización de ventas, productos y clientes...", "Analizar la información existente para llevar a cabo las diferentes campañas de marketing.", "Organización del 'call center'.", "Gestión de soporte en la empresa."],
+                correct: "Analizar la información existente para llevar a cabo las diferentes campañas de marketing.",
+                justification: "Mientras la lógica operacional hace las tareas del día a día, la analítica estudia esos datos para modificar y mejorar estrategias."
+            },
+            {
+                q: "Los CRM actuales pueden dividirse en dos categorías, ¿sabes cuáles son?",
+                options: ["Integrados e inclusivos.", "Integrados en un sistema ERP y exclusivos.", "Interconectados e inclusivos.", "Exclusivos y interconectados."],
+                correct: "Integrados en un sistema ERP y exclusivos.",
+                justification: "Pueden venir ya integrados como módulos dentro de la suite del propio ERP, o ser desarrollados de forma exclusiva e independiente (como SugarCRM)."
+            },
+            {
+                q: "¿Los CRM que están ________ se refieren a que pertenecen al mismo ERP, por ejemplo: Odoo?",
+                options: ["Exclusivos.", "Formateados.", "Integrados.", "Actualizados."],
+                correct: "Integrados.",
+                justification: "Se llaman 'integrados' porque pertenecen y se comunican bajo la misma plataforma del proveedor del ERP."
+            },
+            {
+                q: "Una de las principales funciones de un Data Warehouse es:",
+                options: ["Elimina aquellos datos que se utilizan en las operaciones cotidianas del almacén de datos.", "Integra los datos de las correspondientes bases de datos distribuidas.", "Los Data Warehouse no existen.", "Ninguna de las otras respuestas es correcta."],
+                correct: "Integra los datos de las correspondientes bases de datos distribuidas.",
+                justification: "Reúne e integra la información transaccional y la separa de la base de datos operativa diaria para facilitar el análisis estratégico."
+            },
+            {
+                q: "Identifica las funciones que deben realizar las herramientas que permiten controlar y automatizar las necesidades de los Data Warehouse:",
+                options: ["Gestión integrada de la extracción, transformación y carga del Data Warehouse.", "Manejo de excepciones y archivos logs.", "Control en el tiempo de respuesta.", "Todas son correctas."],
+                correct: "Todas son correctas.",
+                justification: "Estas herramientas (ETL) controlan el ciclo completo de Extracción, Transformación y Carga, así como sus excepciones."
+            },
+            {
+                q: "Identifica la función INCORRECTA entre estas funciones que deben realizar las herramientas que permiten controlar y automatizar las necesidades de los Data Warehouse:",
+                options: ["Control de acceso.", "Gestión integrada de la extracción, transformación y carga del Data Warehouse.", "Manejo de excepciones y archivos logs.", "Control en el tiempo de respuesta."],
+                correct: "Control de acceso.",
+                justification: "El control de acceso es una política de seguridad nativa de la Base de Datos subyacente, no una función directa de las herramientas ETL del Data Warehouse."
+            },
+            {
+                q: "A la hora de elegir un ERP, es preciso tener en cuenta una serie de factores. ¿Cuál de los siguientes NO es uno de esos factores?",
+                options: ["Que proporcione informes y análisis, además de implementar su seguridad.", "Que sea lento y difícil de uso.", "Que ofrezca soporte a todas las áreas que necesite la empresa.", "Todas las respuestas son correctas."],
+                correct: "Que sea lento y difícil de uso.",
+                justification: "Las empresas buscan características exactamente opuestas: rapidez y facilidad de uso y adaptación."
+            },
+            {
+                q: "Cuando se trabaja con software industrial, debe existir un contrato entre el creador y el comprador, denominado licencia. ¿Qué es?",
+                options: ["Es un número que facilita el cliente al desarrollador para usar un servicio.", "Es un documento que detalla una serie de obligaciones que debe tener el desarrollador con el usuario en cuestión, y viceversa.", "Ninguna de las respuestas es correcta.", "Un documento que solo impone obligaciones al usuario."],
+                correct: "Es un documento que detalla una serie de obligaciones que debe tener el desarrollador con el usuario en cuestión, y viceversa.",
+                justification: "Es un contrato vinculante bidireccional que establece los derechos, obligaciones, modificación y distribución del código."
+            },
+            {
+                q: "Identifica las licencias de código abierto permisivas:",
+                options: ["Apache.", "BSD.", "MIT.", "Todas son correctas."],
+                correct: "Todas son correctas.",
+                justification: "Estas tres son los clásicos ejemplos de licencias libres permisivas (con muy pocas restricciones para el usuario)."
+            },
+            {
+                q: "El sistema de instalación _______ realiza la instalación del software en un ordenador, de tal forma que solo va a tener acceso al sistema el propietario del ordenador.",
+                options: ["SaaS.", "Monopuesto.", "Cliente-servidor.", "Cliente-Servidor Web."],
+                correct: "Monopuesto.",
+                justification: "En un sistema monopuesto, tanto el servidor, la aplicación y la base de datos están encerradas en la misma máquina física local."
+            },
+            {
+                q: "La gestión de usuarios de un sistema _________ tiene entre las funciones más importantes la creación, mantenimiento y borrado de los distintos usuarios pertenecientes al sistema.",
+                options: ["Data Warehouse.", "ERP-CRM.", "de bases de datos.", "Relacional."],
+                correct: "ERP-CRM.",
+                justification: "El administrador del propio ERP es el encargado de dar de alta los perfiles y asignar los permisos a los empleados."
+            },
+            {
+                q: "Los sistemas relacionales deben cumplir una serie de propiedades básicas. Indica cuál es:",
+                options: ["Debe ser un sistema capaz de eliminar la redundancia entre sus datos para poder asegurar la coherencia entre todos.", "Debe ser un sistema capaz de eliminar sus datos para poder asegurar la coherencia entre todos.", "Debe ser un sistema capaz de crear la redundancia entre sus datos.", "Ninguna de las respuestas es correcta."],
+                correct: "Debe ser un sistema capaz de eliminar la redundancia entre sus datos para poder asegurar la coherencia entre todos.",
+                justification: "La propiedad de integridad elimina las duplicidades (redundancias) asegurando que no haya datos inconsistentes."
+            },
+            {
+                q: "¿Cuál de las siguientes características NO es una propiedad de un sistema relacional?",
+                options: ["Integridad.", "Compartición.", "Escalaridad.", "Seguridad."],
+                correct: "Escalaridad.",
+                justification: "Las propiedades básicas teóricas de un SGBDR son Integridad, Compartición, Seguridad y Protección contra fallos."
+            },
+            {
+                q: "¿Qué permite el nivel lógico o conceptual de una Base de Datos?",
+                options: ["Es el encargado del almacenamiento físico en un soporte.", "Es un nivel muy utilizado para ficheros.", "Permite crear una estructura en los datos mediante tablas y restricciones de integridad, claves primarias, etc.", "Ninguna de las respuestas es correcta."],
+                correct: "Permite crear una estructura en los datos mediante tablas y restricciones de integridad, claves primarias, etc.",
+                justification: "El nivel lógico es el plano intermedio donde se define el esquema relacional formal y sus restricciones."
+            },
+            {
+                q: "Unidad mínima de información que puede almacenar un ordenador y que se corresponde con una información; no con un tamaño.",
+                options: ["Dato.", "Registro.", "Byte.", "Tabla."],
+                correct: "Dato.",
+                justification: "El 'dato' es la entidad conceptual atómica de almacenamiento de una base de datos de un ERP."
+            },
+            {
+                q: "¿Qué son las consultas?",
+                options: ["Son unas órdenes que se pueden utilizar para almacenar información de la base de datos.", "Son un conjunto de filas que pueden tener una o varias tablas solicitadas por el usuario, dependiendo de distintos criterios de selección.", "Hace referencia a las distintas condiciones para almacenar un campo.", "Ninguna de las anteriores."],
+                correct: "Son un conjunto de filas que pueden tener una o varias tablas solicitadas por el usuario, dependiendo de distintos criterios de selección.",
+                justification: "Las consultas filtran y extraen la información específica que pide el usuario proveniente de las tablas cruzadas."
+            },
+            {
+                q: "A la hora de utilizar la herramienta PgAdmin III, se pueden utilizar diversos procedimientos; ¿sabes cuáles son?",
+                options: ["Informes.", "Modificar una base de datos.", "Crear consultas y vistas.", "Todas son correctas."],
+                correct: "Todas son correctas.",
+                justification: "PgAdmin III funciona como un cliente completo para gestionar integralmente el sistema PostgreSQL."
+            },
+            {
+                q: "¿Con qué archivos podemos cargar y exportar datos masivamente en un sistema ERP-CRM?",
+                options: ["Mediante archivos flag y tiff.", "Mediante archivos txt y blob.", "Mediante archivos xml y csv.", "Mediante archivos xml y txt."],
+                correct: "Mediante archivos xml y csv.",
+                justification: "Los formatos estándar estructurados compatibles con Odoo y Python para este fin son XML y CSV."
+            },
+            {
+                q: "En las órdenes de compra, es fundamental que, para poder vender, haya ______ de los distintos productos, por lo que el aprovisionamiento de los mismos es primordial.",
+                options: ["Existencias.", "Déficit.", "Devoluciones.", "Ninguna opción es correcta."],
+                correct: "Existencias.",
+                justification: "Para tramitar salidas (ventas) legalmente en el ERP, debe haber previamente un stock (existencias) registradas."
+            },
+            {
+                q: "Dentro de la gestión de almacén, las __________ se encargan de ajustar los stocks vendidos y los que se compran.",
+                options: ["Ubicaciones físicas.", "Ubicaciones de socios.", "Ubicaciones virtuales.", "Todas las opciones son correctas."],
+                correct: "Ubicaciones de socios.",
+                justification: "Representan el espacio lógico y contable que pertenece al cliente o proveedor en el flujo de la mercancía."
+            },
+            {
+                q: "Es bastante común que se produzcan devoluciones... ¿En qué caso se podrá eliminar la factura, cancelando de esta manera el albarán y el pedido?",
+                options: ["Cuando la factura ya ha sido abonada.", "Cuando una factura no está pagada y el pedido se encuentra en estado de 'borrador'.", "En todos los casos.", "Ninguna respuesta es correcta."],
+                correct: "Cuando una factura no está pagada y el pedido se encuentra en estado de 'borrador'.",
+                justification: "Si no hay un pago asentado y sigue en estado borrador, es posible cancelarla directamente sin documentos rectificativos."
+            },
+            {
+                q: "¿De cuántas fases consta la metodología de implantación de un sistema ERP-CRM?",
+                options: ["Consta de 5 fases.", "Consta de 4 fases.", "Consta de 3 fases.", "Consta de 6 fases."],
+                correct: "Consta de 5 fases.",
+                justification: "Se estructura en Iniciación, Desarrollo, Implementación, Implantación, y Producción y Soporte."
+            },
+            {
+                q: "En la fase 3 de implementación debe estar completamente definido el sistema para que pueda comenzarse su instalación. Esta fase se divide en las siguientes subfases:",
+                options: ["Adquisición del hardware.", "Desarrollo de software.", "Plan de pruebas.", "Todas son correctas."],
+                correct: "Todas son correctas.",
+                justification: "Son todos los procesos preparatorios que blindan al sistema antes del test del usuario."
+            },
+            {
+                q: "¿Cómo se llama el proceso en el que se definen detalladamente las necesidades de formación de cada uno de los colectivos afectados por el proyecto y las acciones de formación necesarias?",
+                options: ["Plan de proyecto.", "Plan de formación.", "Plan de acción.", "Plan de información."],
+                correct: "Plan de formación.",
+                justification: "Este plan pertenece a la fase de Implantación para asegurar la adopción correcta por parte de los trabajadores."
+            },
+            {
+                q: "En relación a la Fase 5 (producción y soporte), identifica la respuesta INCORRECTA:",
+                options: ["Es en las entrevistas finales cuando se procede a entregar todo el material disponible al cliente.", "A partir de este momento, comienza un largo proceso de operación, mantenimiento y soporte.", "Las funciones que se llevan a cabo en esta fase NO dependerán del tipo de contrato.", "Todas las respuestas son correctas."],
+                correct: "Las funciones que se llevan a cabo en esta fase NO dependerán del tipo de contrato.",
+                justification: "Es falsa porque el mantenimiento evolutivo y correctivo que se otorga depende por completo de las cláusulas del contrato (SLA)."
+            },
+            {
+                q: "La mayoría de implantaciones de sistemas ERP-CRM en una empresa que no llegan a buen fin son casi siempre por una mala _________.",
+                options: ["Ejecución.", "Mantenimiento.", "Organización.", "Implementación."],
+                correct: "Organización.",
+                justification: "La falta de un plan metodológico ordenado aboca el proyecto organizativo al fracaso."
+            },
+            {
+                q: "¿Qué paradigma utiliza OpenERP para diferenciar los datos de su representación?",
+                options: ["Utiliza el MVC (Modelo Vista Controlador).", "Utiliza el MVC (Modelo Vista Clasificador).", "Utiliza el MVC (Modelo Vista-Controlador-Clasificador).", "Ninguna de las anteriores."],
+                correct: "Utiliza el MVC (Modelo Vista Controlador).",
+                justification: "El patrón arquitectónico Modelo-Vista-Controlador aísla la base de datos de la interfaz mostrada en pantalla."
+            },
+            {
+                q: "Selecciona la opción correcta con respecto a la arquitectura del servidor en OpenERP:",
+                options: ["OpenERP utiliza una estructura jerárquica, permitiendo crear un objeto en cada nivel.", "OpenERP utiliza una estructura jerárquica, permitiendo crear un objeto en cada servidor.", "OpenERP utiliza una estructura plana, permitiendo crear un objeto en la parte de servidor.", "OpenERP utiliza una estructura plana, permitiendo crear un objeto en cada nivel."],
+                correct: "OpenERP utiliza una estructura plana, permitiendo crear un objeto en cada nivel.",
+                justification: "El ORM achata la jerarquía de herencia creando una estructura plana en cada nivel de la base de datos."
+            },
+            {
+                q: "¿Qué es una vista?",
+                options: ["Unidad mínima de información...", "Un dato se corresponde con una información...", "Componente que sirve para mostrar un conjunto de información perteneciente a diferentes tablas.", "Ninguna respuesta es correcta."],
+                correct: "Componente que sirve para mostrar un conjunto de información perteneciente a diferentes tablas.",
+                justification: "Es la pantalla o agrupador visual que extrae datos de tablas dispersas para mostrarlos al usuario."
+            },
+            {
+                q: "Hacen referencia a las distintas pantallas creadas para manejar los diferentes datos, simplificando de esta forma la gestión de la información y normalmente están basados en las vistas:",
+                options: ["Informes.", "Formularios.", "Procedimientos almacenados.", "Ninguna de las respuestas es correcta."],
+                correct: "Formularios.",
+                justification: "Los formularios interactivos contienen pestañas y campos para facilitar la inserción/edición."
+            },
+            {
+                q: "¿Para qué sirve la vista de búsqueda en OpenERP?",
+                options: ["No existe la vista de búsqueda.", "Sirve para complementar a la vista en árbol ya que permite añadir un panel de búsqueda y filtrado en su parte superior.", "Sirve para los listados de datos ya que son bastante sencillas.", "Ninguna de las anteriores."],
+                correct: "Sirve para complementar a la vista en árbol ya que permite añadir un panel de búsqueda y filtrado en su parte superior.",
+                justification: "Habilita el filtrado de registros masivos listados previamente por el sistema."
+            },
+            {
+                q: "En la creación de un módulo en un sistema ERP-CRM, ¿qué tiene el archivo llamado init_xml (o __init__.py)?",
+                options: ["Lista que indica los módulos que deben estar instalados.", "Descripción de la categoría y subcategoría del módulo.", "Lista de ficheros XML que se van a utilizar cuando se lance el servidor.", "Ninguna de las respuestas es correcta."],
+                correct: "Lista de ficheros XML que se van a utilizar cuando se lance el servidor.",
+                justification: "Este fichero es el lanzador que indica a Odoo qué archivos de vistas e información base debe arrancar."
+            },
+            {
+                q: "En relación a la creación de informes personalizados, selecciona la respuesta correcta:",
+                options: ["Estos informes pueden incorporar o no estructuras novedosas y utilizan las existentes.", "Estos informes incorporan estructuras novedosas, y también utilizan las existentes.", "Estos informes NO incorporan estructuras novedosas, solo utilizan las existentes, aumentando de esta forma su eficiencia.", "Ninguna de las respuestas es correcta."],
+                correct: "Estos informes NO incorporan estructuras novedosas, solo utilizan las existentes, aumentando de esta forma su eficiencia.",
+                justification: "Un informe es técnicamente una vista apoyada en una consulta SELECT pre-existente para la presentación gráfica o PDF."
+            },
+            {
+                q: "En Python las variables han de declararse siempre y tener un valor asignado:",
+                options: ["Verdadero.", "Falso."],
                 correct: "Falso.",
-                justification: "No se requiere declaración previa de tipo estricto, aunque sí deben contener algún valor (estar instanciadas) para ser operadas, su tipo es totalmente inferido de manera dinámica."
+                justification: "El tipado es dinámico. Cobra vida al asignarle un valor, no hay que 'declarar' su tipo estricto con antelación."
             },
             {
                 q: "En Python los espacios en blanco y tabulaciones no son importantes para la interpretación del código:",
-                options: ["Falso.", "Verdadero."],
+                options: ["Verdadero.", "Falso."],
                 correct: "Falso.",
-                justification: "Falso. La indentación (sangrado) es la manera estricta de delimitar los bloques de código (bucles for, condicionales if). Un mal espacio genera un error de sintaxis."
+                justification: "El sangrado (indentación) es obligatorio, ya que Python no usa llaves {} para iniciar o cerrar sus bloques."
             },
             {
-                q: "En Python, ¿qué carácter utilizamos para iniciar un comentario en una línea?",
-                options: ["#", "!", "?", "<>"],
-                correct: "#",
-                justification: "Todo lo situado tras el símbolo almohadilla '#' en una misma línea es ignorado por el compilador."
-            },
-            {
-                q: "Devuelve la longitud de una cadena (string) en Python:",
-                options: [
-                    "len(cadena).",
-                    "longitud(cadena).",
-                    "join(cadena).",
-                    "splitlines()."
-                ],
+                q: "Devuelve la longitud de una cadena en Python:",
+                options: ["longitud(cadena).", "len(cadena).", "join(cadena).", "splitlines()."],
                 correct: "len(cadena).",
-                justification: "La función incorporada 'len()' cuenta el número total de caracteres de una variable texto o de una lista."
+                justification: "La función interna nativa len() procesa el tamaño o la cantidad de ítems del objeto que recibe."
             },
             {
-                q: "En Python, la función que se utiliza para mostrar por pantalla es:",
-                options: ["print", "Look", "Out", "Remove"],
-                correct: "print",
-                justification: "print('Hola Mundo') devuelve los resultados en la salida estándar de la consola."
+                q: "Para crear funciones en Python se usa la palabra clave ______________, seguida del nombre elegido para la función y, entre paréntesis, los parámetros.",
+                options: ["def.", "fun.", "init.", "Def."],
+                correct: "def.",
+                justification: "Por ejemplo: def mi_funcion(parametro):"
             },
             {
-                q: "Tipo de dato Booleano... define una serie de operandos lógicos/relacionales que pueden ser:",
-                options: [
-                    "Todas son correctas (Negación, Igualdad, Comparación).",
-                    "Solo operadores matemáticos como suma (+).",
-                    "Concatenación de textos.",
-                    "Variables de texto."
-                ],
-                correct: "Todas son correctas (Negación, Igualdad, Comparación).",
-                justification: "Comparaciones como (==, >, <) y operadores como (not, and, or) evalúan sentencias y devuelven un único valor booleano: True o False."
-            },
-            {
-                q: "Dentro del lenguaje Python, ¿qué es un diccionario o tabla hash?",
-                options: [
-                    "Un conjunto de estructuras que almacenan información mediante clave en lugar de por posición.",
-                    "Un listado ordenado numéricamente.",
-                    "Un método para unir cadenas de texto.",
-                    "Un error del sistema de memoria."
-                ],
-                correct: "Un conjunto de estructuras que almacenan información mediante clave en lugar de por posición.",
-                justification: "A diferencia de un array que indexa [0, 1, 2], un dict() asocia pares: {'nombre':'Juan', 'edad':30}."
-            },
-            {
-                q: "Para crear funciones en Python se usa la palabra clave ______________, seguida del nombre elegido.",
-                options: ["def", "fun", "init", "function"],
-                correct: "def",
-                justification: "La declaración canónica de un bloque de función usa la palabra reservada 'def'."
-            },
-            {
-                q: "Una ventaja de Python es que permite pasar como parámetros a las funciones cualquier tipo de datos de forma dinámica.",
+                q: "Una ventaja de Python es que permite pasar como parámetros a las funciones cualquier tipo de datos.",
                 options: ["Verdadero.", "Falso."],
                 correct: "Verdadero.",
-                justification: "El 'duck typing' de Python permite que un argumento no requiera un tipo fijo en su declaración."
+                justification: "Al no exigir declaración estricta, la función aceptará el dato y ejecutará los métodos si son compatibles internamente."
             },
             {
-                q: "El lenguaje Python es orientado a objetos. Dispone de métodos mágicos preimplementados en las clases, ¿sabes cuáles son?",
-                options: [
-                    "Todas son correctas (__init__, __str__, __cmp__, __len__).",
-                    "Solo public y private.",
-                    "Solo try y except.",
-                    "Ninguna, no posee herencia."
-                ],
-                correct: "Todas son correctas (__init__, __str__, __cmp__, __len__).",
-                justification: "Estos métodos 'dunder' proveen la estructura interna de comportamiento estándar a las clases creadas por el usuario."
+                q: "El lenguaje Python, además de ser estructurado, es orientado a objetos. Se dispone de métodos ya implementados en las clases en cualquier momento, ¿sabes cuáles son?",
+                options: ["__cmp__(self, otro).", "__init__(self, args).", "__str__(self).", "Todas son correctas."],
+                correct: "Todas son correctas.",
+                justification: "Son métodos mágicos que dotan a la clase de capacidad de comparación, inicialización y representación en texto."
             },
             {
-                q: "Señala los tipos de herencia que podemos encontrar en el framework de Python para Odoo:",
-                options: [
-                    "Todas son correctas (Herencia por extensión, por prototipo, por delegación).",
-                    "Solo herencia única estándar.",
-                    "Solo polimorfismo estructurado.",
-                    "Odoo no utiliza herencia."
-                ],
-                correct: "Todas son correctas (Herencia por extensión, por prototipo, por delegación).",
-                justification: "Odoo enriquece Python con tres mecanismos propios de herencia de módulos (_inherit, _name, _inherits) para extender modelos sin modificar el core base."
+                q: "En cuanto a la adaptación del ERP a una empresa, ¿en qué ámbitos puede darse?",
+                options: ["Programando módulos completos que añadan todas las características necesarias.", "Modificando y creando nuevos informes adaptándolos a la empresa.", "Estableciendo nuevas vistas con información existente en la base de datos (Informes).", "Todas las opciones son correctas."],
+                correct: "Todas las opciones son correctas.",
+                justification: "Un ERP de código abierto permite adaptar visualmente sus vistas, reportes, o directamente picar código en su núcleo."
             },
             {
-                q: "En referencia al manejo de errores, identifica si la siguiente afirmación es correcta: 'Las excepciones son objetos con información que capturan fallos del código mal introducido (usando try/except)'.",
+                q: "Tipo de dato Booleano: es el más conveniente cuando se trabaja con expresiones condicionales. El tipo booleano define una serie de operandos que pueden ser, entre otros:",
+                options: ["Negación de una expresión -> (not).", "Igualdad -> (==).", "Mayor -> (>).", "Todas son correctas."],
+                correct: "Todas son correctas.",
+                justification: "Operadores condicionales y comparativos que resuelven una evaluación en un simple True o False."
+            },
+            {
+                q: "Dentro de los informes de almacén, el ____________ permite comprobar cómo se han repartido los productos por las distintas ubicaciones.",
+                options: ["Análisis de movimiento.", "Análisis de transporte.", "Análisis de inventario.", "Análisis de personal."],
+                correct: "Análisis de inventario.",
+                justification: "El análisis de inventario da una fotografía exacta de dónde descansa cada unidad física del stock."
+            },
+            {
+                q: "Las licencias de código abierto determinan que un software no tiene propietario.",
                 options: ["Verdadero.", "Falso."],
-                correct: "Verdadero.",
-                justification: "Estructuras como try / except evitan que el programa colapse abruptamente, capturando y derivando los errores I/O, sintácticos o de memoria."
+                correct: "Falso.",
+                justification: "Todo código fuente abierto pertenece a su creador (tiene copyright). Para no tener propietario tendría que ser de 'Dominio Público'."
+            },
+            {
+                q: "No se puede hacer una copia de seguridad de una base de datos.",
+                options: ["Verdadero.", "Falso."],
+                correct: "Falso.",
+                justification: "Se pueden (y deben) hacer utilizando interfaces gestoras como PgAdmin III en PostgreSQL para resguardar la información."
             }
         ];
 
@@ -961,7 +687,7 @@
         let currentQuestionIndex = 0;
         let score = 0;
 
-        // Algoritmo de Fisher-Yates para barajar
+        // Función para barajar elementos de un array
         function shuffleArray(array) {
             let currentIndex = array.length, randomIndex;
             while (currentIndex !== 0) {
@@ -972,7 +698,6 @@
             return array;
         }
 
-        // Inicializar
         function startQuiz() {
             document.getElementById('results-screen').style.display = 'none';
             document.getElementById('question-screen').style.display = 'block';
@@ -980,10 +705,10 @@
             // Copia profunda
             quizData = JSON.parse(JSON.stringify(rawQuestions));
             
-            // 1) Barajar las preguntas
+            // 1) Barajar preguntas
             quizData = shuffleArray(quizData);
             
-            // 2) Barajar las opciones de CADA pregunta
+            // 2) Barajar opciones
             quizData.forEach(q => {
                 q.options = shuffleArray(q.options);
             });
@@ -1022,7 +747,7 @@
             const currentQ = quizData[currentQuestionIndex];
             const allBtns = document.querySelectorAll('.option-btn');
             
-            // Bloquea opciones tras la elección
+            // Bloqueo de opciones
             allBtns.forEach(btn => {
                 btn.disabled = true;
                 if (btn.innerText === correct) {
@@ -1030,6 +755,7 @@
                 }
             });
 
+            // Verificar acierto
             if (selected === correct) {
                 score++;
                 updateUI();
@@ -1041,11 +767,11 @@
             document.getElementById('justification-text').innerText = currentQ.justification;
             document.getElementById('justification').style.display = 'block';
 
-            // Mostrar el botón Siguiente
+            // Siguiente
             document.getElementById('next-btn').style.display = 'inline-block';
             
             if (currentQuestionIndex === quizData.length - 1) {
-                document.getElementById('next-btn').innerText = 'Ver Nota Final';
+                document.getElementById('next-btn').innerText = 'Ver Calificación Final';
             } else {
                 document.getElementById('next-btn').innerText = 'Siguiente Pregunta';
             }
@@ -1067,7 +793,7 @@
             document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
         }
 
-        // Arranca nada más abrir
+        // Iniciar
         window.onload = startQuiz;
 
     </script>
