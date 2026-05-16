@@ -249,6 +249,162 @@
     <script>
         const rawQuestions = [
             {
+        q: "¿Qué significan las siglas ERP?",
+        options: ["Enterprise Relational Program.", "Enterprise Resource Planning.", "Execution Resource Planning.", "Enterprise Record Program."],
+        correct: "Enterprise Resource Planning.",
+        justification: "Las siglas ERP provienen del inglés 'Enterprise Resource Planning', que se traduce al castellano como Sistema de Planificación de Recursos Empresariales [1]."
+    },
+    {
+        q: "¿Qué tipo de instalación de un ERP es más conveniente para realizar pruebas, entornos de desarrollo o aprendizaje?",
+        options: ["SaaS.", "Cliente-servidor.", "Cliente-servidor web.", "Monopuesto."],
+        correct: "Monopuesto.",
+        justification: "En la instalación monopuesto, todo el ERP (base de datos y aplicación) reside en la misma computadora. Es ideal para aprender, pero no sirve para entornos productivos reales con varios empleados [2, 3]."
+    },
+    {
+        q: "¿Cuál es el objetivo principal de un sistema CRM (Customer Relationship Management)?",
+        options: ["Gestionar la contabilidad de la empresa.", "Mejorar y administrar la relación con los clientes.", "Controlar el stock del almacén.", "Desarrollar nuevos programas informáticos."],
+        correct: "Mejorar y administrar la relación con los clientes.",
+        justification: "Un CRM es un software que hace referencia a la estrategia de negocios centrada específicamente en el cliente, buscando establecer relaciones duraderas y satisfactorias [4, 5]."
+    },
+    {
+        q: "Si clasificamos el software por su coste, ¿cómo se llama aquel que se puede usar gratis por un tiempo de prueba, pero luego requiere un pago?",
+        options: ["Freeware.", "Payware.", "Shareware.", "Software libre."],
+        correct: "Shareware.",
+        justification: "El Shareware es un modelo de distribución donde el software puede usarse sin coste durante un periodo de tiempo. Pasado ese tiempo, para continuar usándolo, se debe realizar un pago al autor [6]."
+    },
+    {
+        q: "En el lenguaje de programación Python, ¿cómo se delimitan los bloques de código (como los bucles o condicionales)?",
+        options: ["Con llaves {}.", "Mediante el sangrado o indentación (espacios en blanco).", "Con las palabras reservadas BEGIN y END.", "Con corchetes []."],
+        correct: "Mediante el sangrado o indentación (espacios en blanco).",
+        justification: "En Python no existen llaves para definir bloques explícitos. Los bloques comienzan con dos puntos (:) y todo lo que llevan dentro debe contener una serie de espacios en blanco al inicio de la línea, conocido como sangrado [7]."
+    },
+    {
+        q: "¿Cuál es la mínima unidad de estructura de una base de datos relacional, donde los registros se agrupan en filas y columnas?",
+        options: ["Dato.", "Vista.", "Consulta.", "Tabla."],
+        correct: "Tabla.",
+        justification: "La tabla es la unidad estructural fundamental del modelo relacional. Es el conjunto de registros o filas relacionadas que se almacenan bajo un mismo nombre [8]."
+    },
+    {
+        q: "¿En qué lenguaje de programación está desarrollado el servidor del ERP libre Odoo?",
+        options: ["Java.", "C++.", "Python.", "PHP."],
+        correct: "Python.",
+        justification: "Odoo presenta una arquitectura basada en cliente-servidor, donde la parte del servidor se desarrolla íntegramente utilizando el lenguaje Python [9, 10]."
+    },
+            {
+        "q": "En el lenguaje Python, ¿qué función predefinida se utiliza para mostrar texto o variables por pantalla?",
+        "options": ["Look().", "Out().", "Remove().", "print()."],
+        "correct": "print().",
+        "justification": "En Python, la impresión por consola se realiza mediante la variable denominada cadena de formato utilizando la función nativa print()."
+    },
+    {
+        "q": "En la gestión de productos dentro del ERP, ¿qué tipo de productos SÍ se contabilizan y llevan un control estricto en el stock?",
+        "options": ["Los consumibles.", "Los almacenables.", "Los servicios.", "Ninguna de las respuestas es correcta."],
+        "correct": "Los almacenables.",
+        "justification": "A diferencia de los servicios o los consumibles (que se asumen como ilimitados), solo los productos clasificados como 'almacenables' generan un control de inventario real en el sistema."
+    },
+    {
+        "q": "¿Qué es exactamente PostgreSQL en el entorno de los sistemas ERP como Odoo?",
+        "options": ["Es un sistema de código abierto de administración de bases de datos de tipo relacional.", "Es un sistema gestor de bases de datos de tipo NO relacional.", "Es un lenguaje de programación orientado a objetos.", "Es el módulo de compras del ERP."],
+        "correct": "Es un sistema de código abierto de administración de bases de datos de tipo relacional.",
+        "justification": "PostgreSQL es el SGBD (Sistema Gestor de Bases de Datos) relacional y de código abierto recomendado y utilizado por defecto para dar soporte de datos a Odoo."
+    },
+    {
+        "q": "¿Qué paradigma o arquitectura utiliza el ERP Odoo para separar y diferenciar los datos puros de su representación visual por pantalla?",
+        "options": ["El modelo Vista-Servidor.", "El modelo Cliente-Nube.", "El MVC (Modelo-Vista-Controlador).", "El MVC (Modelo-Vista-Clasificador)."],
+        "correct": "El MVC (Modelo-Vista-Controlador).",
+        "justification": "El paradigma MVC permite una gran independencia, separando la lógica de los datos (Modelo) de la interfaz gráfica que ve el usuario (Vista) gracias a un gestor intermedio (Controlador)."
+    },
+    {
+        "q": "En la logística de un ERP, ¿qué modalidad de albaranes existen para justificar el movimiento de la mercancía?",
+        "options": ["Solo de entrada.", "De entrada y de salida.", "Solo externos.", "De entrada, de salida y externos (Todas las respuestas son correctas)."],
+        "correct": "De entrada, de salida y externos (Todas las respuestas son correctas).",
+        "justification": "Los albaranes justifican las recepciones (entrada), envíos a clientes (salida) y los movimientos entre distintos almacenes o ubicaciones propias (externos/internos)."
+    },
+    {
+        "q": "A la hora de importar o exportar datos de forma masiva en un sistema ERP-CRM (como Odoo), ¿qué tipo de archivos se utilizan habitualmente?",
+        "options": ["Archivos flag y tiff.", "Archivos txt y blob.", "Archivos xml y csv.", "Archivos doc y pdf."],
+        "correct": "Archivos xml y csv.",
+        "justification": "El lenguaje de marcado XML y los archivos separados por comas (CSV) son los formatos estándar más eficientes y compatibles soportados por el lenguaje Python y Odoo para la carga de datos."
+    },
+    {
+        "q": "Según la metodología clásica de implantación de un sistema ERP-CRM, ¿de cuántas fases consta el proyecto completo?",
+        "options": ["Consta de 3 fases.", "Consta de 4 fases.", "Consta de 5 fases.", "Consta de 6 fases."],
+        "correct": "Consta de 5 fases.",
+        "justification": "Un proyecto organizado se divide en 5 fases estables: Iniciación, Desarrollo, Implementación, Implantación, y finalmente, Producción y soporte."
+    },
+    {
+        "q": "En la metodología de implantación, ¿en qué fase se lleva a cabo el análisis detallado y el diseño tanto lógico como físico del sistema?",
+        "options": ["En la fase de Iniciación.", "En la fase de Desarrollo.", "En la fase de Implementación.", "En la fase de Producción."],
+        "correct": "En la fase de Desarrollo.",
+        "justification": "Tras el estudio inicial, la Fase 2 (Desarrollo) es donde el equipo técnico diseña la estructura física y lógica sobre papel antes de comprar los equipos o instalar el software."
+    },
+    {
+        "q": "En el lenguaje Python, ¿qué función nativa se utiliza para devolver la longitud o el número de elementos que tiene una cadena de texto?",
+        "options": ["longitud(cadena).", "size(cadena).", "count(cadena).", "len(cadena)."],
+        "correct": "len(cadena).",
+        "justification": "La función len() (abreviatura de 'length' en inglés) es el comando interno de Python utilizado para devolver la longitud de un determinado objeto, como una cadena o una lista."
+    },
+    {
+        "q": "¿Qué módulo específico nos permite crear una orden de compra de forma directa en el ERP?",
+        "options": ["El módulo de Punto de Venta.", "El módulo de Ventas.", "El módulo de Compras.", "El módulo de Marketing."],
+        "correct": "El módulo de Compras.",
+        "justification": "Es el módulo logístico específico encargado del aprovisionamiento, permitiendo dar de alta proveedores, solicitar presupuestos y emitir las órdenes directas de compra."
+    },
+    {
+        q: "¿Qué valores permite almacenar una variable de tipo Booleano en el código de Python?",
+        options: ["Números del 0 al 10.", "Cadenas de texto.", "Únicamente True (Verdadero) o False (Falso).", "Cualquier número decimal."],
+        correct: "Únicamente True (Verdadero) o False (Falso).",
+        justification: "El tipo de dato booleano es el más conveniente cuando se trabaja con expresiones condicionales, ya que solo permite almacenar los valores lógicos de True o False [12]."
+    },
+    {
+        q: "En el módulo de logística, ¿qué documento del ERP sirve como justificante legal para confirmar la entrega o el movimiento de un producto en el almacén?",
+        options: ["La factura.", "El asiento contable.", "El pedido de venta.", "El albarán."],
+        correct: "El albarán.",
+        justification: "Los albaranes son los justificantes que confirman la entrega o recepción de un determinado producto. Pueden ser de entrada, de salida o externos para movimientos entre ubicaciones [13]."
+    },
+    {
+        "q": "¿Cuál de las siguientes opciones NO es un objetivo principal al implantar un sistema de gestión empresarial (ERP)?",
+        "options": ["Compartir información entre los distintos departamentos.", "Tener que mantener siempre los mismos proveedores.", "Automatizar los procesos internos de la empresa.", "Ordenar toda la información en un mismo lugar y base de datos."],
+        "correct": "Tener que mantener siempre los mismos proveedores.",
+        "justification": "El objetivo de un ERP no es limitar a la empresa a usar siempre los mismos proveedores, sino todo lo contrario: gestionar eficazmente las relaciones con múltiples proveedores (módulos SRM), planificar, automatizar procesos y mejorar el control general [1, 2]."
+    },
+    {
+        "q": "En el entorno del ERP Odoo, al visualizar la información técnica de las aplicaciones, ¿cuál es el nombre técnico o identificador del módulo encargado de la Facturación y Contabilidad?",
+        "options": ["purchase", "sale_management", "account", "contacts"],
+        "correct": "account",
+        "justification": "En Odoo, el identificador técnico en el código para el módulo de Facturación / Contabilidad es 'account' [3, 4]."
+    },
+    {
+        "q": "En relación con el diseño de interfaces en un sistema ERP, ¿cuál de los siguientes es un tipo de vista utilizada para mostrar el contenido y los registros organizados en listados por filas?",
+        "options": ["Vista estructurada.", "Vista relacional.", "Vista en árbol.", "Vista de índice."],
+        "correct": "Vista en árbol.",
+        "justification": "La 'vista en árbol' es uno de los componentes visuales principales y se utiliza específicamente en los listados de datos para mostrar los registros organizados de forma horizontal en filas [5]."
+    },
+    {
+        "q": "¿Cuáles de las siguientes opciones describen las finalidades principales de un Sistema Gestor de Bases de Datos (SGBD) dentro de un ERP?",
+        "options": ["Extraer y manipular datos.", "Almacenar datos de forma segura.", "Darle mayor utilidad a la información que se obtiene de las bases de datos.", "Todas las respuestas son correctas."],
+        "correct": "Todas las respuestas son correctas.",
+        "justification": "El SGBD es el motor lógico de un ERP. Se encarga de guardar físicamente la información, gestionarla, extraerla con eficacia y darle una utilidad analítica en las consultas [6, 7]."
+    },
+    {
+        "q": "En el lenguaje Python, los objetos de tipo cadena (strings) incorporan funciones predefinidas. ¿Cuál de las siguientes funciones NO pertenece al tratamiento de cadenas en Python?",
+        "options": ["capitalize()", "splitlines()", "multiply()", "strip()"],
+        "correct": "multiply()",
+        "justification": "Python incorpora funciones nativas para cadenas como capitalize() (poner mayúscula inicial), splitlines() (dividir en líneas) y strip() (eliminar espacios) [8, 9]. La instrucción multiply() no existe como método de cadena predefinido [9]."
+    },
+    {
+        "q": "El paradigma de trabajar en la nube (cloud computing) permite al cliente contratar infraestructuras externas. ¿Qué modalidades existen en función de las opciones que asume el cliente?",
+        "options": ["SaaS (Software as a Service).", "IaaS (Infrastructure as a Service).", "PaaS (Platform as a Service).", "Todas las respuestas son correctas."],
+        "correct": "Todas las respuestas son correctas.",
+        "justification": "Estas son las tres modalidades oficiales de servicios en la nube: SaaS deja toda la gestión técnica al proveedor, IaaS alquila el hardware a bajo nivel, y PaaS es un punto intermedio para plataformas [10, 11]."
+    },
+    {
+        "q": "La 'vista de búsqueda' en un ERP sirve para complementar a otras vistas. ¿Cuál de las siguientes acciones NO se puede realizar a través de un panel de vista de búsqueda?",
+        "options": ["Realizar operaciones complejas de filtrado sobre los registros.", "Añadir un panel de búsqueda en la parte superior del listado.", "Hacer transferencias bancarias directas.", "Agrupar los datos mostrados según un criterio determinado."],
+        "correct": "Hacer transferencias bancarias directas.",
+        "justification": "La vista de búsqueda es un elemento gráfico destinado exclusivamente a localizar, filtrar y agrupar información [12]. Las transacciones, como una transferencia bancaria, son operaciones que se realizan en un módulo contable editando registros en una vista de formulario [12, 13]."
+    },
+            {
                 q: "¿Qué características tiene un ERP?",
                 options: ["Modularidad, escalabilidad, oportunidad.", "Simplicidad, integración, rigidez.", "Integración, modularidad, adaptabilidad.", "Ninguna respuesta es correcta."],
                 correct: "Integración, modularidad, adaptabilidad.",
