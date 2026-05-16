@@ -6,13 +6,14 @@
     <title>Cuestionario Interactivo: Android Studio y Unity</title>
     <style>
         :root {
-            --primary-color: #2b3a42;
-            --secondary-color: #3DDC84; /* Android Green */
-            --accent-color: #e74c3c;
-            --success-color: #2ecc71;
-            --background-color: #e0e5ec;
+            --primary-color: #073042;        /* Android dark navy (branding) */
+            --secondary-color: #3DDC84;      /* Android Green (acción) */
+            --secondary-dark: #2bbf6c;       /* Verde Android oscurecido para hover */
+            --accent-color: #EA4335;         /* Google red (incorrecto) */
+            --success-color: #34A853;        /* Google green (acierto) */
+            --background-color: #f5f7fa;
             --card-bg: #ffffff;
-            --text-color: #333333;
+            --text-color: #202124;
         }
 
         * {
@@ -29,14 +30,14 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
         }
 
         #quiz-container {
             background-color: var(--card-bg);
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 800px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            max-width: 850px;
             width: 100%;
             padding: 40px;
             position: relative;
@@ -47,25 +48,28 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid #e1e8ed;
         }
 
         .progress {
             font-size: 1.1em;
-            font-weight: 600;
-            color: var(--primary-color);
+            font-weight: 700;
+            color: var(--secondary-dark);
+            background: #e8f9ef;
+            padding: 6px 16px;
+            border-radius: 20px;
         }
 
         .score {
             font-size: 1.1em;
-            font-weight: 600;
-            color: var(--primary-color);
+            font-weight: 700;
+            color: var(--success-color);
         }
 
         h2 {
-            font-size: 1.4em;
+            font-size: 1.35em;
             margin-bottom: 25px;
             color: var(--primary-color);
             line-height: 1.5;
@@ -78,57 +82,137 @@
         }
 
         .option-btn {
-            background-color: #f8f9fa;
-            border: 2px solid #e9ecef;
+            background-color: #ffffff;
+            border: 2px solid #dcdde1;
             border-radius: 8px;
-            padding: 15px 20px;
+            padding: 14px 18px;
             font-size: 1.05em;
             text-align: left;
             cursor: pointer;
             transition: all 0.2s ease;
             color: var(--text-color);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .option-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+            border-radius: 6px;
+            background-color: #eef4f0;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 0.95em;
+            border: 1px solid #dcdde1;
+            transition: all 0.2s ease;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .option-text {
+            flex: 1;
         }
 
         .option-btn:hover:not(:disabled) {
             border-color: var(--secondary-color);
-            background-color: #f0fdf4;
+            background-color: #f3fdf7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .option-btn.pre-selected {
+            border-color: var(--primary-color);
+            background-color: #e6eef3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(7, 48, 66, 0.18);
+        }
+
+        .option-btn.pre-selected .option-number {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
         }
 
         .option-btn.correct {
-            background-color: #eafaf1;
+            background-color: #e8f6ee;
             border-color: var(--success-color);
-            color: #1e8449;
-            font-weight: bold;
+            color: #1e7e34;
+            font-weight: 700;
+        }
+
+        .option-btn.correct .option-number {
+            background-color: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
         }
 
         .option-btn.incorrect {
-            background-color: #fceae9;
+            background-color: #fdecea;
             border-color: var(--accent-color);
-            color: #c0392b;
+            color: #b3261e;
+        }
+
+        .option-btn.incorrect .option-number {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
         }
 
         .option-btn:disabled {
             cursor: not-allowed;
+            opacity: 0.85;
+        }
+
+        .keyboard-hint {
+            margin-top: 18px;
+            padding: 10px 14px;
+            background-color: #f5f7fa;
+            border-radius: 8px;
+            font-size: 0.85em;
+            color: #5f6368;
+            text-align: center;
+            border: 1px dashed #dcdde1;
+        }
+
+        .keyboard-hint kbd {
+            display: inline-block;
+            padding: 2px 8px;
+            background: white;
+            border: 1px solid #bdc3c7;
+            border-bottom-width: 2px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            color: var(--primary-color);
+            font-weight: 700;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+            margin: 0 2px;
         }
 
         .justification-box {
             display: none;
             margin-top: 25px;
             padding: 20px;
-            background-color: #f4fdf8;
+            background-color: #f1fbf5;
             border-left: 5px solid var(--secondary-color);
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 1.05em;
-            line-height: 1.5;
-            animation: fadeIn 0.5s ease;
+            line-height: 1.6;
+            animation: fadeIn 0.4s ease;
         }
 
         .justification-box h4 {
-            color: var(--primary-color);
+            color: var(--secondary-dark);
             margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 1.1em;
         }
 
         .next-btn-container {
@@ -138,25 +222,39 @@
         }
 
         .next-btn, .restart-btn {
-            background-color: var(--primary-color);
+            background-color: var(--secondary-color);
             color: white;
             border: none;
-            padding: 12px 30px;
+            padding: 14px 32px;
             font-size: 1.1em;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.1s;
             display: none;
+            box-shadow: 0 4px 6px rgba(61, 220, 132, 0.3);
         }
 
         .next-btn:hover, .restart-btn:hover {
-            background-color: #1a252a;
+            background-color: var(--secondary-dark);
+            transform: translateY(-2px);
+        }
+
+        .next-btn .kbd-inline {
+            display: inline-block;
+            padding: 1px 7px;
+            background: rgba(255,255,255,0.22);
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85em;
+            margin-left: 8px;
+            font-weight: 700;
         }
 
         .restart-btn {
             display: inline-block;
-            margin-top: 20px;
+            margin-top: 25px;
+            font-size: 1.2em;
         }
 
         .results-screen {
@@ -166,19 +264,22 @@
 
         .results-screen h1 {
             color: var(--primary-color);
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            font-size: 2.5em;
         }
 
         .results-screen p {
             font-size: 1.2em;
+            color: #5f6368;
             margin-bottom: 30px;
         }
 
         .final-score {
-            font-size: 3em;
-            font-weight: bold;
-            color: var(--secondary-color);
+            font-size: 4em;
+            font-weight: 800;
+            color: var(--secondary-dark);
             margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
         @keyframes fadeIn {
@@ -189,7 +290,10 @@
         @media (max-width: 600px) {
             #quiz-container { padding: 25px 20px; }
             h2 { font-size: 1.2em; }
-            .option-btn { font-size: 1em; padding: 12px 15px; }
+            .option-btn { font-size: 1em; padding: 12px 14px; }
+            .option-number { width: 26px; height: 26px; min-width: 26px; font-size: 0.85em; }
+            .final-score { font-size: 3em; }
+            .keyboard-hint { font-size: 0.78em; }
         }
     </style>
 </head>
@@ -207,13 +311,17 @@
             
             <div class="options-container" id="options"></div>
 
+            <div class="keyboard-hint">
+                <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> o <kbd>↑</kbd> <kbd>↓</kbd> para seleccionar · <kbd>Enter</kbd> para confirmar y avanzar
+            </div>
+
             <div class="justification-box" id="justification">
                 <h4><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg> Explicación</h4>
                 <p id="justification-text"></p>
             </div>
 
             <div class="next-btn-container">
-                <button class="next-btn" id="next-btn" onclick="handleNext()">Siguiente Pregunta</button>
+                <button class="next-btn" id="next-btn" onclick="handleNext()">Siguiente Pregunta<span class="kbd-inline">Enter</span></button>
             </div>
         </div>
 
@@ -349,15 +457,15 @@
                 justification: "El archivo de claves (google-services.json) debe colocarse en el módulo raíz de la aplicación para que Android Studio lo detecte al compilar."
             },
             {
-                q: "¿Para qué se utiliza la siguiente línea de código? <uses-permission android:name="android.permission.CAMERA"/>",
+                q: "¿Para qué se utiliza la siguiente línea de código? <uses-permission android:name=\"android.permission.CAMERA\"/>",
                 options: ["Da permiso a la aplicación para conectarse a Internet.", "Da permiso a la aplicación para poder usar la cámara. Se declara en el AndroidManifest.xml.", "Da permiso a la aplicación para poder usar la cámara. Se declara en el AndroidManifest.java.", "Da permiso a la aplicación para poder usar la cámara. Se declara en el layout."],
                 correct: "Da permiso a la aplicación para poder usar la cámara. Se declara en el AndroidManifest.xml.",
                 justification: "Todo uso de hardware bloqueado por el sistema debe declararse primero obligatoriamente dentro del manifiesto del proyecto."
             },
             {
                 q: "¿Qué permiso debemos definir en Android Manifest para poder leer un SMS?",
-                options: ["<uses-permission android:name="android.permission.READ_SMS"/>.", "<uses-permission android:name="android.permission.READSMS"/>.", "<uses-permission android:name="android.permission.SMS"/>.", "<uses-permission android:name="android.permission.READ"/>."],
-                correct: "<uses-permission android:name="android.permission.READ_SMS"/>.",
+                options: ["<uses-permission android:name=\"android.permission.READ_SMS\"/>.", "<uses-permission android:name=\"android.permission.READSMS\"/>.", "<uses-permission android:name=\"android.permission.SMS\"/>.", "<uses-permission android:name=\"android.permission.READ\"/>."],
+                correct: "<uses-permission android:name=\"android.permission.READ_SMS\"/>.",
                 justification: "Es la sintaxis y constante correcta y exacta que exige el sistema operativo Android."
             },
             {
@@ -373,7 +481,7 @@
                 justification: "MediaPlayer es una API para desarrolladores ubicada en el 'Application Framework', y no es un componente núcleo del System Server."
             },
             {
-                q: ""Puede gestionar una cola de sonidos de forma que sepa en cada momento cuál o cuáles de ellos debe reproducir". Esto define a:",
+                q: "\"Puede gestionar una cola de sonidos de forma que sepa en cada momento cuál o cuáles de ellos debe reproducir\". Esto define a:",
                 options: ["ToneGenerator.", "MediaPlayer.", "AudioTrack.", "SoundPool."],
                 correct: "SoundPool.",
                 justification: "Almacena los recursos en memoria RAM logrando cero latencia a la hora de superponer múltiples ruidos simultáneamente."
@@ -575,12 +683,271 @@
                 options: ["onRestore().", "Ninguna respuesta es correcta.", "onCreate().", "onUpgrade()."],
                 correct: "onUpgrade().",
                 justification: "Al cambiar el número de versión local en la base de SQLite (por ejemplo de versión 1 a 2 al añadir una tabla), el gestor lo detecta y obliga a ejecutar este método para aplicar migraciones."
+            },
+
+            // Se añaden nuevas preguntas
+            {
+                q: "¿Cuál es el primer método del ciclo de vida que se ejecuta al crear una Activity y siempre se debe implementar?",
+                options: ["onStart().", "onResume().", "onCreate().", "onRestart()."],
+                correct: "onCreate().",
+                justification: "Según el libro, onCreate() es el primero en ejecutarse al crear la actividad y siempre se debe implementar. En este método se ejecuta aquel código que solo debe ejecutarse una vez en el ciclo de la aplicación."
+            },
+            {
+                q: "Cuando una Activity ya es visible al usuario y está en primer plano, ¿cuál es el último método del ciclo de vida que se ejecuta?",
+                options: ["onStart().", "onResume().", "onPause().", "onCreate()."],
+                correct: "onResume().",
+                justification: "El solucionario oficial del libro (Tema 1.9) confirma que cuando la Activity es visible y coincide con el último método ejecutado mientras está en primer plano, la función a la que se accede es onResume()."
+            },
+            {
+                q: "¿Cuál de los siguientes NO es un evento de teclado que Android pueda gestionar?",
+                options: ["onKeyLongPress().", "onKeyDown().", "onKeyShort().", "onKeyUp()."],
+                correct: "onKeyShort().",
+                justification: "El solucionario oficial (Tema 2.6) confirma que onKeyShort() no existe en Android. Los eventos válidos son onKeyDown(), onKeyUp() y onKeyLongPress()."
+            },
+            {
+                q: "¿Cómo se llama el encapsulado que podemos generar en Android Studio para instalar nuestras aplicaciones en dispositivos sin necesidad de cable?",
+                options: ["JAR.", "APK.", "WAR.", "ZIP."],
+                correct: "APK.",
+                justification: "El solucionario oficial (Tema 2.3) lo confirma: el formato APK (Android Application Package) es el archivo de instalación de aplicaciones Android."
+            },
+            {
+                q: "¿Cuántos tipos básicos de pruebas podemos distinguir en Android?",
+                options: ["1.", "2.", "3.", "4."],
+                correct: "2.",
+                justification: "El solucionario oficial (Tema 2.16) confirma que en Android tenemos básicamente dos tipos: las pruebas unitarias (unit tests), que se ejecutan en la máquina virtual, y las pruebas instrumentales (instrumental tests), que se ejecutan sobre un terminal."
+            },
+            {
+                q: "Las SharedPreferences son una forma más segura para proteger los datos frente a una base de datos embebida como SQLite. ¿Verdadero o falso?",
+                options: ["Verdadero.", "Falso."],
+                correct: "Falso.",
+                justification: "El solucionario oficial (Tema 2.9) confirma que esta afirmación es falsa. SharedPreferences sirven para guardar pares clave-valor sencillos, pero no son más seguras que SQLite."
+            },
+            {
+                q: "¿Qué tipos de conexión Bluetooth distingue Android?",
+                options: ["Bluetooth Standard y Bluetooth Pro.", "Bluetooth Classic y Bluetooth Low Energy (LE).", "Bluetooth 1.0 y Bluetooth 2.0.", "Bluetooth Wifi y Bluetooth NFC."],
+                correct: "Bluetooth Classic y Bluetooth Low Energy (LE).",
+                justification: "El libro distingue dos tipos: la Classic y la Low Energy (LE). El Low Energy va montado sobre las funcionalidades del Classic, pero, una vez establecida la conexión, la transmisión es más eficiente energéticamente."
+            },
+            {
+                q: "Según el libro, ¿cuál es el rango máximo aproximado de comunicación NFC para iniciar la transmisión?",
+                options: ["Un máximo de cuatro centímetros.", "Un máximo de diez metros.", "Un máximo de cien metros.", "Sin límite, depende de la antena."],
+                correct: "Un máximo de cuatro centímetros.",
+                justification: "El libro indica que para iniciar la comunicación NFC normalmente debe haber un máximo de cuatro centímetros. A diferencia del Bluetooth, no necesita descubrimiento ni emparejamiento."
+            },
+            {
+                q: "¿Cuál de las siguientes NO es una clase de bajo nivel en Android?",
+                options: ["AudioTrack.", "Surface.", "Camera2.", "MediaMuxer."],
+                correct: "Camera2.",
+                justification: "El solucionario oficial (Tema 3.7) confirma que Camera2 no es una clase de bajo nivel. AudioTrack, Surface y MediaMuxer sí lo son."
+            },
+            {
+                q: "¿Cuál de las siguientes NO es un mecanismo incluido en el Framework de Android para crear animaciones?",
+                options: ["Animación de propiedades.", "Animación de vistas.", "Animación drawable.", "Animación de colisiones."],
+                correct: "Animación de colisiones.",
+                justification: "El solucionario oficial (Tema 4.3) confirma que la animación de colisiones no es un mecanismo de animación del Framework de Android."
+            },
+            {
+                q: "¿De qué clase disponemos en Unity para obtener el sonido de cualquier recurso de la escena y emitirlo a través de los altavoces?",
+                options: ["Audio source.", "Audio recorder.", "Audio mixer.", "Audio listener."],
+                correct: "Audio listener.",
+                justification: "El solucionario oficial (Tema 4.6) confirma que Audio listener actúa como un micrófono, obteniendo el sonido de la escena. Audio source, en cambio, reproduce un audio clip."
+            },
+            {
+                q: "¿Qué tipo de colisionador elegirías en Unity para representar el choque entre dos pompas de jabón?",
+                options: ["Box collider.", "Capsule collider.", "Sphere collider.", "Mesh collider."],
+                correct: "Sphere collider.",
+                justification: "El solucionario oficial (Tema 5.3) confirma que para objetos con forma esférica como pompas de jabón se utiliza el Sphere collider."
+            },
+            {
+                q: "¿Cómo se conoce el proceso de creación de una imagen 2D/3D real dentro de una escena, a la que se ha aplicado una serie de filtros?",
+                options: ["Renderización.", "Modelado.", "Texturizado.", "Compilación."],
+                correct: "Renderización.",
+                justification: "El solucionario oficial (Tema 5.6) confirma este concepto: la renderización es el proceso de creación de una imagen 2D/3D real dentro de una escena tras aplicar filtros."
+            },
+            {
+                q: "En los dispositivos actuales, la función de depuración de aplicaciones que usa el puerto USB (depuración USB) ha sido eliminada porque vulnera la seguridad. ¿Verdadero o falso?",
+                options: ["Verdadero.", "Falso."],
+                correct: "Falso.",
+                justification: "El solucionario oficial (Tema 1.11) confirma que esta afirmación es falsa. La depuración USB sigue siendo una funcionalidad disponible y comúnmente utilizada en el desarrollo Android."
+            },
+            {
+                q: "Si creamos un proyecto seleccionando una versión de API de nivel 29 (Minimum SDK), ¿en qué dispositivos podremos usar la aplicación?",
+                options: ["En los de nivel 29 y anteriores.", "Solo en los de nivel 29 exactamente.", "En los de nivel 29 y posteriores.", "En cualquier dispositivo Android."],
+                correct: "En los de nivel 29 y posteriores.",
+                justification: "Al seleccionar una versión de API como mínima en Android Studio, le indicamos al sistema que la app necesita las funcionalidades de esa versión. Por lo tanto, funcionará en dispositivos con esa versión y en los modelos más nuevos (posteriores)."
+            },
+            {
+                q: "¿En qué carpeta del módulo Res se almacenan los archivos gráficos del icono de la aplicación, separados por resolución de pantalla?",
+                options: ["drawable.", "layout.", "values.", "mipmap."],
+                correct: "mipmap.",
+                justification: "La carpeta 'mipmap' contiene los archivos gráficos del icono de la aplicación, guardando varias versiones del mismo en función de la densidad y resolución de pantalla del dispositivo para que siempre se vea nítido."
+            },
+            {
+                q: "¿En qué carpeta del directorio Res se guardan los ficheros XML que definen el diseño de las pantallas?",
+                options: ["drawable.", "layout.", "values.", "raw."],
+                correct: "layout.",
+                justification: "El libro indica explícitamente que en la carpeta 'layout' encontramos los ficheros que definen el diseño de las pantallas de la aplicación, en formato XML."
+            },
+            {
+                q: "¿Cuál es la solución recomendada actualmente por Android para la programación asíncrona en Kotlin?",
+                options: ["AsyncTask.", "RxJava.", "Coroutines.", "Threads tradicionales."],
+                correct: "Coroutines.",
+                justification: "El libro afirma que las Coroutines son la solución recomendada para la programación asíncrona en Android. Se basan en funciones suspendidas que no bloquean el hilo principal y resultan eficientes, cancelables y bien integradas con Jetpack."
+            },
+            {
+                q: "¿Cuál es el componente de interfaz gráfica recomendado actualmente en Android para mostrar listas de elementos reciclables?",
+                options: ["ListView.", "RecyclerView.", "GridView.", "ScrollView."],
+                correct: "RecyclerView.",
+                justification: "El libro describe el RecyclerView como un componente de interfaz gráfica para listas cuya presentación podemos adaptar a diferentes diseños, sustituyendo al antiguo ListView por su mejor rendimiento al reciclar vistas."
+            },
+            {
+                q: "Los comandos SQL de tipo DDL (Data Definition Language) sirven para definir la estructura de los datos. ¿Cuál de los siguientes es un comando DDL?",
+                options: ["SELECT.", "INSERT.", "UPDATE.", "CREATE."],
+                correct: "CREATE.",
+                justification: "El libro clasifica los comandos SQL en dos grupos: DDL (CREATE, ALTER, DROP, TRUNCATE) para definir estructuras, y DML (SELECT, INSERT, UPDATE, DELETE) para manipular datos."
+            },
+            {
+                q: "¿Qué significan las siglas ORM en el contexto de bases de datos como Room?",
+                options: ["Object Relational Manager.", "Object Relational Mapping.", "Open Relational Model.", "Object Repository Model."],
+                correct: "Object Relational Mapping.",
+                justification: "El libro define ORM como Object Relational Mapping, una librería que traduce entre el lenguaje de programación orientado a objetos y el lenguaje SQL de la base de datos sin esfuerzo por parte del desarrollador. Room es la librería ORM preferida actualmente."
+            },
+            {
+                q: "¿Qué tipo de rigidbody en Unity NO se ve afectado por las leyes básicas de la física y requiere que el programador indique su posición?",
+                options: ["Dynamic.", "Kinematic.", "Static.", "Physical."],
+                correct: "Kinematic.",
+                justification: "Según el libro, los objetos Kinematic no se ven afectados por las leyes físicas; el programador indica su posición. No tienen atributos como masa o rozamiento y solo colisionan con objetos Dynamic. Ejemplos: puentes levadizos, puertas correderas o rayos láser."
+            },
+            {
+                q: "En Unity, ¿qué tipo de rigidbody se comporta como un objeto inamovible de masa infinita cuando recibe una colisión?",
+                options: ["Dynamic.", "Kinematic.", "Static.", "Inert."],
+                correct: "Static.",
+                justification: "El libro indica que los rigidbody Static no se mueven bajo ningún estímulo. Si reciben una colisión, se comportan como objetos inamovibles de masa infinita (por ejemplo, los muros de un laberinto)."
+            },
+            {
+                q: "Según el libro, ¿cuál es la API de dibujo 3D que permite crear aplicaciones con gráficos tridimensionales aceptando primitivas como líneas, puntos y polígonos?",
+                options: ["DirectX.", "OpenGL.", "Vulkan.", "Metal."],
+                correct: "OpenGL.",
+                justification: "El libro define OpenGL como una API de dibujo 3D que produce gráficos. A partir de su versión 3 desarrolló su propio lenguaje de renderizado: GLSL. Otra API similar mencionada es Direct 3D."
+            },
+            {
+                q: "Según el libro, ¿cuál de las siguientes clasificaciones de motores gráficos NO se considera correcta?",
+                options: ["Según las facilidades ofrecidas.", "Según la licencia (privados u open source).", "Según el lenguaje de programación nativo del desarrollador.", "Por herramientas de creación especializadas."],
+                correct: "Según el lenguaje de programación nativo del desarrollador.",
+                justification: "El libro clasifica los motores según las facilidades ofrecidas (librerías gráficas, motores, herramientas especializadas) y según la licencia (privados u open source). No menciona el lenguaje de programación del desarrollador como criterio de clasificación."
+            },            
+            {
+                q: "¿Qué componente de Android se utiliza para realizar operaciones de larga duración en segundo plano sin proporcionar una interfaz de usuario?",
+                options: ["Activity.", "Fragment.", "Service.", "BroadcastReceiver."],
+                correct: "Service.",
+                justification: "Los servicios (Services) están diseñados para ejecutarse en segundo plano (por ejemplo, reproducir música o descargar un archivo grande) sin necesidad de que el usuario interactúe con una pantalla."
+            },
+            {
+                q: "¿Qué herramienta utiliza Android Studio por defecto para automatizar y gestionar el proceso de compilación (build) del proyecto?",
+                options: ["Maven.", "Ant.", "Gradle.", "npm."],
+                correct: "Gradle.",
+                justification: "Gradle es el sistema de construcción oficial de Android Studio. Se encarga de empaquetar el código, compilarlo y gestionar las dependencias o librerías externas."
+            },
+            {
+                q: "En Android, ¿qué tipo de animación se utiliza para mostrar una secuencia de imágenes estáticas, una tras otra, como si fuera una película?",
+                options: ["Animación de propiedades (Property Animation).", "Animación de vistas (View Animation).", "Animación Drawable (Drawable Animation).", "Animación de transición."],
+                correct: "Animación Drawable (Drawable Animation).",
+                justification: "La animación Drawable funciona cargando una lista de recursos gráficos (imágenes) y mostrándolos en orden frame a frame, ideal para animaciones tradicionales 2D."
+            },
+            {
+                q: "Si queremos traducir nuestra aplicación Android al inglés, ¿cómo debemos nombrar la subcarpeta dentro de 'res' que contendrá el archivo strings.xml traducido?",
+                options: ["values-en", "values-english", "res-en", "strings-en"],
+                correct: "values-en",
+                justification: "Android utiliza sufijos de idioma estándar (ISO 639-1) añadidos a la carpeta 'values' para aplicar automáticamente el idioma según la configuración del móvil del usuario."
+            },
+            {
+                q: "¿Qué método del ciclo de vida de una Activity se llama inmediatamente cuando la actividad deja de estar en el primer plano (por ejemplo, al recibir una llamada)?",
+                options: ["onDestroy().", "onPause().", "onStop().", "onRestart()."],
+                correct: "onPause().",
+                justification: "onPause() es el primer indicador de que el usuario está abandonando la actividad (aunque siga parcialmente visible). Es el lugar ideal para pausar vídeos o animaciones en curso."
+            },
+            {
+                q: "En Unity, ¿qué componente es imprescindible añadir a un GameObject para que este caiga por su propio peso y se vea afectado por la gravedad?",
+                options: ["Box Collider.", "Transform.", "Rigidbody.", "Mesh Renderer."],
+                correct: "Rigidbody.",
+                justification: "El componente Rigidbody es el que le dice al motor de físicas de Unity que tome el control del objeto, aplicándole masa, gravedad y fuerzas."
+            },
+            {
+                q: "Al inicio del desarrollo de apps móviles, hay que tener en cuenta las limitaciones del propio dispositivo. ¿Cuál de las siguientes es una limitación principal frente a un PC de escritorio?",
+                options: ["La arquitectura orientada a objetos.", "El consumo de batería y la limitación de recursos (CPU/RAM).", "La imposibilidad de usar bases de datos.", "La falta de herramientas de depuración."],
+                correct: "El consumo de batería y la limitación de recursos (CPU/RAM).",
+                justification: "La programación en móviles exige optimización constante debido a que los recursos de hardware, la memoria y especialmente la duración de la batería son mucho más limitados que en un ordenador conectado a la red eléctrica."
+            },
+            {
+                q: "Según el libro, ¿qué potente herramienta de Google (no parte del SDK) es muy utilizada para reproducir streaming de audio y vídeo en Android, y permite configurar y ajustar la reproducción a bajo nivel?",
+                options: ["MediaPlayer.", "AsyncPlayer.", "ExoPlayer.", "VideoView."],
+                correct: "ExoPlayer.",
+                justification: "El libro describe ExoPlayer como una poderosa herramienta de Google que, si bien no pertenece al SDK de Android, permite tanto el uso a alto nivel para el trabajo duro como configurar y ajustar la reproducción a bajo nivel."
+            },
+            {
+                q: "Desde Android 8 (API 26), las notificaciones deben estar asociadas obligatoriamente a:",
+                options: ["Un canal (NotificationChannel).", "Un BroadcastReceiver.", "Un Service en primer plano.", "Un PendingIntent exclusivo."],
+                correct: "Un canal (NotificationChannel).",
+                justification: "El libro explica que desde Android 8 (la versión 26 de la API) las notificaciones deben estar asociadas a un canal. Cada canal permite agrupar notificaciones, establecer un icono e incluso permitir que el usuario deshabilite ese canal concreto."
+            },
+            {
+                q: "¿Qué es un PendingIntent en Android?",
+                options: ["Un intent que no se ha podido lanzar por falta de permisos.", "Un intent pendiente de aprobación por el usuario.", "Es como la capacidad futura de lanzar un intent (por ejemplo, al pulsar una notificación).", "Un intent que solo funciona si la app está en pausa."],
+                correct: "Es como la capacidad futura de lanzar un intent (por ejemplo, al pulsar una notificación).",
+                justification: "El libro define el pending intent como 'la capacidad futura de lanzar un intent'. Se usa típicamente para abrir una activity cuando el usuario presione el icono de una notificación."
+            },
+            {
+                q: "¿Qué framework menciona el libro para realizar pruebas unitarias en Android creando 'mocks' que imitan clases más complejas?",
+                options: ["Espresso.", "UI Automator.", "Mockito.", "JUnit Robot."],
+                correct: "Mockito.",
+                justification: "El libro indica que existen frameworks como Mockito que ayudan a crear clases que imitan ser otras más complejas (mocks), de modo que el código de prueba unitario no tenga llamadas reales al sistema."
+            },
+            {
+                q: "Para las pruebas instrumentales en Android, ¿qué dos herramientas menciona el libro como ayudas?",
+                options: ["Mockito y JUnit.", "Espresso y UI Automator.", "Retrofit y OkHttp.", "Gradle y Lint."],
+                correct: "Espresso y UI Automator.",
+                justification: "El libro menciona explícitamente que para las pruebas instrumentales disponemos de ayudas como las herramientas Espresso y UI Automator."
+            },
+            {
+                q: "A partir de la versión 3 de OpenGL, ¿qué lenguaje propio de renderizado se desarrolló para permitir mediante programación el desarrollo de una escena?",
+                options: ["HLSL.", "GLSL.", "OpenCL.", "WebGL."],
+                correct: "GLSL.",
+                justification: "El libro afirma que a partir de la versión 3, OpenGL desarrolló su propio lenguaje de renderizado, llamado GLSL, que permite llevar a cabo mediante programación el desarrollo de una escena."
+            },
+            {
+                q: "Según el libro, antes de poder ejecutarse, el código Kotlin debe compilarse para convertirse en bytecodes dentro de archivos con extensión:",
+                options: [".class.", ".kt.", ".dex.", ".bin."],
+                correct: ".dex.",
+                justification: "El libro explica que el código Kotlin debe compilarse para convertirse en bytecodes dentro de archivos .dex, que serán empaquetados en un APK o Bundle para ser instalados y ejecutados en la máquina Android."
+            },
+            {
+                q: "Tras la aparición del ConstraintLayout, ¿qué ocurrió con los demás layouts según el libro?",
+                options: ["Han quedado obsoletos.", "Se siguen utilizando exactamente igual.", "Solo se usan para juegos.", "Han sido eliminados del SDK."],
+                correct: "Han quedado obsoletos.",
+                justification: "El libro afirma textualmente que 'tras su aparición [del ConstraintLayout], los demás layouts han quedado obsoletos', dado que el ConstraintLayout permite ordenar componentes de forma eficiente y elástica sin necesidad de anidamientos."
+            },
+            {
+                q: "Cuando importamos modelos 3D a Unity, ¿cuáles son los DOS tipos de archivos más habituales según el libro?",
+                options: ["Formatos 3D importados (.OBJ) y archivos propios de la aplicación 3D (como .Blend).", "Archivos .PNG y .JPG.", "Archivos .FBX y .DAE exclusivamente.", "Archivos .MP4 y .AVI."],
+                correct: "Formatos 3D importados (.OBJ) y archivos propios de la aplicación 3D (como .Blend).",
+                justification: "El libro indica que al importar formatos en 3D solemos recurrir a dos tipos: los formatos de archivo 3D importado (.OBJ) o archivos propios de la aplicación 3D, como un archivo de Blender (.Blend)."
+            },
+            {
+                q: "En Unity, ¿qué función de un script se llama una vez por cada frame, es decir, una vez por cada ciclo de renderizado?",
+                options: ["Start().", "Awake().", "Update().", "OnRender()."],
+                correct: "Update().",
+                justification: "El libro explica que el método Start() se ejecuta cuando la escena carga el objeto, mientras que la función Update() se llama una vez por cada frame, es decir, una vez por cada ciclo de renderizado."
             }
         ];
 
         let quizData = [];
         let currentQuestionIndex = 0;
         let score = 0;
+
+        // === Estado para navegación por teclado ===
+        let preSelectedIndex = -1;   // índice de la opción resaltada (aún sin confirmar)
+        let questionAnswered = false; // true cuando ya se ha confirmado la respuesta
+        // =========================================
 
         // Mezclar array (Fisher-Yates)
         function shuffleArray(array) {
@@ -623,35 +990,62 @@
         function renderQuestion() {
             const currentQ = quizData[currentQuestionIndex];
             document.getElementById('question-text').innerText = currentQ.q;
-            
+
             const optionsContainer = document.getElementById('options');
-            optionsContainer.innerHTML = ''; 
+            optionsContainer.innerHTML = '';
 
             document.getElementById('justification').style.display = 'none';
             document.getElementById('next-btn').style.display = 'none';
 
-            currentQ.options.forEach(option => {
+            // Resetear estado de teclado para la nueva pregunta
+            preSelectedIndex = -1;
+            questionAnswered = false;
+
+            currentQ.options.forEach((option, idx) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
-                btn.innerText = option;
-                btn.onclick = () => selectOption(option, currentQ.correct, btn);
+                btn.dataset.index = idx;
+
+                // Número visible que indica qué tecla pulsar
+                const numSpan = document.createElement('span');
+                numSpan.className = 'option-number';
+                numSpan.innerText = idx + 1;
+                btn.appendChild(numSpan);
+
+                const textSpan = document.createElement('span');
+                textSpan.className = 'option-text';
+                textSpan.innerText = option;
+                btn.appendChild(textSpan);
+
+                btn.onclick = () => commitOption(option, currentQ.correct, btn);
                 optionsContainer.appendChild(btn);
             });
         }
 
-        function selectOption(selected, correct, btnElement) {
+        // Resalta visualmente una opción sin confirmarla todavía
+        function preSelectOption(index) {
+            if (questionAnswered) return;
+            const buttons = document.querySelectorAll('.option-btn');
+            if (index < 0 || index >= buttons.length) return;
+
+            buttons.forEach(b => b.classList.remove('pre-selected'));
+            buttons[index].classList.add('pre-selected');
+            preSelectedIndex = index;
+        }
+
+        // Confirma definitivamente la opción seleccionada (equivalente a hacer click)
+        function commitOption(selected, correct, btnElement) {
             const currentQ = quizData[currentQuestionIndex];
             const allBtns = document.querySelectorAll('.option-btn');
-            
-            // Bloquear botones
+
             allBtns.forEach(btn => {
+                btn.classList.remove('pre-selected');
                 btn.disabled = true;
-                if (btn.innerText === correct) {
+                if (btn.querySelector('.option-text').innerText === correct) {
                     btn.classList.add('correct');
                 }
             });
 
-            // Verificar si acertó
             if (selected === correct) {
                 score++;
                 updateUI();
@@ -659,18 +1053,20 @@
                 btnElement.classList.add('incorrect');
             }
 
-            // Mostrar Justificación
+            questionAnswered = true;
+
             document.getElementById('justification-text').innerText = currentQ.justification;
             document.getElementById('justification').style.display = 'block';
 
-            // Mostrar botón Siguiente
             document.getElementById('next-btn').style.display = 'inline-block';
-            
-            if (currentQuestionIndex === quizData.length - 1) {
-                document.getElementById('next-btn').innerText = 'Ver Resultados';
-            } else {
-                document.getElementById('next-btn').innerText = 'Siguiente Pregunta';
-            }
+            document.getElementById('next-btn').innerHTML =
+                (currentQuestionIndex === quizData.length - 1 ? 'Ver Resultados' : 'Siguiente Pregunta')
+                + '<span class="kbd-inline">Enter</span>';
+        }
+
+        // Compatibilidad: mantenemos la firma anterior por si se llama desde otro sitio
+        function selectOption(selected, correct, btnElement) {
+            commitOption(selected, correct, btnElement);
         }
 
         function handleNext() {
@@ -688,6 +1084,66 @@
             document.getElementById('results-screen').style.display = 'block';
             document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
         }
+
+        // === MANEJADOR DE TECLADO ===
+        document.addEventListener('keydown', (e) => {
+            // En la pantalla de resultados: Enter reinicia el cuestionario
+            if (document.getElementById('results-screen').style.display === 'block') {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    startQuiz();
+                }
+                return;
+            }
+
+            // Teclas 1-4 (tanto del teclado normal como del numpad con NumLock activo)
+            if (/^[1-4]$/.test(e.key)) {
+                e.preventDefault();
+                const idx = parseInt(e.key, 10) - 1;
+                preSelectOption(idx);
+                return;
+            }
+
+            // Soporte explícito por code para numpad incluso sin NumLock activo
+            if (/^Numpad[1-4]$/.test(e.code)) {
+                e.preventDefault();
+                const idx = parseInt(e.code.replace('Numpad', ''), 10) - 1;
+                preSelectOption(idx);
+                return;
+            }
+
+            // Flechas arriba/abajo: navegar entre las opciones (con vuelta al extremo)
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (questionAnswered) return;
+                const buttons = document.querySelectorAll('.option-btn');
+                if (buttons.length === 0) return;
+
+                let nextIndex;
+                if (preSelectedIndex < 0) {
+                    nextIndex = (e.key === 'ArrowDown') ? 0 : buttons.length - 1;
+                } else {
+                    const delta = (e.key === 'ArrowDown') ? 1 : -1;
+                    nextIndex = (preSelectedIndex + delta + buttons.length) % buttons.length;
+                }
+                preSelectOption(nextIndex);
+                return;
+            }
+
+            // ENTER: confirma la opción pre-seleccionada o avanza si ya está corregida
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (!questionAnswered) {
+                    if (preSelectedIndex >= 0) {
+                        const buttons = document.querySelectorAll('.option-btn');
+                        buttons[preSelectedIndex].click();
+                    }
+                } else {
+                    handleNext();
+                }
+            }
+        });
+        // ============================
 
         // Iniciar
         window.onload = startQuiz;
