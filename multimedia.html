@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Interactivo: Android Studio y Unity</title>
+    <style>
+        :root {
+            --primary-color: #2b3a42;
+            --secondary-color: #3DDC84; /* Android Green */
+            --accent-color: #e74c3c;
+            --success-color: #2ecc71;
+            --background-color: #e0e5ec;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        #quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .progress {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .score {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        h2 {
+            font-size: 1.4em;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            line-height: 1.5;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px 20px;
+            font-size: 1.05em;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-color);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--secondary-color);
+            background-color: #f0fdf4;
+        }
+
+        .option-btn.correct {
+            background-color: #eafaf1;
+            border-color: var(--success-color);
+            color: #1e8449;
+            font-weight: bold;
+        }
+
+        .option-btn.incorrect {
+            background-color: #fceae9;
+            border-color: var(--accent-color);
+            color: #c0392b;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .justification-box {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f4fdf8;
+            border-left: 5px solid var(--secondary-color);
+            border-radius: 4px;
+            font-size: 1.05em;
+            line-height: 1.5;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .justification-box h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .next-btn-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .next-btn, .restart-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            display: none;
+        }
+
+        .next-btn:hover, .restart-btn:hover {
+            background-color: #1a252a;
+        }
+
+        .restart-btn {
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .results-screen {
+            text-align: center;
+            display: none;
+        }
+
+        .results-screen h1 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .results-screen p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .final-score {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin: 20px 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            #quiz-container { padding: 25px 20px; }
+            h2 { font-size: 1.2em; }
+            .option-btn { font-size: 1em; padding: 12px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="quiz-container">
+        <div id="question-screen">
+            <div class="header">
+                <div class="progress" id="progress">Pregunta 1 de X</div>
+                <div class="score" id="score">Puntuación: 0</div>
+            </div>
+            
+            <h2 id="question-text">¿Pregunta?</h2>
+            
+            <div class="options-container" id="options"></div>
+
+            <div class="justification-box" id="justification">
+                <h4><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg> Explicación</h4>
+                <p id="justification-text"></p>
+            </div>
+
+            <div class="next-btn-container">
+                <button class="next-btn" id="next-btn" onclick="handleNext()">Siguiente Pregunta</button>
+            </div>
+        </div>
+
+        <div class="results-screen" id="results-screen">
+            <h1>¡Cuestionario Completado!</h1>
+            <p>Has finalizado el test de Android y Unity.</p>
+            <div class="final-score" id="final-score">0 / X</div>
+            <button class="restart-btn" onclick="startQuiz()">Reintentar Cuestionario (Aleatorio)</button>
+        </div>
+    </div>
+
+    <script>
+        const rawQuestions = [
+            {
+                q: "¿Qué significan las siglas ADB / Qué es ADB en Android Studio?",
+                options: ["Android Debug Bridge", "Android Data Base", "Application Debug Binary", "Android Development Board"],
+                correct: "Android Debug Bridge",
+                justification: "Es un programa de línea de comandos que permite la comunicación entre el ordenador y el dispositivo (físico o emulador) para instalar y depurar apps."
+            },
+            {
+                q: "¿Cómo se denomina el entorno de EJECUCIÓN de Android?",
+                options: ["ART (Android Runtime)", "JVM (Java Virtual Machine)", "Dalvik", "Android SDK"],
+                correct: "ART (Android Runtime)",
+                justification: "ART es el entorno moderno que compila el código de la app al instalarla, mejorando el rendimiento general en comparación con el antiguo Dalvik."
+            },
+            {
+                q: "¿Que es GenyMotion?",
+                options: ["Emulador", "Entorno de desarrollo (IDE)", "Base de datos en la nube", "Librería de diseño"],
+                correct: "Emulador",
+                justification: "Es un software de terceros muy popular que proporciona emuladores rápidos de dispositivos Android para probar las aplicaciones."
+            },
+            {
+                q: "Una de las herramientas que Android Studio usa para solucionar e identificar errores la encontramos en las pestañas inferiores y muestra los mensajes del sistema... se conoce como:",
+                options: ["Logcat", "Terminal", "Profiler", "Debugger"],
+                correct: "Logcat",
+                justification: "Logcat es el registro donde se imprimen los errores (crashes) y los mensajes de depuración que los programadores lanzan en el código."
+            },
+            {
+                q: "En los dispositivos actuales, la función de depuración de aplicaciones que usa el puerto USB ha sido eliminada porque vulnera la seguridad de los datos...",
+                options: ["Falso", "Verdadero"],
+                correct: "Falso",
+                justification: "La depuración por USB sigue existiendo y es esencial; solo que el usuario debe activarla manualmente desde las 'Opciones de desarrollador'."
+            },
+            {
+                q: "¿Cuales son las siglas de los cinco principios que pueden ayudarnos a tener un buen código o un código más limpio?",
+                options: ["SOLID", "DRY", "KISS", "YAGNI"],
+                correct: "SOLID",
+                justification: "Se refiere a principios de diseño orientado a objetos (Single responsibility, Open/closed, Liskov substitution, Interface segregation, Dependency inversion)."
+            },
+            {
+                q: "La información que contiene la parte de programación en Kotlin se guarda en ficheros con extensión:",
+                options: [".kt", ".java", ".xml", ".ko"],
+                correct: ".kt",
+                justification: "Es la extensión oficial de los archivos de código fuente escritos en el lenguaje Kotlin."
+            },
+            {
+                q: "¿Cuántos tipos de pruebas podemos distinguir en Android?",
+                options: ["2", "3", "4", "5"],
+                correct: "2",
+                justification: "Generalmente se dividen en pruebas locales (Unit tests que corren en la JVM) y pruebas instrumentadas (que necesitan un dispositivo/emulador real)."
+            },
+            {
+                q: "¿Cuál es la ruta completa en el que se ubica el archivo de cadenas para internacionalización?",
+                options: ["/res/values/strings.xml", "/src/main/strings.xml", "/res/layout/strings.xml", "/assets/values/strings.xml"],
+                correct: "/res/values/strings.xml",
+                justification: "Android extrae todos los textos visibles de este archivo para facilitar la traducción de la app a otros idiomas."
+            },
+            {
+                q: "Según la arquitectura del sistema Android, los drivers de la Cámara se encuentran en la capa:",
+                options: ["Linux Kernel", "Android Runtime", "Application Framework", "Libraries"],
+                correct: "Linux Kernel",
+                justification: "El núcleo de Linux es la capa más profunda, encargada de la gestión directa del hardware del teléfono."
+            },
+            {
+                q: "Indica cuál de los siguientes NO pertenece al grupo de los servicios del sistema:",
+                options: ["Servicios MediaPlayer", "Activity Manager", "Location Manager", "Notification Manager"],
+                correct: "Servicios MediaPlayer",
+                justification: "MediaPlayer es una API del framework de aplicaciones, no un servicio de bajo nivel del sistema operativo."
+            },
+            {
+                q: "Cada actividad tiene / necesita:",
+                options: ["Capa lógica (.java o .kt), parte gráfica (.xml) y debe ser declarada en el AndroidManifest.xml.", "Solo una parte gráfica (.xml) y el manifiesto.", "Capa lógica (.kt) y permisos de root.", "Declararse en el build.gradle y tener un archivo .xml."],
+                correct: "Capa lógica (.java o .kt), parte gráfica (.xml) y debe ser declarada en el AndroidManifest.xml.",
+                justification: "Una pantalla en Android no existe si no tiene diseño, código que la controle, y no está registrada en el manifiesto principal."
+            },
+            {
+                q: "¿Cuál es uno de los métodos para lanzar el intent (cambiar de actividad)?",
+                options: ["startActivity(intent)", "launchIntent()", "openActivity()", "switchActivity(intent)"],
+                correct: "startActivity(intent)",
+                justification: "Este método toma el objeto Intent (que contiene el destino) y ordena al sistema operativo que abra la nueva pantalla."
+            },
+            {
+                q: "Cuando una aplicación está en estado 'Stopped' (Detenida), ésta tiene una prioridad...",
+                options: ["Baja o nula", "Alta", "Media", "Máxima"],
+                correct: "Baja o nula",
+                justification: "Si el usuario no está viendo la app, el sistema operativo le quita prioridad y puede cerrarla si necesita RAM."
+            },
+            {
+                q: "Indica cuál de los métodos se llama antes de terminar una actividad (destruirla):",
+                options: ["onDestroy()", "onPause()", "onStop()", "onFinish()"],
+                correct: "onDestroy()",
+                justification: "Es el último paso del ciclo de vida de la Activity, usado para liberar recursos antes de que desaparezca completamente."
+            },
+            {
+                q: "Los layouts son elementos:",
+                options: ["No visibles", "Interactivos primarios", "Gráficos con color por defecto", "Solo para texto"],
+                correct: "No visibles",
+                justification: "Un layout es un contenedor 'transparente' (como LinearLayout o ConstraintLayout) que solo sirve para ordenar los botones e imágenes en su interior."
+            },
+            {
+                q: "Existen varios tipos de layout, indica cuales:",
+                options: ["FrameLayout, LinearLayout, RelativeLayout, TableLayout o GridLayout", "ViewLayout, ButtonLayout, TextLayout", "ConstraintLayout, XML_Layout, JavaLayout", "Box_Layout, Grid_Layout, Flex_Layout"],
+                correct: "FrameLayout, LinearLayout, RelativeLayout, TableLayout o GridLayout",
+                justification: "Son los contenedores clásicos que provee Android para maquetar interfaces."
+            },
+            {
+                q: "¿Qué es un ConstraintLayout en Android Studio?",
+                options: ["Un layout que permite definir las relaciones (restricciones) entre los elementos", "Un layout exclusivo para texto", "Un layout que no permite anidar vistas", "Un contenedor lineal de elementos"],
+                correct: "Un layout que permite definir las relaciones (restricciones) entre los elementos",
+                justification: "Permite crear interfaces complejas anclando las vistas unas a otras sin necesidad de anidar múltiples layouts."
+            },
+            {
+                q: "¿Qué es un RecyclerView?",
+                options: ["Un componente que muestra una lista de elementos desplazable", "Un botón para reciclar memoria", "Un contenedor circular", "Una clase para borrar archivos basura"],
+                correct: "Un componente que muestra una lista de elementos desplazable",
+                justification: "Es un widget avanzado que recicla las celdas de una lista a medida que haces scroll, consumiendo muy poca memoria."
+            },
+            {
+                q: "¿Qué es el método para obtener una referencia a un objeto View en el layout de una actividad?",
+                options: ["findViewById()", "getView()", "obtainElementById()", "searchView()"],
+                correct: "findViewById()",
+                justification: "Busca en el archivo XML el identificador de un componente visual para vincularlo a una variable en el código."
+            },
+            {
+                q: "¿Qué hace el siguiente código? EditText editText = findViewById(R.id.etTuNombre);",
+                options: ["Hace referencia en el archivo .java a un elemento introducido en el archivo .XML", "Crea un nuevo elemento visual en la pantalla", "Borra el texto de un EditText", "Cambia el color del texto a rojo"],
+                correct: "Hace referencia en el archivo .java a un elemento introducido en el archivo .XML",
+                justification: "Conecta la lógica de programación con el componente visual creado en el diseño."
+            },
+            {
+                q: "¿Cuál es la forma de ajustar tamaños (valores)?",
+                options: ["sp para letra y dp para márgenes y paddings", "px para todo", "dp para letra y sp para márgenes", "pt para letra y px para paddings"],
+                correct: "sp para letra y dp para márgenes y paddings",
+                justification: "dp es independiente de la densidad de pantalla, mientras que sp además se ajusta si el usuario cambia el tamaño de fuente en los ajustes de su teléfono."
+            },
+            {
+                q: "¿Qué es un dp?",
+                options: ["Es una medida estándar, un píxel virtual que se adaptará a cada densidad de pantalla", "Un píxel físico", "Density padding", "Un porcentaje de la pantalla"],
+                correct: "Es una medida estándar, un píxel virtual que se adaptará a cada densidad de pantalla",
+                justification: "Permite que un botón mida lo mismo físicamente en un móvil de gama baja que en una tablet de alta resolución."
+            },
+            {
+                q: "¿Qué es un sp?",
+                options: ["Tienen la misma función que los dp, la diferencia es que se aplican a textos", "Un tamaño fijo en milímetros", "Screen pixel", "Píxeles secundarios"],
+                correct: "Tienen la misma función que los dp, la diferencia es que se aplican a textos",
+                justification: "Scale-independent pixels."
+            },
+            {
+                q: "El tamaño px se corresponde con:",
+                options: ["La resolución actual de la pantalla", "El tamaño del dedo del usuario", "Un estándar de Google", "La densidad independiente de pantalla"],
+                correct: "La resolución actual de la pantalla",
+                justification: "Un px es un píxel físico de la pantalla de ese dispositivo exacto. No se recomienda su uso porque varía según la resolución."
+            },
+            {
+                q: "Para definir el ancho total de la vista de un layout usaremos:",
+                options: ["match_parent", "wrap_content", "fill_screen", "max_width"],
+                correct: "match_parent",
+                justification: "Indica a la vista que debe ocupar todo el espacio que su contenedor 'padre' le permita."
+            },
+            {
+                q: "La propiedad width / height:",
+                options: ["width sirve para controlar el ancho; height sirve para controlar el alto", "width controla el alto; height el ancho", "Ambas controlan la profundidad de la vista", "No existen en Android"],
+                correct: "width sirve para controlar el ancho; height sirve para controlar el alto",
+                justification: "Son los atributos de diseño básicos (layout_width y layout_height)."
+            },
+            {
+                q: "¿Qué es una cláusula WHERE en una consulta SQL?",
+                options: ["Una cláusula para filtrar los resultados de una consulta según ciertos criterios", "Un comando para borrar la base de datos", "Una sentencia para crear tablas nuevas", "Un método para ordenar datos alfabéticamente"],
+                correct: "Una cláusula para filtrar los resultados de una consulta según ciertos criterios",
+                justification: "Se usa en SQLite y Room para extraer solo los registros que nos interesan de una tabla."
+            },
+            {
+                q: "¿Qué es un Cursor en SQLite?",
+                options: ["Un objeto que se utiliza para almacenar/recorrer los resultados de una consulta SQL", "El puntero del ratón en el emulador", "Una llave primaria de la base de datos", "Una tabla temporal"],
+                correct: "Un objeto que se utiliza para almacenar/recorrer los resultados de una consulta SQL",
+                justification: "Es un apuntador que nos permite iterar fila por fila por los datos que devuelve la base de datos."
+            },
+            {
+                q: "Al crear nuestra base de datos, puede que ya existiera una versión anterior... esta función que actualiza los datos es:",
+                options: ["onUpgrade()", "onUpdate()", "onCreate()", "onRefresh()"],
+                correct: "onUpgrade()",
+                justification: "Este método se dispara automáticamente si incrementamos la versión de la base de datos, útil para añadir nuevas tablas."
+            },
+            {
+                q: "Firebase....",
+                options: ["Es una base de datos en tiempo real que se encuentra en la nube", "Es la base de datos local predeterminada de Android", "Es un emulador de hardware", "Es una librería para parsear JSON"],
+                correct: "Es una base de datos en tiempo real que se encuentra en la nube",
+                justification: "Es un servicio Backend as a Service (BaaS) de Google alojado en internet, no de forma local."
+            },
+            {
+                q: "¿Qué hace el siguiente código? fbbd=FirebaseDatabase.getInstance()",
+                options: ["Llama a la raíz de la base de datos de Firebase", "Borra toda la base de datos en Firebase", "Inicia sesión en la cuenta del usuario", "Crea una base de datos SQLite local"],
+                correct: "Llama a la raíz de la base de datos de Firebase",
+                justification: "Obtiene la instancia principal para comenzar a leer o escribir datos en la nube."
+            },
+            {
+                q: "Para implementar Firebase a nuestro proyecto se descarga un archivo .json y se instala en la ruta:",
+                options: ["Project/[nombre_proyecto]/app", "Project/[nombre_proyecto]/res", "Project/[nombre_proyecto]/src", "En cualquier carpeta"],
+                correct: "Project/[nombre_proyecto]/app",
+                justification: "El archivo google-services.json debe ir en el directorio raíz del módulo app para que el compilador lo encuentre."
+            },
+            {
+                q: "¿Qué son los permisos en Android?",
+                options: ["Mecanismos de seguridad que permiten a una aplicación acceder a recursos del sistema protegidos", "Contraseñas para subir la app a la Play Store", "Archivos XML que guardan configuraciones visuales", "Suscripciones de pago para desarrolladores"],
+                correct: "Mecanismos de seguridad que permiten a una aplicación acceder a recursos del sistema protegidos",
+                justification: "Protegen la privacidad del usuario bloqueando el acceso a cámara, micrófono, GPS, etc., hasta que se autoriza explícitamente."
+            },
+            {
+                q: "¿Cuál es la forma de solicitar permisos de riesgo en Android?",
+                options: ["Mediante un cuadro de diálogo que se muestra al usuario", "Automáticamente sin preguntar", "Pidiendo al usuario que envíe un correo a Google", "A través de la consola de comandos"],
+                correct: "Mediante un cuadro de diálogo que se muestra al usuario",
+                justification: "Se solicita en 'tiempo de ejecución', interrumpiendo la app con un popup nativo."
+            },
+            {
+                q: "¿Qué tipo de permisos estarán desactivados por defecto en dispositivos a partir de API 23 o superior?",
+                options: ["Permisos de riesgos", "Permisos normales", "Permisos de internet", "Todos los permisos"],
+                correct: "Permisos de riesgos",
+                justification: "A partir de Android 6.0, el usuario debe aprobar activamente funciones peligrosas (como leer SMS)."
+            },
+            {
+                q: "Permisos específicos en el AndroidManifest.xml, ¿Cuál es el formato correcto?",
+                options: ["<uses-permission android:name=\"android.permission.CAMERA\"/>", "<request-permission id=\"camera\"/>", "<allow android:camera=\"true\"/>", "grant_permission('CAMERA')"],
+                correct: "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+                justification: "Son etiquetas obligatorias de declaración previas a pedir el permiso por código."
+            },
+            {
+                q: "¿Qué es el método shouldShowRequestPermissionRationale() en Android?",
+                options: ["Un método que comprueba si se debe mostrar una explicación para solicitar un permiso", "Un método que obliga al sistema a aceptar el permiso", "Muestra un diálogo genérico de Android", "Comprueba si el dispositivo tiene cámara"],
+                correct: "Un método que comprueba si se debe mostrar una explicación para solicitar un permiso",
+                justification: "Devuelve true si el usuario denegó el permiso antes, sugiriendo que le expliquemos por qué lo necesitamos."
+            },
+            {
+                q: "¿Qué es el método onRequestPermissionsResult() en Android?",
+                options: ["Un método que se llama cuando se otorga o deniega un permiso en tiempo real", "Un método para iniciar una descarga", "Un método que borra la memoria caché", "Un comando para finalizar la Activity"],
+                correct: "Un método que se llama cuando se otorga o deniega un permiso en tiempo real",
+                justification: "Es el 'callback' o respuesta del sistema tras mostrar el cuadro de diálogo al usuario."
+            },
+            {
+                q: "Una aplicación multimedia es aquella que contiene diferentes tipos de información integrada. Estos pueden ser:",
+                options: ["Texto, audio, videos, animaciones o interacciones", "Solo videos e imágenes estáticas", "Bases de datos relacionales y texto", "Únicamente sonido envolvente"],
+                correct: "Texto, audio, videos, animaciones o interacciones",
+                justification: "Define la esencia de un entorno enriquecido."
+            },
+            {
+                q: "¿Qué son los servicios multimedia en Android?",
+                options: ["Servicios que permiten la reproducción y grabación de audio y video en segundo plano", "Suscripciones de streaming (como Netflix)", "Librerías para editar imágenes", "Aplicaciones de mensajería"],
+                correct: "Servicios que permiten la reproducción y grabación de audio y video en segundo plano",
+                justification: "Permiten que la música siga sonando aunque minimices la aplicación."
+            },
+            {
+                q: "Indica cuál de los siguientes NO es un servicio multimedia que puede ser usado por Android:",
+                options: ["Search Service", "Media Player", "SoundPool", "MediaRecorder"],
+                correct: "Search Service",
+                justification: "Este servicio gestiona las búsquedas locales, no archivos de audio o vídeo."
+            },
+            {
+                q: "¿Qué es MediaPlayer en Android / qué clase reproduce audio y vídeo?",
+                options: ["Una clase que permite reproducir archivos de audio y video", "Una clase para leer PDFs", "Una librería para descargar imágenes", "Un tipo de Layout visual"],
+                correct: "Una clase que permite reproducir archivos de audio y video",
+                justification: "Es la API de más alto nivel y uso común para reproducir canciones completas o clips de vídeo."
+            },
+            {
+                q: "¿Cuál de las clases multimedia nos permite solapar múltiples fuentes de sonido y reproducir varios a la vez?",
+                options: ["SoundPool", "MediaPlayer", "AudioTrack", "ToneGenerator"],
+                correct: "SoundPool",
+                justification: "Almacena efectos cortos en memoria para reproducirlos sin latencia, ideal para videojuegos (disparos, saltos)."
+            },
+            {
+                q: "¿Qué es MediaRecorder en Android?",
+                options: ["Una clase que permite grabar archivos de audio y video", "Un software para editar videos cortos", "Una clase que reproduce música por internet", "Una clase que toma capturas de pantalla"],
+                correct: "Una clase que permite grabar archivos de audio y video",
+                justification: "Codifica la entrada de micrófono y cámara directamente a un archivo (ej. mp4 o amr)."
+            },
+            {
+                q: "¿Qué es el método setVideoSource() en MediaRecorder?",
+                options: ["Un método que establece la fuente de video para la grabación", "Abre la galería para seleccionar un video", "Sube el video a un servidor web", "Cambia el tamaño de la pantalla del video"],
+                correct: "Un método que establece la fuente de video para la grabación",
+                justification: "Indica si debe grabar desde la cámara frontal, trasera o la pantalla."
+            },
+            {
+                q: "¿Cuál de las siguientes no es una clase de bajo nivel?",
+                options: ["Camera2", "AudioTrack", "ToneGenerator", "Ninguna de las anteriores"],
+                correct: "Camera2",
+                justification: "AudioTrack o ToneGenerator operan a niveles más cercanos al hardware."
+            },
+            {
+                q: "En MediaPlayer, indica cuál es de bajo nivel y destaca en la reproducción de audio ya decodificado:",
+                options: ["AudioTrack", "SoundPool", "MediaRecorder", "AsyncPlayer"],
+                correct: "AudioTrack",
+                justification: "Empuja datos PCM en crudo directamente al hardware de audio."
+            },
+            {
+                q: "Para reproducir frecuencias en forma de pitido simples, utilizaremos:",
+                options: ["ToneGenerator", "SoundPool", "AudioTrack", "MediaPlayer"],
+                correct: "ToneGenerator",
+                justification: "Genera tonos sintéticos (como pitidos DTMF telefónicos)."
+            },
+            {
+                q: "¿Para qué se utiliza VolumeShaper?",
+                options: ["Para insertar atenuaciones de volumen al comienzo, al final o de transición entre clips de audio", "Para aumentar el volumen del altavoz físico por encima del límite", "Para medir los decibelios del micrófono", "Para comprimir archivos de audio"],
+                correct: "Para insertar atenuaciones de volumen al comienzo, al final o de transición entre clips de audio",
+                justification: "Modifica el volumen dinámicamente para lograr efectos de fade-in y fade-out."
+            },
+            {
+                q: "¿Qué protocolo se utilizará para visualizar streams (audios y vídeos) en internet en tiempo real?",
+                options: ["RTP (Real-Time Transport Protocol)", "HTTP", "FTP", "SMTP"],
+                correct: "RTP (Real-Time Transport Protocol)",
+                justification: "Está diseñado para la transmisión de datos continuos sin pausas."
+            },
+            {
+                q: "¿Qué es el paquete RTP en Android?",
+                options: ["Un paquete que contiene las clases necesarias para implementar el protocolo RTP en una aplicación", "Un paquete de texturas para gráficos 3D", "Un compilador de código nativo", "Un administrador de tareas en tiempo real"],
+                correct: "Un paquete que contiene las clases necesarias para implementar el protocolo RTP en una aplicación",
+                justification: "Son las librerías nativas que ofrecen soporte para streaming."
+            },
+            {
+                q: "¿Qué es SurfaceView en Android?",
+                options: ["Una vista que permite la reproducción de archivos de audio y video", "Un botón con diseño en 3D", "Un layout para diseñar menús desplegables", "Un servicio en segundo plano para notificaciones"],
+                correct: "Una vista que permite la reproducción de archivos de audio y video",
+                justification: "Proporciona una superficie de dibujo dedicada incrustada dentro de una jerarquía de vistas, manejada en un hilo secundario (vital para vídeo)."
+            },
+            {
+                q: "La clase AsyncPlayer...",
+                options: ["Reproduce audio en una hebra secundaria", "Descarga videos de forma asíncrona", "Convierte texto a voz", "Sincroniza subtítulos en películas"],
+                correct: "Reproduce audio en una hebra secundaria",
+                justification: "Asegura que la UI de la app no se congele mientras carga y reproduce el sonido."
+            },
+            {
+                q: "¿Qué tipo de colisionador elegirías para representar el choque entre dos pompas de jabón en Unity?",
+                options: ["Sphere collider", "Box collider", "Mesh collider", "Capsule collider"],
+                correct: "Sphere collider",
+                justification: "Es la forma geométrica más eficiente y exacta para calcular físicas de objetos redondos."
+            },
+            {
+                q: "El proceso de creación de una imagen 2D / 3D real dentro de una escena, a la que se ha aplicado filtros, se conoce como:",
+                options: ["Renderización", "Compilación", "Depuración", "Bakeo de texturas"],
+                correct: "Renderización",
+                justification: "Es el cálculo final que hace el motor gráfico para generar los píxeles que verás en la pantalla."
+            },
+            {
+                q: "Para depurar errores en Unity, contamos con varias opciones (puntos de ruptura, ficheros de log)...",
+                options: ["Verdadero", "Falso"],
+                correct: "Verdadero",
+                justification: "Herramientas estándar de debugeo integradas en entornos como Unity/Visual Studio."
+            },
+            {
+                q: "La gran inversión que requiere el desarrollo de un juego en recursos hará que pasen muchos años hasta que sea necesario modificarlo:",
+                options: ["Falso", "Verdadero"],
+                correct: "Falso",
+                justification: "Los juegos móviles requieren actualizaciones, parches y nuevos contenidos casi de inmediato para retener a los usuarios."
+            }
+        ];
+
+        let quizData = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        // Mezclar array (Fisher-Yates)
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Iniciar Quiz
+        function startQuiz() {
+            document.getElementById('results-screen').style.display = 'none';
+            document.getElementById('question-screen').style.display = 'block';
+            
+            // Clonar las preguntas para no modificar el array original
+            quizData = JSON.parse(JSON.stringify(rawQuestions));
+            
+            // Aleatorizar preguntas
+            quizData = shuffleArray(quizData);
+            
+            // Aleatorizar opciones de respuesta
+            quizData.forEach(q => {
+                q.options = shuffleArray(q.options);
+            });
+
+            currentQuestionIndex = 0;
+            score = 0;
+            updateUI();
+            renderQuestion();
+        }
+
+        function updateUI() {
+            document.getElementById('progress').innerText = `Pregunta ${currentQuestionIndex + 1} de ${quizData.length}`;
+            document.getElementById('score').innerText = `Aciertos: ${score}`;
+        }
+
+        function renderQuestion() {
+            const currentQ = quizData[currentQuestionIndex];
+            document.getElementById('question-text').innerText = currentQ.q;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = ''; 
+
+            document.getElementById('justification').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
+
+            currentQ.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = option;
+                btn.onclick = () => selectOption(option, currentQ.correct, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selected, correct, btnElement) {
+            const currentQ = quizData[currentQuestionIndex];
+            const allBtns = document.querySelectorAll('.option-btn');
+            
+            // Bloquear botones y colorear correcta
+            allBtns.forEach(btn => {
+                btn.disabled = true;
+                if (btn.innerText === correct) {
+                    btn.classList.add('correct');
+                }
+            });
+
+            // Verificar si el usuario acertó
+            if (selected === correct) {
+                score++;
+                updateUI();
+            } else {
+                btnElement.classList.add('incorrect');
+            }
+
+            // Mostrar Justificación
+            document.getElementById('justification-text').innerText = currentQ.justification;
+            document.getElementById('justification').style.display = 'block';
+
+            // Mostrar botón Siguiente/Finalizar
+            document.getElementById('next-btn').style.display = 'inline-block';
+            
+            if (currentQuestionIndex === quizData.length - 1) {
+                document.getElementById('next-btn').innerText = 'Ver Resultados';
+            } else {
+                document.getElementById('next-btn').innerText = 'Siguiente Pregunta';
+            }
+        }
+
+        function handleNext() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                updateUI();
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('question-screen').style.display = 'none';
+            document.getElementById('results-screen').style.display = 'block';
+            document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
+        }
+
+        // Iniciar al cargar
+        window.onload = startQuiz;
+
+    </script>
+</body>
+</html>
