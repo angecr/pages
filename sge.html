@@ -1146,8 +1146,26 @@
                 const idx = parseInt(e.code.replace('Numpad', ''), 10) - 1;
                 preSelectOption(idx);
                 return;
-            }
+            }  
+            
+            // Flechas arriba/abajo: navegar entre las opciones (con vuelta al extremo)
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (questionAnswered) return;
+                const buttons = document.querySelectorAll('.option-btn');
+                if (buttons.length === 0) return;
 
+                let nextIndex;
+                if (preSelectedIndex < 0) {
+                    // No hay nada resaltado todavía: empieza por arriba o por abajo según la tecla
+                    nextIndex = (e.key === 'ArrowDown') ? 0 : buttons.length - 1;
+                } else {
+                    const delta = (e.key === 'ArrowDown') ? 1 : -1;
+                    nextIndex = (preSelectedIndex + delta + buttons.length) % buttons.length;
+                }
+                preSelectOption(nextIndex);
+                return;
+            }
             // ENTER: confirma la opción pre-seleccionada o avanza si ya está corregida
             if (e.key === 'Enter') {
                 e.preventDefault();
