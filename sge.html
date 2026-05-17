@@ -746,7 +746,7 @@
                 q: "Selecciona la opción correcta con respecto a la arquitectura del servidor en OpenERP:",
                 options: ["OpenERP utiliza una estructura jerárquica, permitiendo crear un objeto en cada nivel.", "OpenERP utiliza una estructura jerárquica, permitiendo crear un objeto en cada servidor.", "OpenERP utiliza una estructura plana, permitiendo crear un objeto en la parte de servidor.", "OpenERP utiliza una estructura plana, permitiendo crear un objeto en cada nivel."],
                 correct: "OpenERP utiliza una estructura jerárquica, permitiendo crear un objeto en cada nivel.",
-                justification: "El ORM achata la jerarquía de herencia creando una estructura plana en cada nivel de la base de datos."
+                justification: "Aunque el libro no usa literalmente 'plana' vs 'jerárquica', la arquitectura de OpenERP/Odoo es modular y plana: todos los módulos están al mismo nivel y cualquiera de ellos puede definir nuevos objetos heredando de osv.osv. No hay una jerarquía rígida que obligue a crear los objetos en una capa concreta."
             },
             {
                 q: "¿Qué es una vista?",
