@@ -12,7 +12,7 @@
             --success-color: #27ae60;
             --background-color: #f0f3f6;
             --card-bg: #ffffff;
-            --text-color: #2c3e50;
+            --text-color: #2c502e;
         }
 
         * {
@@ -84,13 +84,37 @@
             background-color: #ffffff;
             border: 2px solid #dcdde1;
             border-radius: 8px;
-            padding: 16px 20px;
+            padding: 14px 18px;
             font-size: 1.05em;
             text-align: left;
             cursor: pointer;
             transition: all 0.2s ease;
             color: var(--text-color);
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .option-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+            border-radius: 6px;
+            background-color: #f0f3f7;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 0.95em;
+            border: 1px solid #dcdde1;
+            transition: all 0.2s ease;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .option-text {
+            flex: 1;
         }
 
         .option-btn:hover:not(:disabled) {
@@ -100,11 +124,30 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
+        .option-btn.pre-selected {
+            border-color: var(--primary-color);
+            background-color: #eef2f8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(44, 62, 80, 0.18);
+        }
+
+        .option-btn.pre-selected .option-number {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
         .option-btn.correct {
             background-color: #eafaf1;
             border-color: var(--success-color);
             color: #1e8449;
             font-weight: 700;
+        }
+
+        .option-btn.correct .option-number {
+            background-color: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
         }
 
         .option-btn.incorrect {
@@ -113,9 +156,52 @@
             color: #c0392b;
         }
 
+        .option-btn.incorrect .option-number {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
         .option-btn:disabled {
             cursor: not-allowed;
-            opacity: 0.8;
+            opacity: 0.85;
+        }
+
+        .keyboard-hint {
+            margin-top: 18px;
+            padding: 10px 14px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.85em;
+            color: #7f8c8d;
+            text-align: center;
+            border: 1px dashed #dcdde1;
+        }
+
+        .keyboard-hint kbd {
+            display: inline-block;
+            padding: 2px 8px;
+            background: white;
+            border: 1px solid #bdc3c7;
+            border-bottom-width: 2px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            color: var(--primary-color);
+            font-weight: 700;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+            margin: 0 2px;
+        }
+
+        .next-btn .kbd-inline {
+            display: inline-block;
+            padding: 1px 7px;
+            background: rgba(255,255,255,0.22);
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85em;
+            margin-left: 8px;
+            font-weight: 700;
         }
 
         .justification-box {
@@ -203,8 +289,10 @@
         @media (max-width: 600px) {
             #quiz-container { padding: 25px 20px; }
             h2 { font-size: 1.2em; }
-            .option-btn { font-size: 1em; padding: 14px 15px; }
+            .option-btn { font-size: 1em; padding: 12px 14px; }
+            .option-number { width: 26px; height: 26px; min-width: 26px; font-size: 0.85em; }
             .final-score { font-size: 3em; }
+            .keyboard-hint { font-size: 0.78em; }
         }
     </style>
 </head>
@@ -227,14 +315,18 @@
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="12" y1="16" x2="12" y2="12"></line>
                         <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                    </svg> 
+                    </svg>
                     Explicación
                 </h4>
                 <p id="justification-text"></p>
             </div>
 
             <div class="next-btn-container">
-                <button class="next-btn" id="next-btn" onclick="handleNext()">Siguiente Pregunta</button>
+                <button class="next-btn" id="next-btn" onclick="handleNext()">Siguiente Pregunta<span class="kbd-inline">Enter</span></button>
+            </div>
+
+            <div class="keyboard-hint">
+                <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> o <kbd>↑</kbd> <kbd>↓</kbd> para seleccionar · <kbd>Enter</kbd> para confirmar y avanzar
             </div>
         </div>
 
@@ -762,7 +854,7 @@
                     "Sesgo de Medición.",
                     "Sesgo en Prompts."
                 ],
-                correct: "Sesgo en Datos de Entrenamiento.",
+                correct: "Sesgo de Medición.",
                 justification: "El modelo ha sido entrenado con unos datos (solo pieles claras) que no representaban a la totalidad de los usuarios."
             },
             {
@@ -786,12 +878,410 @@
                 ],
                 correct: "Sesgo en Prompts.",
                 justification: "Como le estás condicionando la respuesta en tu propia instrucción obligándole a darte la razón, estás introduciendo el sesgo mediante el prompt."
+            },
+
+            // =====================================================================
+            // PREGUNTAS ADICIONALES PARA COMPLETAR EL CUESTIONARIO MOPT-IA
+            // Basadas en el contenido del libro de ILERNA.
+            // Mismo formato que rawQuestions: { q, options, correct, justification }
+            // Organizadas por temática para facilitar localización.
+            // =====================================================================
+            
+            // ----------------------------- TEMA 2: DATOS, MODELOS Y ENTRENAMIENTO -----------------------------
+            
+            {
+                q: "¿Cuál de los siguientes es un ejemplo de dato estructurado?",
+                options: [
+                    "Un vídeo de YouTube.",
+                    "Una grabación de voz.",
+                    "Una hoja de cálculo con nombre, edad y calificación de estudiantes.",
+                    "Una fotografía de un paisaje."
+                ],
+                correct: "Una hoja de cálculo con nombre, edad y calificación de estudiantes.",
+                justification: "Los datos estructurados se organizan en filas y columnas con categorías predefinidas (nombre, edad, calificación), almacenables en bases de datos o Excel."
+            },
+            {
+                q: "Según el libro, ¿qué porcentaje aproximado de los datos generados a diario por usuarios y empresas son no estructurados?",
+                options: [
+                    "Menos del 20 %.",
+                    "Alrededor del 50 %.",
+                    "Más del 80 %.",
+                    "El 100 %."
+                ],
+                correct: "Más del 80 %.",
+                justification: "El libro indica explícitamente que más del 80 % de los datos generados cada día son no estructurados (textos libres, imágenes, audios, vídeos)."
+            },
+            {
+                q: "Un archivo XML o JSON, que organiza la información mediante etiquetas pero sin tablas rígidas, es un ejemplo de:",
+                options: [
+                    "Datos estructurados.",
+                    "Datos no estructurados.",
+                    "Datos semiestructurados.",
+                    "Datos cualitativos."
+                ],
+                correct: "Datos semiestructurados.",
+                justification: "Los datos semiestructurados se sitúan a medio camino: tienen etiquetas y metadatos que facilitan su análisis sin llegar a la rigidez de una tabla."
+            },
+            {
+                q: "Un modelo entrenado con miles de correos previamente marcados manualmente como 'spam' o 'no spam' aprende mediante:",
+                options: [
+                    "Aprendizaje no supervisado.",
+                    "Aprendizaje supervisado.",
+                    "Aprendizaje por refuerzo.",
+                    "Aprendizaje generativo."
+                ],
+                correct: "Aprendizaje supervisado.",
+                justification: "Los modelos supervisados aprenden a partir de datos etiquetados (entrada-salida) y corrigen sus errores comparando con la respuesta esperada."
+            },
+            {
+                q: "Un modelo que analiza los hábitos de compra de los clientes y los agrupa automáticamente en perfiles similares, sin recibir etiquetas previas, es un caso de:",
+                options: [
+                    "Aprendizaje supervisado.",
+                    "Aprendizaje no supervisado.",
+                    "Aprendizaje por refuerzo.",
+                    "Fine-tuning."
+                ],
+                correct: "Aprendizaje no supervisado.",
+                justification: "Los modelos no supervisados descubren patrones y agrupamientos en datos sin etiquetar, sin conocer de antemano la 'respuesta correcta'."
+            },
+            {
+                q: "¿Qué arquitectura de IA utiliza el 'mecanismo de atención' para procesar lenguaje y es la base de modelos como GPT o Gemini?",
+                options: [
+                    "GAN (Red Generativa Antagónica).",
+                    "CNN (Red Convolucional).",
+                    "Transformer.",
+                    "VAE (Autoencoder Variacional)."
+                ],
+                correct: "Transformer.",
+                justification: "El transformer es la arquitectura clave para procesar secuencias de datos (lenguaje) gracias al mecanismo de atención; es la base de GPT, Gemini y otros LLM."
+            },
+            {
+                q: "DALL·E y Stable Diffusion generan imágenes degradando primero una imagen en ruido y regenerándola paso a paso. ¿Qué tipo de modelo emplean?",
+                options: [
+                    "Transformer.",
+                    "Difusión (Diffusion).",
+                    "CNN.",
+                    "VAE."
+                ],
+                correct: "Difusión (Diffusion).",
+                justification: "Los modelos de difusión generan contenido mediante un proceso iterativo: primero añaden ruido y luego lo eliminan capa a capa para producir imágenes detalladas."
+            },
+            {
+                q: "¿Qué tipo de red enfrenta a un 'generador' y un 'discriminador' compitiendo entre sí para producir contenido cada vez más realista?",
+                options: [
+                    "CNN.",
+                    "Transformer.",
+                    "GAN (Red Generativa Antagónica).",
+                    "Modelo de difusión."
+                ],
+                correct: "GAN (Red Generativa Antagónica).",
+                justification: "Las GAN funcionan como un duelo: el generador crea datos sintéticos y el discriminador intenta detectar si son reales o inventados, mejorando ambos con el entrenamiento adversarial."
+            },
+            {
+                q: "Las redes neuronales convolucionales (CNN) están especialmente diseñadas para trabajar con:",
+                options: [
+                    "Texto y conversaciones.",
+                    "Imágenes y vídeo.",
+                    "Series temporales financieras.",
+                    "Audios y música."
+                ],
+                correct: "Imágenes y vídeo.",
+                justification: "Las CNN usan filtros para detectar bordes, colores y texturas, y combinan esos elementos en estructuras más complejas. Son la base, por ejemplo, del reconocimiento facial."
+            },
+            {
+                q: "Cuando un modelo de IA memoriza demasiado bien los datos de entrenamiento y falla con casos nuevos, hablamos de:",
+                options: [
+                    "Subajuste (underfitting).",
+                    "Sobreajuste (overfitting).",
+                    "Fine-tuning.",
+                    "Aprendizaje por refuerzo."
+                ],
+                correct: "Sobreajuste (overfitting).",
+                justification: "El sobreajuste ocurre cuando el modelo memoriza demasiado los datos en lugar de generalizar; el subajuste es lo opuesto (no aprende lo suficiente)."
+            },
+            {
+                q: "El proceso de adaptar un modelo ya entrenado para que funcione mejor en un dominio concreto (informes médicos, textos legales, etc.) se denomina:",
+                options: [
+                    "Pre-training.",
+                    "Fine-tuning.",
+                    "Overfitting.",
+                    "Prompt engineering."
+                ],
+                correct: "Fine-tuning.",
+                justification: "El fine-tuning consiste en reentrenar un modelo general con ejemplos específicos de un sector para mejorar su precisión y relevancia."
+            },
+            {
+                q: "¿Qué rama de la inteligencia artificial se encarga de que las máquinas comprendan, interpreten y generen lenguaje humano?",
+                options: [
+                    "Visión por computador.",
+                    "Procesamiento del Lenguaje Natural (PNL).",
+                    "Robótica cognitiva.",
+                    "Aprendizaje por refuerzo."
+                ],
+                correct: "Procesamiento del Lenguaje Natural (PNL).",
+                justification: "El PNL es la rama de la IA que hace posibles los chatbots, traductores automáticos, correctores ortográficos y resúmenes generados por IA."
+            },
+            {
+                q: "Un modelo de IA que predice el precio de la luz para mañana a partir del consumo y clima históricos es un modelo de:",
+                options: [
+                    "Clasificación.",
+                    "Regresión.",
+                    "Generativo.",
+                    "Difusión."
+                ],
+                correct: "Regresión.",
+                justification: "Los modelos de regresión calculan un valor numérico estimado a partir de patrones aprendidos. La clasificación, en cambio, asigna categorías."
+            },
+            
+            // ----------------------------- TEMA 3: HERRAMIENTAS Y PROMPTING -----------------------------
+            
+            {
+                q: "¿Qué chatbot fue creado por Anthropic, prioriza respuestas seguras y explicativas y se usa especialmente en entornos educativos y profesionales?",
+                options: [
+                    "ChatGPT.",
+                    "Gemini.",
+                    "Claude.",
+                    "Copilot."
+                ],
+                correct: "Claude.",
+                justification: "Claude (Anthropic) está diseñado para dar respuestas seguras y explicativas con un tono cuidadoso, priorizando la claridad y la reducción de sesgos."
+            },
+            {
+                q: "¿Qué asistente de IA está integrado en Word, Excel, PowerPoint, Outlook y Teams como herramienta de productividad de Microsoft 365?",
+                options: [
+                    "Gemini.",
+                    "Copilot.",
+                    "Pi.",
+                    "Meta AI."
+                ],
+                correct: "Copilot.",
+                justification: "Microsoft Copilot integra OpenAI en las aplicaciones de Microsoft 365 y ayuda con redacción, análisis de datos, presentaciones, gestión del correo y reuniones."
+            },
+            {
+                q: "¿Cuál de estos chatbots se centra en la conversación personal y el acompañamiento, con un estilo cercano y 'amigable' más que en la productividad?",
+                options: [
+                    "Pi (Inflection AI).",
+                    "Copilot.",
+                    "Perplexity.",
+                    "ChatGPT."
+                ],
+                correct: "Pi (Inflection AI).",
+                justification: "Pi está orientado a la interacción social y al apoyo personal con un tono que busca parecer empático, no a tareas de productividad."
+            },
+            {
+                q: "Si das a un modelo de IA dos o tres ejemplos previos antes de pedirle que realice una tarea similar, estás aplicando:",
+                options: [
+                    "Zero-shot prompting.",
+                    "Few-shot prompting.",
+                    "Chain-of-thought.",
+                    "Instrucción inversa."
+                ],
+                correct: "Few-shot prompting.",
+                justification: "Few-shot consiste en proporcionar algunos ejemplos previos para guiar la respuesta. Zero-shot es sin ejemplos; chain-of-thought es razonar paso a paso."
+            },
+            {
+                q: "Indicarle a una IA 'Actúa como un periodista especializado en mascotas' antes de pedirle que redacte un texto es una técnica de prompting llamada:",
+                options: [
+                    "Persona.",
+                    "Glosario.",
+                    "Zero-shot.",
+                    "Plantilla."
+                ],
+                correct: "Persona.",
+                justification: "Asignar a la IA un rol o 'persona' específico ajusta su lenguaje y tono al contexto deseado, generando respuestas más alineadas con la audiencia."
+            },
+            {
+                q: "Los modelos LLM (Large Language Models) como GPT, Gemini o Claude se caracterizan por:",
+                options: [
+                    "Funcionar sin GPU y con datos mínimos.",
+                    "Integrar miles de millones de parámetros y requerir gran poder computacional.",
+                    "Estar limitados a tareas de clasificación.",
+                    "Funcionar únicamente en idioma inglés."
+                ],
+                correct: "Integrar miles de millones de parámetros y requerir gran poder computacional.",
+                justification: "Los LLM se basan en aprendizaje profundo, integran miles de millones de parámetros y requieren GPU especializadas, lo que implica elevados costes energéticos y económicos."
+            },
+            
+            // ----------------------------- TEMA 4: COMPETENCIAS Y ROLES -----------------------------
+            
+            {
+                q: "¿Qué rol profesional emergente se especializa en formular instrucciones precisas y dominar técnicas como few-shot prompting o cadena de pensamiento?",
+                options: [
+                    "Analista de datos junior.",
+                    "Supervisor de IA.",
+                    "Prompt designer (diseñador de prompts).",
+                    "Ingeniero de datos."
+                ],
+                correct: "Prompt designer (diseñador de prompts).",
+                justification: "El prompt designer es el profesional especializado en crear instrucciones efectivas para sistemas de IA y conoce técnicas avanzadas como few-shot y cadena de pensamiento."
+            },
+            {
+                q: "Un profesional que monitoriza los resultados de un sistema de IA para detectar sesgos, evalúa la calidad de las salidas e implementa salvaguardas éticas, es un:",
+                options: [
+                    "Prompt designer.",
+                    "Analista de datos junior.",
+                    "Supervisor de IA.",
+                    "Diseñador UX."
+                ],
+                correct: "Supervisor de IA.",
+                justification: "El supervisor de IA garantiza que los sistemas funcionen correctamente, de forma ética y alineada con los objetivos de la organización."
+            },
+            {
+                q: "¿Cuál de las siguientes NO se considera una competencia clave para convivir con la IA según el libro?",
+                options: [
+                    "Pensamiento crítico y verificación de información.",
+                    "Diseño de prompts efectivos.",
+                    "Programación avanzada en Python.",
+                    "Creatividad e innovación aumentada."
+                ],
+                correct: "Programación avanzada en Python.",
+                justification: "El libro insiste en que no se necesita ser programador para aprovechar la IA; las competencias clave son pensamiento crítico, diseño de prompts, creatividad aumentada y juicio ético."
+            },
+            {
+                q: "¿Cuál de los siguientes ejemplos representa mejor el uso de la IA para automatizar tareas repetitivas en el trabajo?",
+                options: [
+                    "Un despacho de abogados que usa IA para clasificar contratos y resumir cláusulas clave.",
+                    "Un equipo creativo que decide qué eslogan publicitario transmite mejor los valores de marca.",
+                    "Un médico que confirma un diagnóstico considerando el historial del paciente.",
+                    "Un profesor que adapta su explicación al detectar desmotivación en un alumno."
+                ],
+                correct: "Un despacho de abogados que usa IA para clasificar contratos y resumir cláusulas clave.",
+                justification: "Los otros tres ejemplos requieren juicio humano, empatía o creatividad. El procesamiento masivo y rutinario de documentos es la tarea claramente automatizable."
+            },
+            
+            // ----------------------------- TEMA 5: ÉTICA, PRIVACIDAD Y SESGOS -----------------------------
+            
+            {
+                q: "Una aplicación de reconocimiento de voz funciona bien con adultos de 30-50 años pero falla con niños y mayores porque sus datos de entrenamiento no incluían esas franjas. ¿Qué sesgo se ha producido?",
+                options: [
+                    "Sesgo de Confirmación.",
+                    "Sesgo de Selección.",
+                    "Sesgo de Medición.",
+                    "Sesgo en Prompts."
+                ],
+                correct: "Sesgo de Selección.",
+                justification: "El sesgo de selección ocurre cuando los datos utilizados no representan adecuadamente a toda la población. La muestra estaba sesgada hacia un rango de edad concreto."
+            },
+            {
+                q: "Un buscador que, al teclear 'beneficios de las dietas milagro', solo muestra páginas favorables y oculta fuentes médicas críticas, reproduce un:",
+                options: [
+                    "Sesgo de Medición.",
+                    "Sesgo en Datos de Entrenamiento.",
+                    "Sesgo de Confirmación.",
+                    "Sesgo de Selección."
+                ],
+                correct: "Sesgo de Confirmación.",
+                justification: "El sesgo de confirmación aparece cuando el sistema prioriza información que confirma las creencias previas del usuario, dejando de lado la que las contradice."
+            },
+            {
+                q: "Si pides a una IA imágenes de 'una persona programadora' y casi todos los resultados son hombres jóvenes con gafas, aunque haya programadoras en los datos, estamos ante:",
+                options: [
+                    "Sesgo de medición.",
+                    "Amplificación de estereotipos.",
+                    "Sesgo en prompts.",
+                    "Sesgo de confirmación."
+                ],
+                correct: "Amplificación de estereotipos.",
+                justification: "La IA magnifica los estereotipos más frecuentes de sus datos de entrenamiento, haciéndolos aparecer con más fuerza de la que tienen en la realidad."
+            },
+            {
+                q: "Según el RGPD, ¿qué derecho permite exigir que los datos personales sean eliminados por completo de un sistema de IA?",
+                options: [
+                    "Derecho de acceso.",
+                    "Derecho a la portabilidad.",
+                    "Derecho al olvido.",
+                    "Derecho a la explicación."
+                ],
+                correct: "Derecho al olvido.",
+                justification: "El derecho al olvido permite exigir la eliminación de los datos personales de un sistema, siempre que no haya motivos legales que justifiquen su conservación."
+            },
+            {
+                q: "Si una IA bancaria deniega un préstamo, el RGPD reconoce al cliente el derecho a saber qué factores influyeron en esa decisión. Este derecho se denomina:",
+                options: [
+                    "Derecho de acceso.",
+                    "Derecho a la explicación.",
+                    "Derecho al olvido.",
+                    "Derecho a la portabilidad."
+                ],
+                correct: "Derecho a la explicación.",
+                justification: "El derecho a la explicación obliga a las organizaciones a justificar qué variables y criterios usó un sistema automatizado para tomar decisiones que afectan al ciudadano."
+            },
+            {
+                q: "Según el artículo 22 del RGPD, una decisión automatizada que afecte significativamente a una persona (crédito, ayuda social, seguro...):",
+                options: [
+                    "Puede tomarse exclusivamente por una IA si el sistema es preciso.",
+                    "Requiere supervisión humana y no puede delegarse sólo en un sistema automatizado.",
+                    "Solo puede aplicarse en el sector privado.",
+                    "Está prohibida en todos los casos."
+                ],
+                correct: "Requiere supervisión humana y no puede delegarse sólo en un sistema automatizado.",
+                justification: "El RGPD establece que ninguna persona debe ser objeto de una decisión significativa basada únicamente en tratamiento automatizado; siempre debe haber supervisión humana."
+            },
+            {
+                q: "¿Qué normativa europea obliga a informar al usuario cuando interactúa con un sistema de IA o ante un contenido generado/manipulado por IA?",
+                options: [
+                    "RGPD.",
+                    "Directiva de Derechos de Autor 2019/790.",
+                    "Reglamento (UE) 2024/1689 (AI Act).",
+                    "LOPD."
+                ],
+                correct: "Reglamento (UE) 2024/1689 (AI Act).",
+                justification: "El AI Act introduce la obligación de transparencia para sistemas que interactúan con personas y para contenidos creados o manipulados con IA."
+            },
+            {
+                q: "¿Qué técnica permite comprender por qué un modelo de IA ha llegado a un resultado determinado, esencial en sectores como banca o sanidad?",
+                options: [
+                    "Fine-tuning.",
+                    "Anonimización.",
+                    "Explicabilidad de algoritmos (XAI).",
+                    "Diversificación de datos."
+                ],
+                correct: "Explicabilidad de algoritmos (XAI).",
+                justification: "La XAI hace transparente el razonamiento del modelo para que las decisiones sean justificables, especialmente en ámbitos donde tienen gran impacto."
+            },
+            {
+                q: "Para comprobar si una imagen ha sido sacada de contexto o ya ha circulado antes, herramientas como Google Imágenes o TinEye permiten realizar una:",
+                options: [
+                    "Auditoría externa.",
+                    "Búsqueda inversa de imágenes.",
+                    "Anonimización visual.",
+                    "Compresión gráfica."
+                ],
+                correct: "Búsqueda inversa de imágenes.",
+                justification: "La búsqueda inversa de imágenes permite localizar dónde ha aparecido una foto previamente y detectar si se está usando fuera de contexto."
+            },
+            {
+                q: "¿Cuáles son los cuatro principios éticos clave que deben guiar el desarrollo responsable de la IA según el libro?",
+                options: [
+                    "Eficiencia, rapidez, escalabilidad y precisión.",
+                    "Equidad, privacidad, transparencia y responsabilidad.",
+                    "Innovación, disrupción, automatización y rentabilidad.",
+                    "Confidencialidad, seguridad, redundancia y velocidad."
+                ],
+                correct: "Equidad, privacidad, transparencia y responsabilidad.",
+                justification: "Son los cuatro pilares éticos que el libro establece para un uso responsable de la IA."
+            },
+            {
+                q: "Entre las consecuencias adversas de la IA en la interacción humana, ¿cuál se refiere a confiar demasiado en la tecnología hasta perder autonomía y capacidad crítica?",
+                options: [
+                    "Desplazamiento laboral.",
+                    "Brecha socioeconómica.",
+                    "Dependencia excesiva.",
+                    "Manipulación de la opinión pública."
+                ],
+                correct: "Dependencia excesiva.",
+                justification: "La dependencia excesiva consiste en delegar tareas básicas y decisiones en la IA, reduciendo la autonomía personal y el juicio crítico."
             }
         ];
 
         let quizData = [];
         let currentQuestionIndex = 0;
         let score = 0;
+
+        // === Estado para navegación por teclado ===
+        let preSelectedIndex = -1;
+        let questionAnswered = false;
+        // =========================================
 
         function shuffleArray(array) {
             let currentIndex = array.length, randomIndex;
@@ -832,22 +1322,49 @@
             document.getElementById('justification').style.display = 'none';
             document.getElementById('next-btn').style.display = 'none';
 
-            currentQ.options.forEach(option => {
+            preSelectedIndex = -1;
+            questionAnswered = false;
+
+            currentQ.options.forEach((option, idx) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
-                btn.innerText = option;
-                btn.onclick = () => selectOption(option, currentQ.correct, btn);
+                btn.dataset.index = idx;
+
+                const numSpan = document.createElement('span');
+                numSpan.className = 'option-number';
+                numSpan.innerText = idx + 1;
+                btn.appendChild(numSpan);
+
+                const textSpan = document.createElement('span');
+                textSpan.className = 'option-text';
+                textSpan.innerText = option;
+                btn.appendChild(textSpan);
+
+                btn.onclick = () => commitOption(option, currentQ.correct, btn);
                 optionsContainer.appendChild(btn);
             });
         }
 
-        function selectOption(selected, correct, btnElement) {
+        function preSelectOption(index) {
+            if (questionAnswered) return;
+            const buttons = document.querySelectorAll('.option-btn');
+            if (index < 0 || index >= buttons.length) return;
+
+            buttons.forEach(b => b.classList.remove('pre-selected'));
+            buttons[index].classList.add('pre-selected');
+            preSelectedIndex = index;
+        }
+
+        function commitOption(selected, correct, btnElement) {
             const currentQ = quizData[currentQuestionIndex];
             const allBtns = document.querySelectorAll('.option-btn');
 
             allBtns.forEach(btn => {
+                btn.classList.remove('pre-selected');
                 btn.disabled = true;
-                if (btn.innerText === correct) btn.classList.add('correct');
+                if (btn.querySelector('.option-text').innerText === correct) {
+                    btn.classList.add('correct');
+                }
             });
 
             if (selected === correct) {
@@ -857,12 +1374,18 @@
                 btnElement.classList.add('incorrect');
             }
 
+            questionAnswered = true;
+
             document.getElementById('justification-text').innerText = currentQ.justification;
             document.getElementById('justification').style.display = 'block';
             document.getElementById('next-btn').style.display = 'inline-block';
+            document.getElementById('next-btn').innerHTML =
+                (currentQuestionIndex === quizData.length - 1 ? 'Ver Calificación Final' : 'Siguiente Pregunta')
+                + '<span class="kbd-inline">Enter</span>';
+        }
 
-            document.getElementById('next-btn').innerText =
-                currentQuestionIndex === quizData.length - 1 ? 'Ver Calificación Final' : 'Siguiente Pregunta';
+        function selectOption(selected, correct, btnElement) {
+            commitOption(selected, correct, btnElement);
         }
 
         function handleNext() {
@@ -880,6 +1403,61 @@
             document.getElementById('results-screen').style.display = 'block';
             document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
         }
+
+        // === MANEJADOR DE TECLADO ===
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('results-screen').style.display === 'block') {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    startQuiz();
+                }
+                return;
+            }
+
+            if (/^[1-4]$/.test(e.key)) {
+                e.preventDefault();
+                const idx = parseInt(e.key, 10) - 1;
+                preSelectOption(idx);
+                return;
+            }
+
+            if (/^Numpad[1-4]$/.test(e.code)) {
+                e.preventDefault();
+                const idx = parseInt(e.code.replace('Numpad', ''), 10) - 1;
+                preSelectOption(idx);
+                return;
+            }
+
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (questionAnswered) return;
+                const buttons = document.querySelectorAll('.option-btn');
+                if (buttons.length === 0) return;
+
+                let nextIndex;
+                if (preSelectedIndex < 0) {
+                    nextIndex = (e.key === 'ArrowDown') ? 0 : buttons.length - 1;
+                } else {
+                    const delta = (e.key === 'ArrowDown') ? 1 : -1;
+                    nextIndex = (preSelectedIndex + delta + buttons.length) % buttons.length;
+                }
+                preSelectOption(nextIndex);
+                return;
+            }
+
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (!questionAnswered) {
+                    if (preSelectedIndex >= 0) {
+                        const buttons = document.querySelectorAll('.option-btn');
+                        buttons[preSelectedIndex].click();
+                    }
+                } else {
+                    handleNext();
+                }
+            }
+        });
+        // ============================
 
         window.onload = startQuiz;
     </script>
